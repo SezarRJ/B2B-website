@@ -55,7 +55,7 @@ function StatCard({ title, value, change, changeType, icon: Icon, subtitle }: an
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold text-surface-800">{value}</p>
+      <p className="text-2xl font-bold text-surface-800 font-mono tabular-nums">{value}</p>
       <p className="text-sm text-surface-500 mt-0.5">{title}</p>
       {subtitle && <p className="text-xs text-surface-400 mt-1">{subtitle}</p>}
     </div>
@@ -193,21 +193,85 @@ function DashboardPage() {
     );
   }
 
+  const totalDealValue = deals.reduce(
+    (sum, d) => sum + Number(d.suggested_price || 0) * Number(d.quantity || 0),
+    0
+  );
+  const lastSync = new Date().toLocaleTimeString("en-GB", { hour12: false });
+
   return (
-    <div className="space-y-8 animate-slide-in">
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-slate-900 rounded-3xl p-8 lg:p-10 text-white relative overflow-hidden shadow-2xl border border-white/10 select-none">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-xl" />
-        <div className="relative z-10 space-y-2">
-          <div className="flex items-center gap-2.5 font-mono text-xs">
-            <Badge className="bg-yellow-400 text-black font-black uppercase text-[10px] tracking-widest px-3 py-1 shadow-md">Sovereign Command Desk</Badge>
-            <span className="text-primary-200 font-bold hidden sm:inline">● Shipped Hybrid Enterprise Trajectory Engine</span>
+    <div className="space-y-6 animate-slide-in">
+      {/* TERMINAL HEADER — dense, ticker-style */}
+      <div
+        className="rounded-2xl overflow-hidden border border-white/10 shadow-xl"
+        style={{ backgroundColor: "#0B1220" }}
+      >
+        <div className="px-6 py-5 flex items-start justify-between gap-6 flex-wrap">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span
+                className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest rounded-sm"
+                style={{ backgroundColor: "#f59e0b", color: "#0B1220" }}
+              >
+                Command Desk
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 status-pulse" />
+                Engine Active
+              </span>
+            </div>
+            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-white">
+              What needs your attention
+            </h1>
+            <p className="text-sm text-surface-300 max-w-2xl">
+              Live pre-deals, orders, and corridor signals across Iraq · Iran · Turkey.
+            </p>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-black tracking-tight pt-1">Institutional Deal Command Center</h1>
-          <p className="text-primary-100 max-w-2xl text-xs lg:text-sm leading-relaxed font-sans">
-            Your smart heuristic trade terminal is actively correlating purchasing queries and physical spot ledgers across the primary Iraq, Iran, Turkey, and EU cross-border lanes.
-          </p>
+          <div className="font-mono text-right text-surface-300 text-[11px] leading-relaxed">
+            <div>
+              <span className="text-surface-500">SESSION</span>{" "}
+              <span className="text-white">{lastSync}</span>
+            </div>
+            <div>
+              <span className="text-surface-500">LANES</span>{" "}
+              <span className="text-white">IQ · IR · TR · EU</span>
+            </div>
+          </div>
+        </div>
+
+        {/* TICKER STRIP */}
+        <div
+          className="border-t border-white/10 px-6 py-2.5 flex items-center gap-x-8 gap-y-1.5 flex-wrap font-mono text-[11px]"
+          style={{ backgroundColor: "rgba(255,255,255,0.02)" }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="text-surface-500 uppercase tracking-wider">Active Deals</span>
+            <span className="text-white font-semibold tabular-nums">
+              {String(stats?.active_pre_deals ?? 0).padStart(3, "0")}
+            </span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-surface-500 uppercase tracking-wider">Orders</span>
+            <span className="text-white font-semibold tabular-nums">
+              {String(stats?.accepted_deals ?? 0).padStart(3, "0")}
+            </span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-surface-500 uppercase tracking-wider">Pipeline</span>
+            <span className="font-semibold tabular-nums" style={{ color: "#f59e0b" }}>
+              ${totalDealValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-surface-500 uppercase tracking-wider">Products</span>
+            <span className="text-white font-semibold tabular-nums">
+              {String(stats?.total_products ?? 0).padStart(3, "0")}
+            </span>
+          </span>
+          <span className="flex items-center gap-2 ml-auto">
+            <span className="text-surface-500 uppercase tracking-wider">Last Sync</span>
+            <span className="text-emerald-400 tabular-nums">{lastSync}</span>
+          </span>
         </div>
       </div>
 

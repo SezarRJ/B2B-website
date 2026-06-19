@@ -102,7 +102,7 @@ function AddProductModal({ onClose, onSuccess }: { onClose: () => void; onSucces
     setSubmitting(true);
     setError("");
     try {
-      await createProduct(form);
+      await createProduct({ ...form, quantity: Number(form.quantity), price: Number(form.price) } as any);
       onSuccess();
       onClose();
     } catch (err: any) {
