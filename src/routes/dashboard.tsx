@@ -55,7 +55,7 @@ function StatCard({ title, value, change, changeType, icon: Icon, subtitle }: an
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold text-surface-800">{value}</p>
+      <p className="text-2xl font-bold text-surface-800 font-mono tabular-nums">{value}</p>
       <p className="text-sm text-surface-500 mt-0.5">{title}</p>
       {subtitle && <p className="text-xs text-surface-400 mt-1">{subtitle}</p>}
     </div>
