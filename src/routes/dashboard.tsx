@@ -401,17 +401,17 @@ function DashboardPage() {
       const actedDealIds = new Set(
         logs
           .filter((log) => log.item_type === "deal" && log.new_status === "acted")
-          .map((log) => log.item_id),
+          .map((log) => String(log.item_id)),
       );
       const actedOrderIds = new Set(
         logs
           .filter((log) => log.item_type === "order" && log.new_status === "acted")
-          .map((log) => log.item_id),
+          .map((log) => String(log.item_id)),
       );
       setStats(s);
       setActedLogs(logs.slice(0, 8));
-      setDeals(d.filter((deal) => !actedDealIds.has(deal.id)).slice(0, 3));
-      setOrders(o.filter((order) => !actedOrderIds.has(order.id)).slice(0, 3));
+      setDeals(d.filter((deal) => !actedDealIds.has(String(deal.id))).slice(0, 3));
+      setOrders(o.filter((order) => !actedOrderIds.has(String(order.id))).slice(0, 3));
     } catch (error) {
       console.error(error);
     } finally {

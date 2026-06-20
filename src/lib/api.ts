@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-empty */
+import { supabase } from "@/integrations/supabase/client";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 export type AccountType = "free" | "bronze" | "silver" | "gold" | "platinum" | "black";
@@ -161,9 +163,9 @@ export interface Notification {
 
 export interface WorkflowActionLog {
   id: string;
-  user_id?: number;
+  user_id?: string | number;
   item_type: "deal" | "order";
-  item_id: number;
+  item_id: string | number;
   title: string;
   detail: string;
   previous_status?: string;
@@ -291,6 +293,92 @@ function getLocal<T>(key: string, defaultVal: T): T {
 function saveLocal(key: string, val: any) {
   if (typeof window !== "undefined") {
     localStorage.setItem(key, JSON.stringify(val));
+  }
+}
+
+function normalizeWorkflowAction(entry: any): WorkflowActionLog {
+  return {
+    id: String(entry.id),
+    user_id: entry.user_id,
+    item_type: entry.item_type || entry.itemType,
+    item_id: entry.item_id ?? String(entry.id || "").split("-")[1] ?? "0",
+    title: entry.title,
+    detail: entry.detail || "",
+    previous_status: entry.previous_status,
+    new_status: entry.new_status || "acted",
+    acted_at: entry.acted_at || entry.actedAt || new Date().toISOString(),
+    source: entry.source || "local",
+  };
+}
+
+async function getSupabaseUserId(): Promise<string | null> {
+  if (typeof window === "undefined") return null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) return null;
+    return data.user?.id || null;
+  } catch {
+    return null;
+  }
+}
+
+async function readWorkflowActionsFromSupabase(): Promise<WorkflowActionLog[] | null> {
+  const userId = await getSupabaseUserId();
+  if (!userId) return null;
+  try {
+    const { data, error } = await (supabase as any)
+      .from("workflow_actions")
+      .select(
+        "id,user_id,item_type,item_id,title,detail,previous_status,new_status,acted_at,source",
+      )
+      .order("acted_at", { ascending: false });
+    if (error) return null;
+    return (data || []).map(normalizeWorkflowAction);
+  } catch {
+    return null;
+  }
+}
+
+async function writeWorkflowActionToSupabase(
+  data: Omit<WorkflowActionLog, "source">,
+): Promise<WorkflowActionLog | null> {
+  const userId = await getSupabaseUserId();
+  if (!userId) return null;
+  try {
+    const row = {
+      id: data.id,
+      user_id: userId,
+      item_type: data.item_type,
+      item_id: String(data.item_id),
+      title: data.title,
+      detail: data.detail,
+      previous_status: data.previous_status,
+      new_status: data.new_status,
+      acted_at: data.acted_at,
+      source: "server",
+    };
+    const { data: inserted, error } = await (supabase as any)
+      .from("workflow_actions")
+      .upsert(row)
+      .select(
+        "id,user_id,item_type,item_id,title,detail,previous_status,new_status,acted_at,source",
+      )
+      .single();
+    if (error) return null;
+    return normalizeWorkflowAction(inserted);
+  } catch {
+    return null;
+  }
+}
+
+async function deleteWorkflowActionFromSupabase(actionId: string): Promise<boolean> {
+  const userId = await getSupabaseUserId();
+  if (!userId) return false;
+  try {
+    const { error } = await (supabase as any).from("workflow_actions").delete().eq("id", actionId);
+    return !error;
+  } catch {
+    return false;
   }
 }
 
@@ -725,18 +813,7 @@ async function runOfflineMock(path: string, options: RequestInit = {}): Promise<
   const notifications = getLocal("tureep_notifications", DEMO_NOTIFICATIONS);
   const kycs = getLocal("tureep_kycs", DEMO_KYCS);
   const sanctions = getLocal("tureep_sanctions", DEMO_SANCTIONS);
-  const workflowActions = getLocal<any[]>("tureep_action_log", []).map((entry) => ({
-    id: entry.id,
-    user_id: entry.user_id,
-    item_type: entry.item_type || entry.itemType,
-    item_id: Number(entry.item_id ?? String(entry.id || "").split("-")[1] ?? 0),
-    title: entry.title,
-    detail: entry.detail,
-    previous_status: entry.previous_status,
-    new_status: entry.new_status || "acted",
-    acted_at: entry.acted_at || entry.actedAt || new Date().toISOString(),
-    source: entry.source || "local",
-  })) as WorkflowActionLog[];
+  const workflowActions = getLocal<any[]>("tureep_action_log", []).map(normalizeWorkflowAction);
 
   // 0. Workflow action audit log
   if (path.includes("/workflow/actions") && method === "GET") {
@@ -1300,12 +1377,16 @@ export async function getDashboard(): Promise<DashboardStats> {
 }
 
 export async function getWorkflowActionLogs(): Promise<WorkflowActionLog[]> {
+  const persisted = await readWorkflowActionsFromSupabase();
+  if (persisted) return persisted;
   return api<WorkflowActionLog[]>("/api/workflow/actions");
 }
 
 export async function recordWorkflowAction(
   data: Omit<WorkflowActionLog, "source">,
 ): Promise<WorkflowActionLog> {
+  const persisted = await writeWorkflowActionToSupabase(data);
+  if (persisted) return persisted;
   return api<WorkflowActionLog>("/api/workflow/actions", {
     method: "POST",
     body: JSON.stringify(data),
@@ -1315,6 +1396,8 @@ export async function recordWorkflowAction(
 export async function deleteWorkflowAction(
   actionId: string,
 ): Promise<{ status: string; id: string }> {
+  const deleted = await deleteWorkflowActionFromSupabase(actionId);
+  if (deleted) return { status: "deleted", id: actionId };
   return api<{ status: string; id: string }>(
     `/api/workflow/actions/${encodeURIComponent(actionId)}`,
     {

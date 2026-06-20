@@ -745,6 +745,34 @@ const DICTIONARY: Translations = {
     ku: "داواکارییەکان",
     tr: "Talepler",
   },
+  "internal.loading": {
+    en: "Checking access...",
+    ar: "جارٍ التحقق من الصلاحية...",
+    fa: "در حال بررسی دسترسی...",
+    ku: "دەستپێگەیشتن پشکنرێت...",
+    tr: "Erişim kontrol ediliyor...",
+  },
+  "internal.denied.title": {
+    en: "Internal page restricted",
+    ar: "صفحة داخلية مقيدة",
+    fa: "صفحه داخلی محدود است",
+    ku: "پەڕەی ناوخۆیی سنووردارە",
+    tr: "İç sayfa kısıtlı",
+  },
+  "internal.denied.desc": {
+    en: "This page contains internal architecture, security, or operational documentation. It is available only to admin or Black-tier accounts.",
+    ar: "تحتوي هذه الصفحة على وثائق داخلية للبنية أو الأمان أو التشغيل، وهي متاحة فقط للمسؤولين أو حسابات Black.",
+    fa: "این صفحه شامل مستندات داخلی معماری، امنیت یا عملیات است و فقط برای مدیران یا حساب‌های Black در دسترس است.",
+    ku: "ئەم پەڕەیە بەڵگەنامەی ناوخۆیی تەلارسازی، ئاسایش یان کارگێڕی تێدایە و تەنها بۆ بەڕێوەبەر یان هەژماری Black بەردەستە.",
+    tr: "Bu sayfa iç mimari, güvenlik veya operasyon dokümantasyonu içerir; yalnızca yönetici veya Black seviye hesaplara açıktır.",
+  },
+  "internal.denied.badge": {
+    en: "Admin / Black tier required",
+    ar: "يتطلب مسؤولاً أو فئة Black",
+    fa: "نیازمند مدیر یا سطح Black",
+    ku: "پێویستی بە بەڕێوەبەر / ئاستی Black هەیە",
+    tr: "Yönetici / Black seviye gerekli",
+  },
 
   "dash.loading": {
     en: "Loading your trade dashboard...",

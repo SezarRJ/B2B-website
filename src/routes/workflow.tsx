@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/AppSidebar";
+import { InternalRouteGate } from "@/components/InternalRouteGate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -125,123 +126,125 @@ function DealWorkflowPage() {
       <AppSidebar activeRoute="microservices-spec" />
 
       <main className="flex-1 overflow-auto">
-        <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8 select-none">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate({ to: "/dashboard" })}
-              className="text-muted-foreground hover:text-foreground"
+        <InternalRouteGate>
+          <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8 select-none">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate({ to: "/dashboard" })}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <ArrowLeft className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
+              </button>
+              <h1 className="text-lg font-bold text-foreground">
+                {t("wf.title", "Definitive 7-Stage Trade Workflow & System Explorer")}
+              </h1>
+            </div>
+            <a
+              href="/APPLICATION_WORKFLOW_COMPLETE_GUIDE.md"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-4 py-2 rounded-lg text-xs font-mono tabular-nums select-none"
             >
-              <ArrowLeft className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
-            </button>
-            <h1 className="text-lg font-bold text-foreground">
-              {t("wf.title", "Definitive 7-Stage Trade Workflow & System Explorer")}
-            </h1>
-          </div>
-          <a
-            href="/APPLICATION_WORKFLOW_COMPLETE_GUIDE.md"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-4 py-2 rounded-lg text-xs font-mono tabular-nums select-none"
-          >
-            <BookOpen className="h-4 w-4" />
-            <span>Read Complete Markdown Specs</span>
-          </a>
-        </header>
+              <BookOpen className="h-4 w-4" />
+              <span>Read Complete Markdown Specs</span>
+            </a>
+          </header>
 
-        <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8 select-none">
-          {/* Status Walkthrough Summary Banner */}
-          <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
-            <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div className="space-y-1.5 max-w-3xl select-text">
-                <Badge className="bg-primary text-white uppercase text-[10px] font-mono tabular-nums tracking-wider">
-                  End-To-End Journey
-                </Badge>
-                <h2 className="text-lg font-extrabold text-foreground">
-                  How Tureep Counterparties Stepping Through the Hybrid Stack
-                </h2>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Every cross-border transaction naturally steps through seven distinct operational
-                  state machines. Click any of the interactive stage simulation cards below to
-                  explore underlying PostgreSQL schemas, Supabase RLS isolation notes, and instantly
-                  jump to that exact tool in our trade terminal!
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8 select-none">
+            {/* Status Walkthrough Summary Banner */}
+            <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
+              <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1.5 max-w-3xl select-text">
+                  <Badge className="bg-primary text-white uppercase text-[10px] font-mono tabular-nums tracking-wider">
+                    End-To-End Journey
+                  </Badge>
+                  <h2 className="text-lg font-extrabold text-foreground">
+                    How Tureep Counterparties Stepping Through the Hybrid Stack
+                  </h2>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Every cross-border transaction naturally steps through seven distinct
+                    operational state machines. Click any of the interactive stage simulation cards
+                    below to explore underlying PostgreSQL schemas, Supabase RLS isolation notes,
+                    and instantly jump to that exact tool in our trade terminal!
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* 7 Horizontal Workflow Stages */}
-          <div className="space-y-6">
-            {stages.map((st) => {
-              const Icon = st.icon;
+            {/* 7 Horizontal Workflow Stages */}
+            <div className="space-y-6">
+              {stages.map((st) => {
+                const Icon = st.icon;
 
-              return (
-                <Card
-                  key={st.id}
-                  className="overflow-hidden border border-border bg-white shadow-sm hover:border-primary/60 transition-all hover:scale-[1.01] flex flex-col md:flex-row items-stretch"
-                >
-                  {/* Left Column: Number Bar */}
-                  <div className="bg-slate-900 text-emerald-400 p-6 flex flex-col items-center justify-center min-w-28 border-b md:border-b-0 md:border-r border-slate-800 shadow-inner select-none font-mono tabular-nums">
-                    <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold font-sans">
-                      Stage
-                    </span>
-                    <span className="text-4xl font-black">{st.step}</span>
-                  </div>
+                return (
+                  <Card
+                    key={st.id}
+                    className="overflow-hidden border border-border bg-white shadow-sm hover:border-primary/60 transition-all hover:scale-[1.01] flex flex-col md:flex-row items-stretch"
+                  >
+                    {/* Left Column: Number Bar */}
+                    <div className="bg-slate-900 text-emerald-400 p-6 flex flex-col items-center justify-center min-w-28 border-b md:border-b-0 md:border-r border-slate-800 shadow-inner select-none font-mono tabular-nums">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold font-sans">
+                        Stage
+                      </span>
+                      <span className="text-4xl font-black">{st.step}</span>
+                    </div>
 
-                  {/* Center Column: Descriptions */}
-                  <div className="p-6 space-y-4 flex-1 select-text">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-                          <Icon className="h-5 w-5" />
+                    {/* Center Column: Descriptions */}
+                    <div className="p-6 space-y-4 flex-1 select-text">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <CardTitle className="text-base sm:text-lg font-extrabold text-foreground">
+                            {st.title}
+                          </CardTitle>
                         </div>
-                        <CardTitle className="text-base sm:text-lg font-extrabold text-foreground">
-                          {st.title}
-                        </CardTitle>
+                        <Badge
+                          variant="outline"
+                          className="border-primary text-primary bg-primary/5 font-mono tabular-nums text-xs"
+                        >
+                          {st.badge}
+                        </Badge>
                       </div>
-                      <Badge
-                        variant="outline"
-                        className="border-primary text-primary bg-primary/5 font-mono tabular-nums text-xs"
+
+                      <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                        {st.desc}
+                      </p>
+
+                      <div className="space-y-2 pt-1 font-mono tabular-nums text-xs">
+                        <div className="p-2.5 rounded-lg bg-secondary/60 border text-muted-foreground text-[11px] leading-relaxed">
+                          <strong className="text-foreground font-bold font-sans block mb-0.5">
+                            Underlying Subsystem Hooks:
+                          </strong>
+                          {st.rls}
+                        </div>
+
+                        <div className="p-2.5 rounded-lg bg-slate-950 text-slate-300 text-[11px] overflow-x-auto">
+                          <span className="text-primary-400 font-bold block mb-0.5">
+                            FastAPI Python Routers:
+                          </span>
+                          <span className="text-emerald-400">{st.api}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Launch Execution Button */}
+                    <div className="p-6 bg-secondary/20 border-t md:border-t-0 md:border-l border-border flex items-center justify-center min-w-56 select-none">
+                      <Button
+                        className="bg-primary hover:bg-primary/90 text-white font-extrabold px-6 py-4 h-auto w-full text-xs shadow-lg flex items-center justify-center gap-2 select-none group"
+                        onClick={() => navigate({ to: st.path })}
                       >
-                        {st.badge}
-                      </Badge>
+                        <span>{st.action}</span>
+                        <ExternalLink className="h-4 w-4 group-hover:scale-125 transition-transform flex-shrink-0" />
+                      </Button>
                     </div>
-
-                    <p className="text-xs text-muted-foreground leading-relaxed font-medium">
-                      {st.desc}
-                    </p>
-
-                    <div className="space-y-2 pt-1 font-mono tabular-nums text-xs">
-                      <div className="p-2.5 rounded-lg bg-secondary/60 border text-muted-foreground text-[11px] leading-relaxed">
-                        <strong className="text-foreground font-bold font-sans block mb-0.5">
-                          Underlying Subsystem Hooks:
-                        </strong>
-                        {st.rls}
-                      </div>
-
-                      <div className="p-2.5 rounded-lg bg-slate-950 text-slate-300 text-[11px] overflow-x-auto">
-                        <span className="text-primary-400 font-bold block mb-0.5">
-                          FastAPI Python Routers:
-                        </span>
-                        <span className="text-emerald-400">{st.api}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Launch Execution Button */}
-                  <div className="p-6 bg-secondary/20 border-t md:border-t-0 md:border-l border-border flex items-center justify-center min-w-56 select-none">
-                    <Button
-                      className="bg-primary hover:bg-primary/90 text-white font-extrabold px-6 py-4 h-auto w-full text-xs shadow-lg flex items-center justify-center gap-2 select-none group"
-                      onClick={() => navigate({ to: st.path })}
-                    >
-                      <span>{st.action}</span>
-                      <ExternalLink className="h-4 w-4 group-hover:scale-125 transition-transform flex-shrink-0" />
-                    </Button>
-                  </div>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </InternalRouteGate>
       </main>
     </div>
   );
