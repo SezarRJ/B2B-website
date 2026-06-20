@@ -1,5 +1,5 @@
-import { createRootRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { createRootRoute, HeadContent, Link, Outlet, Scripts, useLocation } from "@tanstack/react-router";
+import { useState, useEffect, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Package,
@@ -25,10 +25,41 @@ import { GlobalStoreProvider } from "@/stores/GlobalStoreProvider";
 import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import { UniversalInAppHelpDrawer } from "@/components/UniversalInAppHelpDrawer";
 import { ClientErrorConsole } from "@/components/ClientErrorConsole";
+import appCss from "@/styles.css?url";
 
 export const Route = createRootRoute({
-  component: RootLayout,
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Tureep AI+ Terminal" },
+    ],
+    links: [{ rel: "stylesheet", href: appCss }],
+  }),
+  component: RootComponent,
 });
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <RootLayout />
+    </RootDocument>
+  );
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
