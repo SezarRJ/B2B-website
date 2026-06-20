@@ -33,7 +33,7 @@ import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import { UniversalInAppHelpDrawer } from "@/components/UniversalInAppHelpDrawer";
 import { ClientErrorConsole } from "@/components/ClientErrorConsole";
 import { useI18n } from "@/lib/i18n";
-import appCss from "@/index.css?url";
+import "@/index.css";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -48,7 +48,6 @@ export const Route = createRootRoute({
       },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
