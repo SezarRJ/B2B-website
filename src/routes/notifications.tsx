@@ -6,9 +6,31 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Notification, getNotifications, markNotificationRead, markAllNotificationsRead, triggerMockNotification } from "@/lib/api";
-import { Bell, CheckCircle2, AlertCircle, Send, Radio, Mail, Smartphone, RefreshCw, Trash2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Notification,
+  getNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+  triggerMockNotification,
+} from "@/lib/api";
+import {
+  Bell,
+  CheckCircle2,
+  AlertCircle,
+  Send,
+  Radio,
+  Mail,
+  Smartphone,
+  RefreshCw,
+  Trash2,
+} from "lucide-react";
 
 export const Route = createFileRoute("/notifications")({
   component: NotificationsPage,
@@ -97,7 +119,9 @@ function NotificationsPage() {
         <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Bell className="h-5 w-5 text-primary flex-shrink-0" />
-            <h1 className="text-lg font-semibold text-foreground">Multi-Channel Priority Dispatch Center</h1>
+            <h1 className="text-lg font-semibold text-foreground">
+              Multi-Channel Priority Dispatch Center
+            </h1>
           </div>
           <Badge variant="outline" className="border-primary text-primary bg-primary/5">
             {unreadCount} Unread Message{unreadCount === 1 ? "" : "s"}
@@ -112,7 +136,8 @@ function NotificationsPage() {
                 <div>
                   <CardTitle className="text-base">Event Bus Orchestration</CardTitle>
                   <CardDescription>
-                    Tureep AI+ utilizes a Redis-backed priority queue to dispatch alerts across in-app WebSockets, SendGrid (email), Firebase (mobile push), and Twilio (SMS).
+                    Tureep AI+ utilizes a Redis-backed priority queue to dispatch alerts across
+                    in-app WebSockets, SendGrid (email), Firebase (mobile push), and Twilio (SMS).
                   </CardDescription>
                 </div>
                 <div className="flex gap-2.5">
@@ -182,7 +207,7 @@ function NotificationsPage() {
                   </div>
 
                   <div className="space-y-2 md:col-span-3">
-                    <Label htmlFor="mockMessage">Payload Payload</Label>
+                    <Label htmlFor="mockMessage">Payload</Label>
                     <Input
                       id="mockMessage"
                       value={mockMessage}
@@ -193,11 +218,25 @@ function NotificationsPage() {
                   </div>
                 </div>
 
-                {error && <p className="text-sm text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200">{error}</p>}
-                {success && <p className="text-sm text-green-600 bg-green-50 p-2.5 rounded-lg border border-green-200">{success}</p>}
+                {error && (
+                  <p className="text-sm text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200">
+                    {error}
+                  </p>
+                )}
+                {success && (
+                  <p className="text-sm text-green-600 bg-green-50 p-2.5 rounded-lg border border-green-200">
+                    {success}
+                  </p>
+                )}
 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={dispatching}>
-                  {dispatching ? "Transmitting via event bus..." : "Broadcast Cryptographic Notification Payload"}
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-white"
+                  disabled={dispatching}
+                >
+                  {dispatching
+                    ? "Transmitting via event bus..."
+                    : "Broadcast Cryptographic Notification Payload"}
                 </Button>
               </form>
             </CardContent>
@@ -205,21 +244,27 @@ function NotificationsPage() {
 
           {/* Notifications Ledger */}
           <div className="space-y-3">
-            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider font-mono">My Active Inbox Ledger</h3>
+            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider font-mono tabular-nums">
+              My Active Inbox Ledger
+            </h3>
             {loading ? (
               <p className="text-muted-foreground text-sm">Fetching immutable notifications...</p>
             ) : notifications.length === 0 ? (
               <div className="p-12 text-center bg-secondary/30 rounded-xl border border-border">
                 <Bell className="mx-auto h-8 w-8 text-muted-foreground" />
                 <p className="mt-3 font-medium text-foreground">Zero Dispatches</p>
-                <p className="text-xs text-muted-foreground mt-1">Your communication queues are entirely silent.</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Your communication queues are entirely silent.
+                </p>
               </div>
             ) : (
               notifications.map((n) => (
                 <div
                   key={n.id}
                   className={`flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-xl border transition-all ${
-                    n.read ? "bg-white border-border opacity-80" : "bg-primary/5 border-primary/30 shadow-sm"
+                    n.read
+                      ? "bg-white border-border opacity-80"
+                      : "bg-primary/5 border-primary/30 shadow-sm"
                   }`}
                 >
                   <div className="flex items-start gap-4 flex-1">
@@ -229,15 +274,23 @@ function NotificationsPage() {
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-base text-foreground">{n.title}</span>
-                        <Badge variant={n.priority === "urgent" ? "destructive" : "secondary"} className="uppercase font-mono text-[10px]">
+                        <Badge
+                          variant={n.priority === "urgent" ? "destructive" : "secondary"}
+                          className="uppercase font-mono tabular-nums text-[10px]"
+                        >
                           Priority: {n.priority}
                         </Badge>
-                        <Badge variant="outline" className="uppercase font-mono text-[10px]">
+                        <Badge
+                          variant="outline"
+                          className="uppercase font-mono tabular-nums text-[10px]"
+                        >
                           Channel: {n.type.replace("_", "-")}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed pt-0.5">{n.message}</p>
-                      <span className="text-[10px] font-mono text-muted-foreground block pt-1">
+                      <p className="text-xs text-muted-foreground leading-relaxed pt-0.5">
+                        {n.message}
+                      </p>
+                      <span className="text-[10px] font-mono tabular-nums text-muted-foreground block pt-1">
                         Dispatched: {new Date(n.created_at).toUTCString()}
                       </span>
                     </div>
@@ -245,12 +298,16 @@ function NotificationsPage() {
 
                   <div className="flex items-center gap-2 self-end md:self-center">
                     {!n.read && (
-                      <Button size="sm" onClick={() => handleMarkRead(n.id)} className="bg-primary hover:bg-primary/90 text-white text-xs py-1 h-8">
+                      <Button
+                        size="sm"
+                        onClick={() => handleMarkRead(n.id)}
+                        className="bg-primary hover:bg-primary/90 text-white text-xs py-1 h-8"
+                      >
                         Acknowledge
                       </Button>
                     )}
                     {n.read && (
-                      <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono tabular-nums">
                         <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> Settled
                       </span>
                     )}

@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   AlertCircle,
   TrendingUp,
-  ArrowUpDown
+  ArrowUpDown,
 } from "lucide-react";
 import { getProducts, createProduct, type Product } from "@/lib/api";
 
@@ -43,10 +43,14 @@ function ProductCard({ product }: { product: Product }) {
             </span>
             <h3 className="font-semibold text-surface-800 text-sm leading-tight">{product.name}</h3>
           </div>
-          <div className={`w-2.5 h-2.5 rounded-full ${product.is_available ? "bg-success-500" : "bg-surface-300"}`} />
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${product.is_available ? "bg-success-500" : "bg-surface-300"}`}
+          />
         </div>
 
-        <p className="text-xs text-surface-500 mb-4 line-clamp-2">{product.description || "No description provided"}</p>
+        <p className="text-xs text-surface-500 mb-4 line-clamp-2">
+          {product.description || "No description provided"}
+        </p>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="bg-surface-50 rounded-xl p-3">
@@ -54,14 +58,18 @@ function ProductCard({ product }: { product: Product }) {
               <DollarSign className="w-3 h-3 text-surface-400" />
               <span className="text-[10px] text-surface-400 uppercase tracking-wider">Price</span>
             </div>
-            <p className="text-sm font-bold text-surface-800">${product.price}/{product.unit}</p>
+            <p className="text-sm font-bold text-surface-800">
+              ${product.price}/{product.unit}
+            </p>
           </div>
           <div className="bg-surface-50 rounded-xl p-3">
             <div className="flex items-center gap-1.5 mb-1">
               <Box className="w-3 h-3 text-surface-400" />
               <span className="text-[10px] text-surface-400 uppercase tracking-wider">Stock</span>
             </div>
-            <p className="text-sm font-bold text-surface-800">{product.quantity} {product.unit}</p>
+            <p className="text-sm font-bold text-surface-800">
+              {product.quantity} {product.unit}
+            </p>
           </div>
         </div>
 
@@ -71,7 +79,9 @@ function ProductCard({ product }: { product: Product }) {
         </div>
 
         <div className="flex items-center justify-between pt-3 border-t border-surface-100">
-          <span className={`text-xs font-medium ${product.is_available ? "text-success-600" : "text-surface-400"}`}>
+          <span
+            className={`text-xs font-medium ${product.is_available ? "text-success-600" : "text-surface-400"}`}
+          >
             {product.is_available ? "Available for Trade" : "Unavailable"}
           </span>
           <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -102,17 +112,22 @@ function AddProductModal({ onClose, onSuccess }: { onClose: () => void; onSucces
     setSubmitting(true);
     setError("");
     try {
-      await createProduct({ ...form, quantity: Number(form.quantity), price: Number(form.price) } as any);
+      await createProduct({
+        ...form,
+        quantity: Number(form.quantity),
+        price: form.price,
+      });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to create product");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create product");
     } finally {
       setSubmitting(false);
     }
   }
 
-  const inputClass = "w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-sm text-surface-800 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all";
+  const inputClass =
+    "w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-sm text-surface-800 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all";
   const labelClass = "block text-xs font-semibold text-surface-600 mb-1.5";
 
   return (
@@ -124,7 +139,10 @@ function AddProductModal({ onClose, onSuccess }: { onClose: () => void; onSucces
             <h2 className="text-xl font-bold text-surface-800">List New Product</h2>
             <p className="text-sm text-surface-500 mt-0.5">Add your commodity to the marketplace</p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-surface-100 transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 rounded-xl hover:bg-surface-100 transition-colors"
+          >
             <X className="w-5 h-5 text-surface-500" />
           </button>
         </div>
@@ -298,9 +316,10 @@ function ProductsPage() {
   useEffect(() => {
     let result = [...products];
     if (search) {
-      result = result.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.toLowerCase().includes(search.toLowerCase())
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.category.toLowerCase().includes(search.toLowerCase()),
       );
     }
     if (activeCategory !== "all") {
@@ -320,7 +339,9 @@ function ProductsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-surface-800">My Products</h1>
-          <p className="text-sm text-surface-500 mt-0.5">Manage your commodity listings and inventory</p>
+          <p className="text-sm text-surface-500 mt-0.5">
+            Manage your commodity listings and inventory
+          </p>
         </div>
         <button
           onClick={() => setShowModal(true)}
@@ -344,7 +365,9 @@ function ProductsPage() {
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setSortBy(sortBy === "newest" ? "price" : sortBy === "price" ? "quantity" : "newest")}
+            onClick={() =>
+              setSortBy(sortBy === "newest" ? "price" : sortBy === "price" ? "quantity" : "newest")
+            }
             className="flex items-center gap-2 px-4 py-2.5 bg-white border border-surface-200 rounded-xl text-sm font-medium text-surface-600 hover:bg-surface-50 transition-colors"
           >
             <ArrowUpDown className="w-4 h-4" />
@@ -374,7 +397,10 @@ function ProductsPage() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse">
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse"
+            >
               <div className="h-2 bg-surface-200 rounded mb-4" />
               <div className="h-4 bg-surface-200 rounded w-3/4 mb-2" />
               <div className="h-3 bg-surface-200 rounded w-1/2 mb-4" />

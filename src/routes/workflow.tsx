@@ -4,7 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
-import { Cpu, Handshake, ShoppingCart, ShieldCheck, Landmark, Truck, Bell, ArrowRight, CheckCircle2, Terminal, ExternalLink, ArrowLeft, BookOpen } from "lucide-react";
+import {
+  Cpu,
+  Handshake,
+  ShoppingCart,
+  ShieldCheck,
+  Landmark,
+  Truck,
+  Bell,
+  ArrowRight,
+  CheckCircle2,
+  Terminal,
+  ExternalLink,
+  ArrowLeft,
+  BookOpen,
+} from "lucide-react";
 
 export const Route = createFileRoute("/workflow")({
   component: DealWorkflowPage,
@@ -47,7 +61,7 @@ function DealWorkflowPage() {
       badge: "Transactional Lock",
       path: "/orders",
       action: "Inspect Escrow Transactions",
-      desc: "Once both trading entities mutually click 'Accept Deal', the pre-deal instantly transitions to an accepted state. Executing 'Convert to Order' commits an immutable transaction manifest (Order #TUR-2026-000001) and applies exact platform overhead overhead fees.",
+      desc: "Once both trading entities mutually click 'Accept Deal', the pre-deal instantly transitions to an accepted state. Executing 'Convert to Order' commits an immutable transaction manifest (Order #TUR-2026-000001) and applies exact platform overhead fees.",
       rls: "RLS Execution Guard: Only verified Buyers and Sellers can access their specific active Orders.",
       api: "POST /api/orders/ • GET /api/orders/{id}",
     },
@@ -104,13 +118,19 @@ function DealWorkflowPage() {
   const isRtl = dir === "rtl";
 
   return (
-    <div className={`flex min-h-screen bg-background ${isRtl ? "font-sans text-right" : "font-sans text-left"}`} dir={dir}>
+    <div
+      className={`flex min-h-screen bg-background ${isRtl ? "font-sans text-right" : "font-sans text-left"}`}
+      dir={dir}
+    >
       <AppSidebar activeRoute="microservices-spec" />
 
       <main className="flex-1 overflow-auto">
         <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8 select-none">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate({ to: "/dashboard" })} className="text-muted-foreground hover:text-foreground">
+            <button
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="text-muted-foreground hover:text-foreground"
+            >
               <ArrowLeft className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
             </button>
             <h1 className="text-lg font-bold text-foreground">
@@ -121,7 +141,7 @@ function DealWorkflowPage() {
             href="/APPLICATION_WORKFLOW_COMPLETE_GUIDE.md"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-4 py-2 rounded-lg text-xs font-mono select-none"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-4 py-2 rounded-lg text-xs font-mono tabular-nums select-none"
           >
             <BookOpen className="h-4 w-4" />
             <span>Read Complete Markdown Specs</span>
@@ -129,15 +149,21 @@ function DealWorkflowPage() {
         </header>
 
         <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8 select-none">
-          
           {/* Status Walkthrough Summary Banner */}
           <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
             <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="space-y-1.5 max-w-3xl select-text">
-                <Badge className="bg-primary text-white uppercase text-[10px] font-mono tracking-wider">End-To-End Journey</Badge>
-                <h2 className="text-lg font-extrabold text-foreground">How Tureep Counterparties Stepping Through the Hybrid Stack</h2>
+                <Badge className="bg-primary text-white uppercase text-[10px] font-mono tabular-nums tracking-wider">
+                  End-To-End Journey
+                </Badge>
+                <h2 className="text-lg font-extrabold text-foreground">
+                  How Tureep Counterparties Stepping Through the Hybrid Stack
+                </h2>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Every cross-border transaction naturally steps through seven distinct operational state machines. Click any of the interactive stage simulation cards below to explore underlying PostgreSQL schemas, Supabase RLS isolation notes, and instantly jump to that exact tool in our trade terminal!
+                  Every cross-border transaction naturally steps through seven distinct operational
+                  state machines. Click any of the interactive stage simulation cards below to
+                  explore underlying PostgreSQL schemas, Supabase RLS isolation notes, and instantly
+                  jump to that exact tool in our trade terminal!
                 </p>
               </div>
             </CardContent>
@@ -149,10 +175,15 @@ function DealWorkflowPage() {
               const Icon = st.icon;
 
               return (
-                <Card key={st.id} className="overflow-hidden border border-border bg-white shadow-sm hover:border-primary/60 transition-all hover:scale-[1.01] flex flex-col md:flex-row items-stretch">
+                <Card
+                  key={st.id}
+                  className="overflow-hidden border border-border bg-white shadow-sm hover:border-primary/60 transition-all hover:scale-[1.01] flex flex-col md:flex-row items-stretch"
+                >
                   {/* Left Column: Number Bar */}
-                  <div className="bg-slate-900 text-emerald-400 p-6 flex flex-col items-center justify-center min-w-28 border-b md:border-b-0 md:border-r border-slate-800 shadow-inner select-none font-mono">
-                    <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold font-sans">Stage</span>
+                  <div className="bg-slate-900 text-emerald-400 p-6 flex flex-col items-center justify-center min-w-28 border-b md:border-b-0 md:border-r border-slate-800 shadow-inner select-none font-mono tabular-nums">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold font-sans">
+                      Stage
+                    </span>
                     <span className="text-4xl font-black">{st.step}</span>
                   </div>
 
@@ -163,9 +194,14 @@ function DealWorkflowPage() {
                         <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
                           <Icon className="h-5 w-5" />
                         </div>
-                        <CardTitle className="text-base sm:text-lg font-extrabold text-foreground">{st.title}</CardTitle>
+                        <CardTitle className="text-base sm:text-lg font-extrabold text-foreground">
+                          {st.title}
+                        </CardTitle>
                       </div>
-                      <Badge variant="outline" className="border-primary text-primary bg-primary/5 font-mono text-xs">
+                      <Badge
+                        variant="outline"
+                        className="border-primary text-primary bg-primary/5 font-mono tabular-nums text-xs"
+                      >
                         {st.badge}
                       </Badge>
                     </div>
@@ -174,14 +210,18 @@ function DealWorkflowPage() {
                       {st.desc}
                     </p>
 
-                    <div className="space-y-2 pt-1 font-mono text-xs">
+                    <div className="space-y-2 pt-1 font-mono tabular-nums text-xs">
                       <div className="p-2.5 rounded-lg bg-secondary/60 border text-muted-foreground text-[11px] leading-relaxed">
-                        <strong className="text-foreground font-bold font-sans block mb-0.5">Underlying Subsystem Hooks:</strong>
+                        <strong className="text-foreground font-bold font-sans block mb-0.5">
+                          Underlying Subsystem Hooks:
+                        </strong>
                         {st.rls}
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-slate-950 text-slate-300 text-[11px] overflow-x-auto">
-                        <span className="text-primary-400 font-bold block mb-0.5">FastAPI Python Routers:</span>
+                        <span className="text-primary-400 font-bold block mb-0.5">
+                          FastAPI Python Routers:
+                        </span>
                         <span className="text-emerald-400">{st.api}</span>
                       </div>
                     </div>

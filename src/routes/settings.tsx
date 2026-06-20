@@ -14,9 +14,14 @@ import {
   Zap,
   Sparkles,
   Gem,
-  Diamond
+  Diamond,
 } from "lucide-react";
-import { getMySubscription, createCheckoutSession, cancelSubscription, type Subscription } from "@/lib/api";
+import {
+  getMySubscription,
+  createCheckoutSession,
+  cancelSubscription,
+  type Subscription,
+} from "@/lib/api";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -30,7 +35,12 @@ const tiers = [
     period: "forever",
     icon: Star,
     color: "bg-surface-100 text-surface-600",
-    features: ["Basic product listing", "5 AI matches/month", "Standard support", "120h deal delay"],
+    features: [
+      "Basic product listing",
+      "5 AI matches/month",
+      "Standard support",
+      "120h deal delay",
+    ],
     cta: "Current Plan",
     popular: false,
   },
@@ -41,7 +51,13 @@ const tiers = [
     period: "/month",
     icon: Zap,
     color: "bg-amber-100 text-amber-700",
-    features: ["Up to 20 products", "25 AI matches/month", "Email support", "72h deal delay", "Basic analytics"],
+    features: [
+      "Up to 20 products",
+      "25 AI matches/month",
+      "Email support",
+      "72h deal delay",
+      "Basic analytics",
+    ],
     cta: "Upgrade",
     popular: false,
   },
@@ -52,7 +68,14 @@ const tiers = [
     period: "/month",
     icon: Sparkles,
     color: "bg-slate-200 text-slate-700",
-    features: ["Unlimited products", "100 AI matches/month", "Priority support", "24h deal delay", "Full analytics", "L/C support"],
+    features: [
+      "Unlimited products",
+      "100 AI matches/month",
+      "Priority support",
+      "24h deal delay",
+      "Full analytics",
+      "L/C support",
+    ],
     cta: "Upgrade",
     popular: true,
   },
@@ -63,7 +86,14 @@ const tiers = [
     period: "/month",
     icon: Crown,
     color: "bg-yellow-100 text-yellow-700",
-    features: ["Unlimited everything", "500 AI matches/month", "Dedicated manager", "Instant deals", "ML predictions", "Escrow priority"],
+    features: [
+      "Unlimited everything",
+      "500 AI matches/month",
+      "Dedicated manager",
+      "Instant deals",
+      "ML predictions",
+      "Escrow priority",
+    ],
     cta: "Upgrade",
     popular: false,
   },
@@ -74,7 +104,14 @@ const tiers = [
     period: "/month",
     icon: Gem,
     color: "bg-indigo-100 text-indigo-700",
-    features: ["Enterprise features", "Unlimited matches", "24/7 concierge", "Instant deals", "Custom ML models", "White-glove onboarding"],
+    features: [
+      "Enterprise features",
+      "Unlimited matches",
+      "24/7 concierge",
+      "Instant deals",
+      "Custom ML models",
+      "White-glove onboarding",
+    ],
     cta: "Upgrade",
     popular: false,
   },
@@ -85,7 +122,14 @@ const tiers = [
     period: "",
     icon: Diamond,
     color: "bg-surface-800 text-white",
-    features: ["Bespoke solutions", "Dedicated infrastructure", "Custom integrations", "SLA guarantees", "Executive reporting", "Private corridors"],
+    features: [
+      "Bespoke solutions",
+      "Dedicated infrastructure",
+      "Custom integrations",
+      "SLA guarantees",
+      "Executive reporting",
+      "Private corridors",
+    ],
     cta: "Contact Sales",
     popular: false,
   },
@@ -133,7 +177,9 @@ function SettingsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Settings</h1>
-        <p className="text-sm text-surface-500 mt-0.5">Manage your account, billing, and preferences</p>
+        <p className="text-sm text-surface-500 mt-0.5">
+          Manage your account, billing, and preferences
+        </p>
       </div>
 
       {/* Tabs */}
@@ -168,7 +214,9 @@ function SettingsPage() {
             <h3 className="font-bold text-surface-800 mb-4">Profile Information</h3>
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-surface-600 mb-2">Company Name</label>
+                <label className="block text-xs font-semibold text-surface-600 mb-2">
+                  Company Name
+                </label>
                 <input
                   type="text"
                   defaultValue="Istanbul Imports Ltd."
@@ -176,7 +224,9 @@ function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-surface-600 mb-2">Email Address</label>
+                <label className="block text-xs font-semibold text-surface-600 mb-2">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   defaultValue="buyer.turkey@tureep.ai"
@@ -184,7 +234,9 @@ function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-surface-600 mb-2">Phone Number</label>
+                <label className="block text-xs font-semibold text-surface-600 mb-2">
+                  Phone Number
+                </label>
                 <input
                   type="tel"
                   defaultValue="+905301234567"
@@ -214,7 +266,9 @@ function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <Shield className="w-5 h-5 text-primary-500" />
                   <div>
-                    <p className="text-sm font-semibold text-surface-800">Two-Factor Authentication</p>
+                    <p className="text-sm font-semibold text-surface-800">
+                      Two-Factor Authentication
+                    </p>
                     <p className="text-xs text-surface-500">Add an extra layer of security</p>
                   </div>
                 </div>
@@ -252,7 +306,9 @@ function SettingsPage() {
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-surface-800 capitalize">{subscription.tier} Plan</p>
+                    <p className="text-lg font-bold text-surface-800 capitalize">
+                      {subscription.tier} Plan
+                    </p>
                     <p className="text-sm text-surface-500">
                       Renews {new Date(subscription.current_period_end).toLocaleDateString()}
                     </p>
@@ -291,8 +347,8 @@ function SettingsPage() {
                       isCurrent
                         ? "border-primary-500 ring-2 ring-primary-100"
                         : tier.popular
-                        ? "border-accent-300 ring-1 ring-accent-100"
-                        : "border-surface-200 card-hover"
+                          ? "border-accent-300 ring-1 ring-accent-100"
+                          : "border-surface-200 card-hover"
                     }`}
                   >
                     {tier.popular && (
@@ -305,7 +361,9 @@ function SettingsPage() {
                         Current Plan
                       </span>
                     )}
-                    <div className={`w-10 h-10 rounded-xl ${tier.color} flex items-center justify-center mb-3`}>
+                    <div
+                      className={`w-10 h-10 rounded-xl ${tier.color} flex items-center justify-center mb-3`}
+                    >
                       <Icon className="w-5 h-5" />
                     </div>
                     <h4 className="font-bold text-surface-800">{tier.name}</h4>
@@ -328,8 +386,8 @@ function SettingsPage() {
                         isCurrent
                           ? "bg-surface-100 text-surface-400 cursor-not-allowed"
                           : tier.popular
-                          ? "bg-accent-500 text-white hover:bg-accent-600"
-                          : "bg-surface-100 text-surface-700 hover:bg-surface-200"
+                            ? "bg-accent-500 text-white hover:bg-accent-600"
+                            : "bg-surface-100 text-surface-700 hover:bg-surface-200"
                       }`}
                     >
                       {isCurrent ? "Current Plan" : upgrading ? "Processing..." : tier.cta}
@@ -347,14 +405,41 @@ function SettingsPage() {
         <div className="bg-white rounded-2xl p-6 border border-surface-200 space-y-6">
           <h3 className="font-bold text-surface-800">Notification Preferences</h3>
           {[
-            { label: "Deal Alerts", desc: "Get notified when new AI matches are found", checked: true },
-            { label: "Order Updates", desc: "Status changes for your orders and shipments", checked: true },
-            { label: "Price Alerts", desc: "Market price movements for your commodities", checked: false },
-            { label: "Compliance Alerts", desc: "KYC and sanctions screening updates", checked: true },
-            { label: "Payment Notifications", desc: "Escrow releases and payment confirmations", checked: true },
-            { label: "Marketing & Updates", desc: "Product updates and platform news", checked: false },
+            {
+              label: "Deal Alerts",
+              desc: "Get notified when new AI matches are found",
+              checked: true,
+            },
+            {
+              label: "Order Updates",
+              desc: "Status changes for your orders and shipments",
+              checked: true,
+            },
+            {
+              label: "Price Alerts",
+              desc: "Market price movements for your commodities",
+              checked: false,
+            },
+            {
+              label: "Compliance Alerts",
+              desc: "KYC and sanctions screening updates",
+              checked: true,
+            },
+            {
+              label: "Payment Notifications",
+              desc: "Escrow releases and payment confirmations",
+              checked: true,
+            },
+            {
+              label: "Marketing & Updates",
+              desc: "Product updates and platform news",
+              checked: false,
+            },
           ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-surface-100 last:border-0">
+            <div
+              key={i}
+              className="flex items-center justify-between py-3 border-b border-surface-100 last:border-0"
+            >
               <div>
                 <p className="text-sm font-semibold text-surface-800">{item.label}</p>
                 <p className="text-xs text-surface-500">{item.desc}</p>

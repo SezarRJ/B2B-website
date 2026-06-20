@@ -5,11 +5,35 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getKYCStatus, submitKYC, listPendingKYC, reviewKYC, KYCRecord, getMe, User } from "@/lib/api";
-import { Shield, ArrowLeft, Upload, CheckCircle2, Clock, XCircle, FileCheck2, UserCheck, AlertCircle } from "lucide-react";
+import {
+  getKYCStatus,
+  submitKYC,
+  listPendingKYC,
+  reviewKYC,
+  KYCRecord,
+  getMe,
+  User,
+} from "@/lib/api";
+import {
+  Shield,
+  ArrowLeft,
+  Upload,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  FileCheck2,
+  UserCheck,
+  AlertCircle,
+} from "lucide-react";
 
 export const Route = createFileRoute("/kyc")({
   component: KYCPage,
@@ -52,7 +76,10 @@ function KYCPage() {
       const records = await listPendingKYC();
       setPendingRecords(records);
     } catch (err: any) {
-      setAdminError(err.message || "Failed to load admin KYC records. (Demo Note: User email must contain 'admin')");
+      setAdminError(
+        err.message ||
+          "Failed to load admin KYC records. (Demo Note: User email must contain 'admin')",
+      );
     } finally {
       setAdminLoading(false);
     }
@@ -76,7 +103,10 @@ function KYCPage() {
 
   async function handleReview(kycId: number, reviewStatus: "approved" | "rejected") {
     try {
-      const reason = reviewStatus === "rejected" ? (rejectionReasons[kycId] || "Incomplete documentation") : undefined;
+      const reason =
+        reviewStatus === "rejected"
+          ? rejectionReasons[kycId] || "Incomplete documentation"
+          : undefined;
       await reviewKYC(kycId, reviewStatus, reason);
       setPendingRecords(pendingRecords.filter((r) => r.id !== kycId));
       if (currentUser?.id === kycId) {
@@ -104,7 +134,10 @@ function KYCPage() {
       <main className="flex-1 overflow-auto">
         <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate({ to: "/dashboard" })} className="text-muted-foreground hover:text-foreground">
+            <button
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="text-muted-foreground hover:text-foreground"
+            >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <h1 className="text-lg font-semibold text-foreground">KYC & AML Workflow Management</h1>
@@ -138,7 +171,8 @@ function KYCPage() {
                     <div>
                       <CardTitle>Verify Your Business Identity</CardTitle>
                       <CardDescription>
-                        Strict cross-border regulatory compliance requires corporate KYC/AML verification prior to enabling active deal execution.
+                        Strict cross-border regulatory compliance requires corporate KYC/AML
+                        verification prior to enabling active deal execution.
                       </CardDescription>
                     </div>
                   </div>
@@ -148,8 +182,17 @@ function KYCPage() {
                     {statusIcons[status] || statusIcons.pending}
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-foreground capitalize">Status: {status.replace("_", " ")}</p>
-                        <Badge variant={status === "approved" ? "outline" : "secondary"} className={status === "approved" ? "bg-green-50 text-green-700 border-green-300" : ""}>
+                        <p className="font-bold text-foreground capitalize">
+                          Status: {status.replace("_", " ")}
+                        </p>
+                        <Badge
+                          variant={status === "approved" ? "outline" : "secondary"}
+                          className={
+                            status === "approved"
+                              ? "bg-green-50 text-green-700 border-green-300"
+                              : ""
+                          }
+                        >
                           {status === "approved" ? "Active Tier" : "Pending Audit"}
                         </Badge>
                       </div>
@@ -173,9 +216,15 @@ function KYCPage() {
                             <SelectContent>
                               <SelectItem value="passport">Executive Passport</SelectItem>
                               <SelectItem value="national_id">National Identity Card</SelectItem>
-                              <SelectItem value="business_license">Business Trade License</SelectItem>
-                              <SelectItem value="tax_certificate">Tax Registration Certificate</SelectItem>
-                              <SelectItem value="bank_statement">Corporate Bank Statement</SelectItem>
+                              <SelectItem value="business_license">
+                                Business Trade License
+                              </SelectItem>
+                              <SelectItem value="tax_certificate">
+                                Tax Registration Certificate
+                              </SelectItem>
+                              <SelectItem value="bank_statement">
+                                Corporate Bank Statement
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -200,15 +249,28 @@ function KYCPage() {
                             required
                           />
                           <p className="text-xs text-muted-foreground">
-                            In production, files are uploaded via pre-signed AWS S3 KMS buckets with virus scanning enabled.
+                            In production, files are uploaded via pre-signed AWS S3 KMS buckets with
+                            virus scanning enabled.
                           </p>
                         </div>
                       </div>
 
-                      {error && <p className="text-sm font-medium text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{error}</p>}
-                      {success && <p className="text-sm font-medium text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">{success}</p>}
-                      
-                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-2.5" disabled={loading}>
+                      {error && (
+                        <p className="text-sm font-medium text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                          {error}
+                        </p>
+                      )}
+                      {success && (
+                        <p className="text-sm font-medium text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
+                          {success}
+                        </p>
+                      )}
+
+                      <Button
+                        type="submit"
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-2.5"
+                        disabled={loading}
+                      >
                         <Upload className="mr-2 h-4 w-4" />
                         {loading ? "Transmitting Securely..." : "Submit Regulatory KYC Proof"}
                       </Button>
@@ -226,10 +288,16 @@ function KYCPage() {
                     <div>
                       <CardTitle>Compliance Admin Desk</CardTitle>
                       <CardDescription>
-                        Review submitted KYC documents, verify cryptographic integrity, and approve corporate trading tiers.
+                        Review submitted KYC documents, verify cryptographic integrity, and approve
+                        corporate trading tiers.
                       </CardDescription>
                     </div>
-                    <Button variant="outline" size="sm" onClick={loadAdminRecords} disabled={adminLoading}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={loadAdminRecords}
+                      disabled={adminLoading}
+                    >
                       <Clock className="mr-2 h-4 w-4" />
                       Refresh Pool
                     </Button>
@@ -239,11 +307,18 @@ function KYCPage() {
                   {!isAdmin ? (
                     <div className="p-8 text-center bg-yellow-50/50 rounded-xl border border-yellow-200">
                       <AlertCircle className="mx-auto h-10 w-10 text-yellow-600 mb-2" />
-                      <h4 className="text-sm font-bold text-yellow-900">Compliance Officer Role Required</h4>
+                      <h4 className="text-sm font-bold text-yellow-900">
+                        Compliance Officer Role Required
+                      </h4>
                       <p className="text-xs text-yellow-800 mt-1 max-w-md mx-auto leading-relaxed">
-                        To access the live review queue, you must be logged in as an accredited Compliance Officer. For demo purposes, log in with `admin@tureep.ai` (password: `Tureep*Auth#2026!xKey`).
+                        To access the live review queue, you must be logged in as an accredited
+                        Compliance Officer. For demo purposes, log in with `admin@tureep.ai`
+                        (password: `Tureep*Auth#2026!xKey`).
                       </p>
-                      <Button className="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white" onClick={() => navigate({ to: "/login" })}>
+                      <Button
+                        className="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white"
+                        onClick={() => navigate({ to: "/login" })}
+                      >
                         Switch to Admin Demo Account
                       </Button>
                     </div>
@@ -257,22 +332,42 @@ function KYCPage() {
                     <div className="p-12 text-center bg-secondary/30 rounded-xl border border-border">
                       <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" />
                       <p className="mt-3 font-medium text-foreground">Zero Pending Submissions</p>
-                      <p className="text-xs text-muted-foreground mt-1">All applicant queues have been fully audited and settled.</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        All applicant queues have been fully audited and settled.
+                      </p>
                     </div>
                   ) : (
                     <div className="grid gap-4">
                       {pendingRecords.map((record) => (
-                        <Card key={record.id} className="overflow-hidden border border-border bg-white shadow-sm">
+                        <Card
+                          key={record.id}
+                          className="overflow-hidden border border-border bg-white shadow-sm"
+                        >
                           <CardContent className="p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                             <div className="space-y-1.5 flex-1">
                               <div className="flex items-center gap-2">
-                                <Badge variant="secondary" className="uppercase font-mono text-xs">{record.document_type.replace("_", " ")}</Badge>
-                                <span className="text-xs font-mono text-muted-foreground">Submission #{record.id}</span>
+                                <Badge
+                                  variant="secondary"
+                                  className="uppercase font-mono tabular-nums text-xs"
+                                >
+                                  {record.document_type.replace("_", " ")}
+                                </Badge>
+                                <span className="text-xs font-mono tabular-nums text-muted-foreground">
+                                  Submission #{record.id}
+                                </span>
                               </div>
                               <p className="text-sm font-bold text-foreground">
-                                Document URL: <a href={record.document_url} target="_blank" rel="noreferrer" className="text-primary underline font-normal">{record.document_url}</a>
+                                Document URL:{" "}
+                                <a
+                                  href={record.document_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-primary underline font-normal"
+                                >
+                                  {record.document_url}
+                                </a>
                               </p>
-                              <p className="text-xs text-muted-foreground font-mono">
+                              <p className="text-xs text-muted-foreground font-mono tabular-nums">
                                 SHA-256 Hash: {record.document_hash}
                               </p>
                             </div>
@@ -282,7 +377,12 @@ function KYCPage() {
                                 size={30}
                                 placeholder="Rejection note (if rejecting)"
                                 value={rejectionReasons[record.id] || ""}
-                                onChange={(e) => setRejectionReasons({ ...rejectionReasons, [record.id]: e.target.value })}
+                                onChange={(e) =>
+                                  setRejectionReasons({
+                                    ...rejectionReasons,
+                                    [record.id]: e.target.value,
+                                  })
+                                }
                                 className="text-xs h-8"
                               />
                               <div className="flex gap-2 justify-end">

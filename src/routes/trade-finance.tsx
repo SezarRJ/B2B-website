@@ -5,8 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LetterOfCredit, DocumentaryCollection, getLCs, actOnLC, getDPs, actOnDP, getOrders, Order } from "@/lib/api";
-import { CreditCard, ArrowRight, CheckCircle2, AlertTriangle, FileText, Landmark, RefreshCw, Send, XCircle, ShieldCheck } from "lucide-react";
+import {
+  LetterOfCredit,
+  DocumentaryCollection,
+  getLCs,
+  actOnLC,
+  getDPs,
+  actOnDP,
+  getOrders,
+  Order,
+} from "@/lib/api";
+import {
+  CreditCard,
+  ArrowRight,
+  CheckCircle2,
+  AlertTriangle,
+  FileText,
+  Landmark,
+  RefreshCw,
+  Send,
+  XCircle,
+  ShieldCheck,
+} from "lucide-react";
 
 export const Route = createFileRoute("/trade-finance")({
   component: TradeFinancePage,
@@ -86,9 +106,14 @@ function TradeFinancePage() {
         <header className="flex h-16 items-center justify-between border-b border-border bg-white px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Landmark className="h-5 w-5 text-primary flex-shrink-0" />
-            <h1 className="text-lg font-semibold text-foreground">Trade Finance & Institutional State Machines</h1>
+            <h1 className="text-lg font-semibold text-foreground">
+              Trade Finance & Institutional State Machines
+            </h1>
           </div>
-          <Badge variant="outline" className="border-green-500 text-green-700 bg-green-50 font-mono">
+          <Badge
+            variant="outline"
+            className="border-green-500 text-green-700 bg-green-50 font-mono tabular-nums"
+          >
             UCP 600 / URC 522 SWIFT Nodes: Active
           </Badge>
         </header>
@@ -104,7 +129,9 @@ function TradeFinancePage() {
                     B2B Commercial Instrument Automation
                   </CardTitle>
                   <CardDescription>
-                    Tureep AI+ orchestrates rigorous financial state machines. Letters of Credit (L/C) are governed by ICC UCP 600 rules, while Documentary Collections (D/P) execute under URC 522 protocols.
+                    Tureep AI+ orchestrates rigorous financial state machines. Letters of Credit
+                    (L/C) are governed by ICC UCP 600 rules, while Documentary Collections (D/P)
+                    execute under URC 522 protocols.
                   </CardDescription>
                 </div>
                 <Button size="sm" variant="outline" onClick={load} disabled={loading}>
@@ -115,8 +142,16 @@ function TradeFinancePage() {
             </CardHeader>
           </Card>
 
-          {error && <p className="text-sm font-medium text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{error}</p>}
-          {success && <p className="text-sm font-medium text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">{success}</p>}
+          {error && (
+            <p className="text-sm font-medium text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+              {error}
+            </p>
+          )}
+          {success && (
+            <p className="text-sm font-medium text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
+              {success}
+            </p>
+          )}
 
           <Tabs defaultValue="lc" className="w-full">
             <TabsList className="mb-6 grid w-full grid-cols-2 max-w-md">
@@ -138,26 +173,46 @@ function TradeFinancePage() {
                 <div className="p-12 text-center bg-secondary/30 rounded-xl border border-border">
                   <Landmark className="mx-auto h-8 w-8 text-muted-foreground" />
                   <p className="mt-3 font-medium text-foreground">No Active L/Cs</p>
-                  <p className="text-xs text-muted-foreground mt-1">Convert a pre-deal with L/C payment terms to initiate an instrument.</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Convert a pre-deal with L/C payment terms to initiate an instrument.
+                  </p>
                 </div>
               ) : (
                 lcs.map((lc) => {
                   const currentStepIdx = lcSteps.findIndex((s) => s.id === lc.status);
 
                   return (
-                    <Card key={lc.id} className="overflow-hidden border border-border bg-white shadow-sm">
+                    <Card
+                      key={lc.id}
+                      className="overflow-hidden border border-border bg-white shadow-sm"
+                    >
                       <CardHeader className="bg-secondary/40 border-b border-border pb-4">
                         <div className="flex flex-wrap items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <Badge variant="secondary" className="font-mono text-xs">{lc.lc_number}</Badge>
+                            <Badge variant="secondary" className="font-mono tabular-nums text-xs">
+                              {lc.lc_number}
+                            </Badge>
                             <CardTitle className="text-base font-bold text-foreground">
                               SWIFT MT700 Documentary Instrument
                             </CardTitle>
-                            <Badge variant={lc.status === "settled" ? "outline" : lc.status === "discrepancies" ? "destructive" : "default"} className={lc.status === "settled" ? "bg-green-50 text-green-700 border-green-300 uppercase font-mono text-[10px]" : "uppercase font-mono text-[10px]"}>
+                            <Badge
+                              variant={
+                                lc.status === "settled"
+                                  ? "outline"
+                                  : lc.status === "discrepancies"
+                                    ? "destructive"
+                                    : "default"
+                              }
+                              className={
+                                lc.status === "settled"
+                                  ? "bg-green-50 text-green-700 border-green-300 uppercase font-mono tabular-nums text-[10px]"
+                                  : "uppercase font-mono tabular-nums text-[10px]"
+                              }
+                            >
                               State: {lc.status.replace("_", " ")}
                             </Badge>
                           </div>
-                          <span className="text-xs text-muted-foreground font-mono">
+                          <span className="text-xs text-muted-foreground font-mono tabular-nums">
                             Expires: {new Date(lc.expiry_date).toLocaleDateString()}
                           </span>
                         </div>
@@ -166,7 +221,7 @@ function TradeFinancePage() {
                       <CardContent className="p-6 space-y-6">
                         {/* State Machine Progress Bar */}
                         <div className="space-y-2">
-                          <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block font-mono">
+                          <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block font-mono tabular-nums">
                             UCP 600 State Machine Trajectory
                           </span>
                           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
@@ -181,11 +236,13 @@ function TradeFinancePage() {
                                     isCurrent
                                       ? "bg-primary text-primary-foreground font-bold border-primary shadow-sm"
                                       : isCompleted
-                                      ? "bg-green-50 border-green-200 text-green-900 font-medium"
-                                      : "bg-secondary/50 border-border text-muted-foreground opacity-60"
+                                        ? "bg-green-50 border-green-200 text-green-900 font-medium"
+                                        : "bg-secondary/50 border-border text-muted-foreground opacity-60"
                                   }`}
                                 >
-                                  <span className="text-[11px] block font-mono">Step {idx + 1}</span>
+                                  <span className="text-[11px] block font-mono tabular-nums">
+                                    Step {idx + 1}
+                                  </span>
                                   <span className="text-xs tracking-tight">{step.label}</span>
                                 </div>
                               );
@@ -196,16 +253,28 @@ function TradeFinancePage() {
                         {/* Institutional routing metadata */}
                         <div className="grid md:grid-cols-3 gap-4 p-4 bg-secondary/30 rounded-xl text-xs">
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5">Issuing Institutional Bank:</span>
-                            <span className="font-mono text-muted-foreground">{lc.issuing_bank}</span>
+                            <span className="font-bold text-foreground block mb-0.5">
+                              Issuing Institutional Bank:
+                            </span>
+                            <span className="font-mono tabular-nums text-muted-foreground">
+                              {lc.issuing_bank}
+                            </span>
                           </div>
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5">Advising Institutional Bank:</span>
-                            <span className="font-mono text-muted-foreground">{lc.advising_bank}</span>
+                            <span className="font-bold text-foreground block mb-0.5">
+                              Advising Institutional Bank:
+                            </span>
+                            <span className="font-mono tabular-nums text-muted-foreground">
+                              {lc.advising_bank}
+                            </span>
                           </div>
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5">Total Settlement Commitment:</span>
-                            <span className="font-bold text-base text-foreground font-mono">${Number(lc.amount).toFixed(2)} {lc.currency}</span>
+                            <span className="font-bold text-foreground block mb-0.5">
+                              Total Settlement Commitment:
+                            </span>
+                            <span className="font-bold text-base text-foreground font-mono tabular-nums">
+                              ${Number(lc.amount).toFixed(2)} {lc.currency}
+                            </span>
                           </div>
                         </div>
 
@@ -218,7 +287,8 @@ function TradeFinancePage() {
                             </div>
                             <p className="text-xs leading-relaxed pt-0.5">{lc.discrepancy_notes}</p>
                             <p className="text-[10px] text-red-700 pt-1">
-                              Action required: Exporter must submit clean compliant documentation or applicant must officially waive discrepancies.
+                              Action required: Exporter must submit clean compliant documentation or
+                              applicant must officially waive discrepancies.
                             </p>
                           </div>
                         )}
@@ -232,7 +302,11 @@ function TradeFinancePage() {
                           )}
 
                           {lc.status === "advised" && (
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleLCAction(lc.id, "present")}>
+                            <Button
+                              size="sm"
+                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                              onClick={() => handleLCAction(lc.id, "present")}
+                            >
                               <FileText className="mr-2 h-4 w-4" /> Present Commercial Documents
                             </Button>
                           )}
@@ -243,25 +317,43 @@ function TradeFinancePage() {
                                 size="sm"
                                 variant="outline"
                                 className="border-red-300 text-red-700 hover:bg-red-50"
-                                onClick={() => handleLCAction(lc.id, "discrepancy", "Port of export mismatch identified in Commercial Invoice #8812.")}
+                                onClick={() =>
+                                  handleLCAction(
+                                    lc.id,
+                                    "discrepancy",
+                                    "Port of export mismatch identified in Commercial Invoice #8812.",
+                                  )
+                                }
                               >
-                                <AlertTriangle className="mr-1.5 h-4 w-4" /> Simulate SWIFT MT734 Discrepancy
+                                <AlertTriangle className="mr-1.5 h-4 w-4" /> Simulate SWIFT MT734
+                                Discrepancy
                               </Button>
-                              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleLCAction(lc.id, "clean")}>
-                                <CheckCircle2 className="mr-1.5 h-4 w-4" /> Confirm Clean Compliant Audit
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => handleLCAction(lc.id, "clean")}
+                              >
+                                <CheckCircle2 className="mr-1.5 h-4 w-4" /> Confirm Clean Compliant
+                                Audit
                               </Button>
                             </>
                           )}
 
-                          {(lc.status === "clean_presentation" || lc.status === "discrepancies") && (
-                            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-bold" onClick={() => handleLCAction(lc.id, "settle")}>
+                          {(lc.status === "clean_presentation" ||
+                            lc.status === "discrepancies") && (
+                            <Button
+                              size="sm"
+                              className="bg-primary hover:bg-primary/90 text-white font-bold"
+                              onClick={() => handleLCAction(lc.id, "settle")}
+                            >
                               <Landmark className="mr-2 h-4 w-4" /> Settle Wire MT756 ($7,500)
                             </Button>
                           )}
 
                           {lc.status === "settled" && (
-                            <span className="text-xs font-bold text-green-700 bg-green-50 px-4 py-2 rounded-md border border-green-300 flex items-center gap-1.5 font-mono">
-                              <CheckCircle2 className="h-4 w-4" /> L/C Settled Fully & Wire MT756 Authenticated
+                            <span className="text-xs font-bold text-green-700 bg-green-50 px-4 py-2 rounded-md border border-green-300 flex items-center gap-1.5 font-mono tabular-nums">
+                              <CheckCircle2 className="h-4 w-4" /> L/C Settled Fully & Wire MT756
+                              Authenticated
                             </span>
                           )}
                         </div>
@@ -275,7 +367,9 @@ function TradeFinancePage() {
             {/* Documentary Collection Tab */}
             <TabsContent value="dp" className="space-y-6">
               {loading ? (
-                <p className="text-muted-foreground text-sm">Querying Documentary Collection pool...</p>
+                <p className="text-muted-foreground text-sm">
+                  Querying Documentary Collection pool...
+                </p>
               ) : dps.length === 0 ? (
                 <div className="p-12 text-center bg-secondary/30 rounded-xl border border-border">
                   <FileText className="mx-auto h-8 w-8 text-muted-foreground" />
@@ -286,19 +380,31 @@ function TradeFinancePage() {
                   const currentStepIdx = dpSteps.findIndex((s) => s.id === dp.status);
 
                   return (
-                    <Card key={dp.id} className="overflow-hidden border border-border bg-white shadow-sm">
+                    <Card
+                      key={dp.id}
+                      className="overflow-hidden border border-border bg-white shadow-sm"
+                    >
                       <CardHeader className="bg-secondary/40 border-b border-border pb-4">
                         <div className="flex flex-wrap items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <Badge variant="secondary" className="font-mono text-xs">{dp.dp_number}</Badge>
+                            <Badge variant="secondary" className="font-mono tabular-nums text-xs">
+                              {dp.dp_number}
+                            </Badge>
                             <CardTitle className="text-base font-bold text-foreground">
                               URC 522 Documents Against Payment (D/P)
                             </CardTitle>
-                            <Badge variant={dp.status === "documents_released" ? "outline" : "default"} className={dp.status === "documents_released" ? "bg-green-50 text-green-700 border-green-300 uppercase font-mono text-[10px]" : "uppercase font-mono text-[10px]"}>
+                            <Badge
+                              variant={dp.status === "documents_released" ? "outline" : "default"}
+                              className={
+                                dp.status === "documents_released"
+                                  ? "bg-green-50 text-green-700 border-green-300 uppercase font-mono tabular-nums text-[10px]"
+                                  : "uppercase font-mono tabular-nums text-[10px]"
+                              }
+                            >
                               State: {dp.status.replace("_", " ")}
                             </Badge>
                           </div>
-                          <span className="text-xs text-muted-foreground font-mono">
+                          <span className="text-xs text-muted-foreground font-mono tabular-nums">
                             Created: {new Date(dp.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -306,7 +412,7 @@ function TradeFinancePage() {
 
                       <CardContent className="p-6 space-y-6">
                         <div className="space-y-2">
-                          <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block font-mono">
+                          <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block font-mono tabular-nums">
                             URC 522 State Machine Trajectory
                           </span>
                           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -321,11 +427,13 @@ function TradeFinancePage() {
                                     isCurrent
                                       ? "bg-primary text-primary-foreground font-bold border-primary shadow-sm"
                                       : isCompleted
-                                      ? "bg-green-50 border-green-200 text-green-900 font-medium"
-                                      : "bg-secondary/50 border-border text-muted-foreground opacity-60"
+                                        ? "bg-green-50 border-green-200 text-green-900 font-medium"
+                                        : "bg-secondary/50 border-border text-muted-foreground opacity-60"
                                   }`}
                                 >
-                                  <span className="text-[11px] block font-mono">Step {idx + 1}</span>
+                                  <span className="text-[11px] block font-mono tabular-nums">
+                                    Step {idx + 1}
+                                  </span>
                                   <span className="text-xs tracking-tight">{step.label}</span>
                                 </div>
                               );
@@ -333,43 +441,63 @@ function TradeFinancePage() {
                           </div>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-4 p-4 bg-secondary/30 rounded-xl text-xs font-mono">
+                        <div className="grid md:grid-cols-3 gap-4 p-4 bg-secondary/30 rounded-xl text-xs font-mono tabular-nums">
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5 font-sans">Remitting Bank (Exporter):</span>
+                            <span className="font-bold text-foreground block mb-0.5 font-sans">
+                              Remitting Bank (Exporter):
+                            </span>
                             <span>{dp.remitting_bank}</span>
                           </div>
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5 font-sans">Collecting Bank (Importer):</span>
+                            <span className="font-bold text-foreground block mb-0.5 font-sans">
+                              Collecting Bank (Importer):
+                            </span>
                             <span>{dp.collecting_bank}</span>
                           </div>
                           <div>
-                            <span className="font-bold text-foreground block mb-0.5 font-sans">Collection Face Value:</span>
-                            <span className="font-bold text-base text-foreground">${Number(dp.amount).toFixed(2)} {dp.currency}</span>
+                            <span className="font-bold text-foreground block mb-0.5 font-sans">
+                              Collection Face Value:
+                            </span>
+                            <span className="font-bold text-base text-foreground">
+                              ${Number(dp.amount).toFixed(2)} {dp.currency}
+                            </span>
                           </div>
                         </div>
 
                         <div className="pt-2 border-t border-border flex flex-wrap items-center justify-end gap-2.5">
                           {dp.status === "sent_to_collecting_bank" && (
                             <Button size="sm" onClick={() => handleDPAction(dp.id, "present")}>
-                              <Send className="mr-2 h-4 w-4" /> Present Commercial Papers to Importer
+                              <Send className="mr-2 h-4 w-4" /> Present Commercial Papers to
+                              Importer
                             </Button>
                           )}
 
                           {dp.status === "presented_to_importer" && (
-                            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleDPAction(dp.id, "pay")}>
-                              <Landmark className="mr-2 h-4 w-4" /> Capture Importer Wire Payment ($3,800)
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                              onClick={() => handleDPAction(dp.id, "pay")}
+                            >
+                              <Landmark className="mr-2 h-4 w-4" /> Capture Importer Wire Payment
+                              ($3,800)
                             </Button>
                           )}
 
                           {dp.status === "paid" && (
-                            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => handleDPAction(dp.id, "send")}>
-                              <CheckCircle2 className="mr-2 h-4 w-4" /> Release Commercial Shipment Documents
+                            <Button
+                              size="sm"
+                              className="bg-primary hover:bg-primary/90 text-white"
+                              onClick={() => handleDPAction(dp.id, "send")}
+                            >
+                              <CheckCircle2 className="mr-2 h-4 w-4" /> Release Commercial Shipment
+                              Documents
                             </Button>
                           )}
 
                           {dp.status === "documents_released" && (
-                            <span className="text-xs font-bold text-green-700 bg-green-50 px-4 py-2 rounded-md border border-green-300 flex items-center gap-1.5 font-mono">
-                              <CheckCircle2 className="h-4 w-4" /> Collection Paid & Documents Released to Importer
+                            <span className="text-xs font-bold text-green-700 bg-green-50 px-4 py-2 rounded-md border border-green-300 flex items-center gap-1.5 font-mono tabular-nums">
+                              <CheckCircle2 className="h-4 w-4" /> Collection Paid & Documents
+                              Released to Importer
                             </span>
                           )}
                         </div>

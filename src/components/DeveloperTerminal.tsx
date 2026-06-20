@@ -79,7 +79,7 @@ export function DeveloperTerminal() {
           <p className="text-slate-300">● Full SHA Hash: <span className="text-amber-400 select-all">{vm.fullHash}</span></p>
           <p className="text-slate-300">● Deployed Release: {vm.release}</p>
           <p className="text-slate-300">● Timestamp: {new Date(vm.timestamp).toUTCString()}</p>
-          <p className="text-slate-300">● Author: {(vm as any).author ?? "unknown"}</p>
+          <p className="text-slate-300">● Author: {vm.author}</p>
           <p className="text-slate-400 text-[10px] pt-1 leading-relaxed border-t border-slate-800">Commit Message: "{vm.message}"</p>
         </div>
       );
