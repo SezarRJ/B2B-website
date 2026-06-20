@@ -1,5 +1,12 @@
-import { createRootRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import {
+  createRootRoute,
+  HeadContent,
+  Link,
+  Outlet,
+  Scripts,
+  useLocation,
+} from "@tanstack/react-router";
+import { useState, useEffect, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Package,
@@ -26,10 +33,53 @@ import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import { UniversalInAppHelpDrawer } from "@/components/UniversalInAppHelpDrawer";
 import { ClientErrorConsole } from "@/components/ClientErrorConsole";
 import { useI18n } from "@/lib/i18n";
+import "@/index.css";
 
 export const Route = createRootRoute({
-  component: RootLayout,
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+      { title: "Tureep AI+ — Trade Intelligence Platform" },
+      {
+        name: "description",
+        content:
+          "AI-powered B2B trade platform connecting sellers and buyers across the Middle East and beyond.",
+      },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      },
+    ],
+  }),
+  component: RootComponent,
 });
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <RootLayout />
+    </RootDocument>
+  );
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 const navItems = [
   { path: "/dashboard", labelKey: "nav.dashboard", fallback: "Dashboard", icon: LayoutDashboard },
