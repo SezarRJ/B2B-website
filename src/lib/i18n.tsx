@@ -1319,17 +1319,21 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("tureep_lang") as Language;
-      return saved || "en";
-    }
-    return "en";
-  });
+  // Always start with "en" on both server and initial client render to avoid
+  // SSR hydration mismatches. Read persisted language after mount.
+  const [language, setLanguageState] = useState<Language>("en");
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("tureep_lang") as Language | null;
+      if (saved) setLanguageState(saved);
+    } catch {}
+    setHydrated(true);
+  }, []);
 
   const dir = language === "ar" || language === "fa" || language === "ku" ? "rtl" : "ltr";
 
-  // Dynamic explicit Web Fonts application for Arabic, Persian, Kurdish, and Turkish
   const fontFamily =
     language === "ar" || language === "ku"
       ? "'Noto Sans Arabic', sans-serif"
@@ -1338,12 +1342,13 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         : "'Inter', sans-serif";
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (!hydrated) return;
+    try {
       localStorage.setItem("tureep_lang", language);
-      document.documentElement.dir = dir;
-      document.documentElement.lang = language;
-    }
-  }, [language, dir]);
+    } catch {}
+    document.documentElement.dir = dir;
+    document.documentElement.lang = language;
+  }, [language, dir, hydrated]);
 
   function setLanguage(lang: Language) {
     setLanguageState(lang);
