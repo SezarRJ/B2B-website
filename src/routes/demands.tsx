@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TopWorkflowBar } from "@/components/TopWorkflowBar";
 import { Demand, getDemands, createDemand, generatePreDeals } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
 import {
