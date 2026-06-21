@@ -1500,7 +1500,6 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       >
         {children}
       </div>
-      <UniversalLanguageBar />
     </I18nContext.Provider>
   );
 }

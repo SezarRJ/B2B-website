@@ -40,19 +40,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
-      { title: "Tureep AI+ — Trade Intelligence Platform" },
+      { title: "DealCompass AI+ — Global Trade Intelligence Platform" },
       {
         name: "description",
         content:
-          "AI-powered B2B trade platform connecting sellers and buyers across the Middle East and beyond.",
-      },
-    ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+          "AI-powered global trade intelligence platform for discovering, scoring, saving, and monitoring real trade opportunities.",
       },
     ],
   }),
@@ -131,6 +123,7 @@ function AppChrome() {
 
   const chromeLessRoutes = ["/", "/login"];
   const legacySidebarRoutes = [
+    "/ai-agent",
     "/billing",
     "/demands",
     "/hardening-notes",
@@ -138,6 +131,7 @@ function AppChrome() {
     "/microservices-spec",
     "/ml-analytics",
     "/notifications",
+    "/opportunities",
     "/pre-deals",
     "/profile",
     "/sanctions",
@@ -181,9 +175,9 @@ function AppChrome() {
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div className={isRtl ? "leading-tight text-right" : "leading-tight"}>
-                  <div className="text-sm font-bold tracking-tight">Tureep AI+</div>
+                  <div className="text-sm font-bold tracking-tight">DealCompass AI+</div>
                   <div className="text-[9px] uppercase tracking-[0.18em] text-surface-400 font-mono">
-                    {t("topbar.tradeTerminal", "Trade Terminal")}
+                    {t("nav.intelPortal", "Trade Intelligence")}
                   </div>
                 </div>
               </Link>
