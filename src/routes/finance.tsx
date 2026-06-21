@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import {
   CreditCard,
   FileText,
@@ -287,16 +288,18 @@ function FinancePage() {
   const [lcs, setLcs] = useState<LetterOfCredit[]>([]);
   const [dps, setDps] = useState<DocumentaryCollection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"lc" | "dp">("lc");
 
   async function loadData() {
     setLoading(true);
+    setError(null);
     try {
       const [lcData, dpData] = await Promise.all([getLCs(), getDPs()]);
       setLcs(lcData);
       setDps(dpData);
     } catch (err) {
-      console.error(err);
+      setError(err instanceof Error ? err.message : "Could not load trade finance data.");
     } finally {
       setLoading(false);
     }
@@ -308,6 +311,7 @@ function FinancePage() {
 
   return (
     <div className="space-y-6 animate-slide-in">
+      {error && <ConnectionErrorCard title="Trade finance unavailable" message={error} />}
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Trade Finance</h1>
@@ -360,7 +364,7 @@ function FinancePage() {
             </div>
           </div>
           <p className="text-xs text-surface-500 leading-relaxed">
-            Funds held by Tureep until shipping documents and quality inspection are verified.
+            Funds held by DealCompass until shipping documents and quality inspection are verified.
           </p>
         </div>
       </div>

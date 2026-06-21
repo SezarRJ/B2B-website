@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,6 +57,7 @@ function MLAnalyticsPage() {
     ai_node_verdict: string;
   } | null>(null);
   const [simLoading, setSimLoading] = useState(false);
+  const [simError, setSimError] = useState<string | null>(null);
 
   useEffect(() => {
     load();
@@ -86,11 +88,12 @@ function MLAnalyticsPage() {
 
   async function runSim() {
     setSimLoading(true);
+    setSimError(null);
     try {
       const res = await simulateMLMatching(oilPrice, freightRisk, urgency);
       setSimResult(res);
     } catch (err) {
-      console.error(err);
+      setSimError(err instanceof Error ? err.message : "Could not run market simulation.");
     } finally {
       setSimLoading(false);
     }

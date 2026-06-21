@@ -12,7 +12,7 @@ export const CookieConsentBanner: React.FC = () => {
 
   useEffect(() => {
     const saved =
-      typeof window !== "undefined" ? localStorage.getItem("tureep_gdpr_consent") : null;
+      typeof window !== "undefined" ? localStorage.getItem("dealcompass_gdpr_consent") : null;
     if (!saved) {
       saveConsent({ necessary: true, analytics: true, functional: true });
     }
@@ -21,7 +21,7 @@ export const CookieConsentBanner: React.FC = () => {
   const saveConsent = (preferences: any) => {
     setConsentState(preferences);
     if (typeof window !== "undefined") {
-      localStorage.setItem("tureep_gdpr_consent", JSON.stringify(preferences));
+      localStorage.setItem("dealcompass_gdpr_consent", JSON.stringify(preferences));
     }
     setShowBanner(false);
   };

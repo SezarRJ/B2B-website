@@ -136,7 +136,7 @@ function NotificationsPage() {
                 <div>
                   <CardTitle className="text-base">Event Bus Orchestration</CardTitle>
                   <CardDescription>
-                    Tureep AI+ utilizes a Redis-backed priority queue to dispatch alerts across
+                    DealCompass AI+ utilizes a Redis-backed priority queue to dispatch alerts across
                     in-app WebSockets, SendGrid (email), Firebase (mobile push), and Twilio (SMS).
                   </CardDescription>
                 </div>

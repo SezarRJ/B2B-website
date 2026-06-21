@@ -21,7 +21,7 @@ export const DealProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Re-hydrate persistent cart from LocalStorage
   useEffect(() => {
-    const saved = typeof window !== "undefined" ? localStorage.getItem("tureep_cart") : null;
+    const saved = typeof window !== "undefined" ? localStorage.getItem("dealcompass_cart") : null;
     if (saved) {
       try {
         setSelectedProductsCart(JSON.parse(saved));
@@ -32,7 +32,7 @@ export const DealProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const saveCartLocal = (newCart: Product[]) => {
     setSelectedProductsCart(newCart);
     if (typeof window !== "undefined") {
-      localStorage.setItem("tureep_cart", JSON.stringify(newCart));
+      localStorage.setItem("dealcompass_cart", JSON.stringify(newCart));
     }
   };
 

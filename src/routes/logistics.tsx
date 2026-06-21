@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import {
   Truck,
   MapPin,
@@ -195,11 +196,12 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
 function LogisticsPage() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getShipments()
       .then(setShipments)
-      .catch(console.error)
+      .catch((err) => setError(err instanceof Error ? err.message : "Could not load data."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -212,6 +214,7 @@ function LogisticsPage() {
 
   return (
     <div className="space-y-6 animate-slide-in">
+      {error && <ConnectionErrorCard title="Logistics unavailable" message={error} />}
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Logistics & Tracking</h1>

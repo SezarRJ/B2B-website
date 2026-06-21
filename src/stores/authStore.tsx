@@ -20,7 +20,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Re-hydrate persistent auth session on initial boot
   useEffect(() => {
-    const activeToken = typeof window !== "undefined" ? localStorage.getItem("tureep_token") : null;
+    const activeToken =
+      typeof window !== "undefined" ? localStorage.getItem("dealcompass_token") : null;
     if (activeToken) {
       setTokenState(activeToken);
       getMe()
@@ -41,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (newToken: string, userData?: User) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("tureep_token", newToken);
+      localStorage.setItem("dealcompass_token", newToken);
     }
     setTokenState(newToken);
     if (userData) {

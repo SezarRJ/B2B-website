@@ -14,8 +14,8 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("seller.iraq@tureep.ai");
-  const [password, setPassword] = useState("Tureep*Auth#2026!xKey");
+  const [email, setEmail] = useState("seller.iraq@dealcompass.ai");
+  const [password, setPassword] = useState("DealCompass*Auth#2026!xKey");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -36,8 +36,8 @@ function LoginPage() {
 
   function handleQuickLogin(testEmail: string) {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("tureep_signed_out");
-      localStorage.setItem("tureep_token", `jwt_mock_${testEmail}`);
+      localStorage.removeItem("dealcompass_signed_out");
+      localStorage.setItem("dealcompass_token", `jwt_mock_${testEmail}`);
     }
     setToken(`jwt_mock_${testEmail}`);
     navigate({ to: "/dashboard" });
@@ -60,7 +60,7 @@ function LoginPage() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-white font-bold text-lg tracking-tight">Tureep AI+</h1>
+              <h1 className="text-white font-bold text-lg tracking-tight">DealCompass AI+</h1>
               <p className="text-primary-200 text-[10px] -mt-0.5">Trade Intelligence Platform</p>
             </div>
           </div>
@@ -120,31 +120,31 @@ function LoginPage() {
               <p className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-white flex-shrink-0"></span>
                 <span>
-                  Seller (Silver): <strong>seller.iraq@tureep.ai</strong>
+                  Seller (Silver): <strong>seller.iraq@dealcompass.ai</strong>
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-amber-400 flex-shrink-0"></span>
                 <span>
-                  Buyer (Gold): <strong>buyer.turkey@tureep.ai</strong>
+                  Buyer (Gold): <strong>buyer.turkey@dealcompass.ai</strong>
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-purple-400 flex-shrink-0"></span>
                 <span>
-                  Global Buyer (Platinum): <strong>buyer.global@tureep.ai</strong>
+                  Global Buyer (Platinum): <strong>buyer.global@dealcompass.ai</strong>
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-slate-900 flex-shrink-0"></span>
                 <span>
-                  Compliance Officer (Admin): <strong>admin@tureep.ai</strong>
+                  Compliance Officer (Admin): <strong>admin@dealcompass.ai</strong>
                 </span>
               </p>
               <p className="flex items-center gap-2 pt-1 border-t border-white/10">
                 <span className="h-2 w-2 rounded-full bg-green-400 flex-shrink-0"></span>
                 <span>
-                  Universal Password: <strong>Tureep*Auth#2026!xKey</strong>
+                  Universal Password: <strong>DealCompass*Auth#2026!xKey</strong>
                 </span>
               </p>
             </div>
@@ -165,7 +165,7 @@ function LoginPage() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-surface-800 text-lg">Tureep AI+</h1>
+              <h1 className="font-bold text-surface-800 text-lg">DealCompass AI+</h1>
               <p className="text-surface-400 text-[10px] -mt-0.5">Trade Intelligence Platform</p>
             </div>
           </div>
@@ -193,7 +193,7 @@ function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seller.iraq@tureep.ai"
+                  placeholder="seller.iraq@dealcompass.ai"
                   className={inputClass}
                   required
                 />
@@ -235,7 +235,7 @@ function LoginPage() {
                 size="sm"
                 variant="outline"
                 className="text-xs font-mono h-10 border-primary-300 text-primary-700 hover:bg-primary-50 rounded-xl"
-                onClick={() => handleQuickLogin("seller.iraq@tureep.ai")}
+                onClick={() => handleQuickLogin("seller.iraq@dealcompass.ai")}
               >
                 Silver Seller (Iraq)
               </Button>
@@ -243,7 +243,7 @@ function LoginPage() {
                 size="sm"
                 variant="outline"
                 className="text-xs font-mono h-10 border-amber-300 text-amber-700 hover:bg-amber-50 rounded-xl"
-                onClick={() => handleQuickLogin("buyer.turkey@tureep.ai")}
+                onClick={() => handleQuickLogin("buyer.turkey@dealcompass.ai")}
               >
                 Gold Buyer (Turkey)
               </Button>
@@ -251,7 +251,7 @@ function LoginPage() {
                 size="sm"
                 variant="outline"
                 className="text-xs font-mono h-10 border-purple-300 text-purple-700 hover:bg-purple-50 rounded-xl"
-                onClick={() => handleQuickLogin("buyer.global@tureep.ai")}
+                onClick={() => handleQuickLogin("buyer.global@dealcompass.ai")}
               >
                 Platinum Enterprise
               </Button>
@@ -259,7 +259,7 @@ function LoginPage() {
                 size="sm"
                 variant="outline"
                 className="text-xs font-mono h-10 border-surface-800 text-surface-900 hover:bg-surface-100 rounded-xl"
-                onClick={() => handleQuickLogin("admin@tureep.ai")}
+                onClick={() => handleQuickLogin("admin@dealcompass.ai")}
               >
                 Compliance Officer
               </Button>

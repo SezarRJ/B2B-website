@@ -10,6 +10,7 @@ import {
   type Product,
 } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import { Eye, Filter, Globe2, Lock, Radar, Save, Search, Star } from "lucide-react";
 
 export const Route = createFileRoute("/opportunities")({
@@ -151,6 +152,8 @@ function OpportunitiesPage() {
   const { t, dir } = useI18n();
   const isRtl = dir === "rtl";
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [type, setType] = useState<"all" | OpportunityType>("all");
   const [minScore, setMinScore] = useState(70);
@@ -164,9 +167,23 @@ function OpportunitiesPage() {
   });
 
   useEffect(() => {
-    Promise.all([getProducts(), getDemands(), getPreDeals()]).then(([products, demands, deals]) => {
-      setOpportunities(buildOpportunities(products, demands, deals));
-    });
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const [products, demands, deals] = await Promise.all([
+          getProducts(),
+          getDemands(),
+          getPreDeals(),
+        ]);
+        setOpportunities(buildOpportunities(products, demands, deals));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Could not load opportunity data.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
   }, []);
 
   const filtered = useMemo(() => {
@@ -237,134 +254,150 @@ function OpportunitiesPage() {
         </header>
 
         <div className="mx-auto max-w-7xl space-y-6 p-6 lg:p-8">
-          <div className="rounded-[2rem] border border-border bg-white p-5 shadow-sm">
-            <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search product, origin, export country, city..."
-                  className="w-full rounded-2xl border border-border bg-secondary/30 py-3 pl-11 pr-4 text-sm outline-none focus:border-primary"
-                />
-              </div>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value as "all" | OpportunityType)}
-                className="rounded-2xl border border-border bg-white px-4 py-3 text-sm font-bold"
-              >
-                <option value="all">All opportunity types</option>
-                <option value="sell">Selling offers</option>
-                <option value="buy">Buying requests</option>
-                <option value="tender">Tenders</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="surplus">AI matches / surplus</option>
-              </select>
-              <label className="flex items-center gap-3 rounded-2xl border border-border bg-white px-4 py-3 text-sm font-bold">
-                <Filter className="h-4 w-4 text-primary" />
-                Score +
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={minScore}
-                  onChange={(e) => setMinScore(Number(e.target.value))}
-                  className="w-16 rounded-lg border border-border px-2 py-1 font-mono"
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-2">
-            {filtered.map((item) => {
-              const isSaved = saved.includes(item.id);
-              const isRevealed = revealed.includes(item.id);
-              return (
-                <div
-                  key={item.id}
-                  className="rounded-[2rem] border border-border bg-white p-5 shadow-sm"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-black uppercase text-blue-700">
-                        {item.type.replace("_", " ")}
-                      </span>
-                      <h2 className="mt-3 text-lg font-black text-foreground">{item.product}</h2>
-                      <p className="mt-1 text-sm text-muted-foreground">{item.specs}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-mono text-2xl font-black text-emerald-600">
-                        {item.opportunityScore}
-                      </p>
-                      <p className="text-[11px] font-bold text-muted-foreground">
-                        Data Quality Score
-                      </p>
-                    </div>
+          {(loading || error) && (
+            <ConnectionErrorCard
+              title={loading ? "Loading opportunity wall" : "Opportunity wall unavailable"}
+              message={loading ? "Connecting to the backend service..." : error}
+            />
+          )}
+          {!loading && !error && (
+            <>
+              <div className="rounded-[2rem] border border-border bg-white p-5 shadow-sm">
+                <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search product, origin, export country, city..."
+                      className="w-full rounded-2xl border border-border bg-secondary/30 py-3 pl-11 pr-4 text-sm outline-none focus:border-primary"
+                    />
                   </div>
-
-                  <div className="mt-5 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
-                    <div className="rounded-2xl bg-secondary/50 p-3">
-                      <p className="font-bold text-muted-foreground">Origin</p>
-                      <p className="font-black text-foreground">{item.originCountry}</p>
-                    </div>
-                    <div className="rounded-2xl bg-secondary/50 p-3">
-                      <p className="font-bold text-muted-foreground">Export</p>
-                      <p className="font-black text-foreground">{item.exportCountry}</p>
-                    </div>
-                    <div className="rounded-2xl bg-secondary/50 p-3">
-                      <p className="font-bold text-muted-foreground">Quantity</p>
-                      <p className="font-mono font-black text-foreground">{item.quantity}</p>
-                    </div>
-                    <div className="rounded-2xl bg-secondary/50 p-3">
-                      <p className="font-bold text-muted-foreground">Price</p>
-                      <p className="font-mono font-black text-foreground">{item.price}</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                    <Globe2 className="h-4 w-4 text-primary" />
-                    <span>{item.source}</span>
-                    <span>•</span>
-                    <span>{item.freshness}</span>
-                    <span>•</span>
-                    <span className="font-mono font-black text-blue-700">
-                      Lead Score {item.leadScore}/100
-                    </span>
-                  </div>
-
-                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                    <button
-                      onClick={() => toggleSave(item.id)}
-                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-black ${
-                        isSaved ? "bg-emerald-50 text-emerald-700" : "bg-secondary text-foreground"
-                      }`}
-                    >
-                      <Save className="h-4 w-4" />
-                      {isSaved ? "Saved" : "Save"}
-                    </button>
-                    <button
-                      onClick={() => revealContact(item.id)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-black text-white hover:bg-blue-600"
-                    >
-                      {isRevealed ? <Eye className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-                      {isRevealed
-                        ? item.company || "Contact revealed"
-                        : "Reveal contact • 5 credits"}
-                    </button>
-                  </div>
+                  <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value as "all" | OpportunityType)}
+                    className="rounded-2xl border border-border bg-white px-4 py-3 text-sm font-bold"
+                  >
+                    <option value="all">All opportunity types</option>
+                    <option value="sell">Selling offers</option>
+                    <option value="buy">Buying requests</option>
+                    <option value="tender">Tenders</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="surplus">AI matches / surplus</option>
+                  </select>
+                  <label className="flex items-center gap-3 rounded-2xl border border-border bg-white px-4 py-3 text-sm font-bold">
+                    <Filter className="h-4 w-4 text-primary" />
+                    Score +
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={minScore}
+                      onChange={(e) => setMinScore(Number(e.target.value))}
+                      className="w-16 rounded-lg border border-border px-2 py-1 font-mono"
+                    />
+                  </label>
                 </div>
-              );
-            })}
-          </div>
+              </div>
 
-          {filtered.length === 0 && (
-            <div className="rounded-[2rem] border border-dashed border-border bg-white p-12 text-center">
-              <Star className="mx-auto h-10 w-10 text-muted-foreground" />
-              <h2 className="mt-4 text-xl font-black text-foreground">No matching opportunities</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Try lowering the score filter or changing the product/country search.
-              </p>
-            </div>
+              <div className="grid gap-4 lg:grid-cols-2">
+                {filtered.map((item) => {
+                  const isSaved = saved.includes(item.id);
+                  const isRevealed = revealed.includes(item.id);
+                  return (
+                    <div
+                      key={item.id}
+                      className="rounded-[2rem] border border-border bg-white p-5 shadow-sm"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-black uppercase text-blue-700">
+                            {item.type.replace("_", " ")}
+                          </span>
+                          <h2 className="mt-3 text-lg font-black text-foreground">
+                            {item.product}
+                          </h2>
+                          <p className="mt-1 text-sm text-muted-foreground">{item.specs}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-mono text-2xl font-black text-emerald-600">
+                            {item.opportunityScore}
+                          </p>
+                          <p className="text-[11px] font-bold text-muted-foreground">
+                            Data Quality Score
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                        <div className="rounded-2xl bg-secondary/50 p-3">
+                          <p className="font-bold text-muted-foreground">Origin</p>
+                          <p className="font-black text-foreground">{item.originCountry}</p>
+                        </div>
+                        <div className="rounded-2xl bg-secondary/50 p-3">
+                          <p className="font-bold text-muted-foreground">Export</p>
+                          <p className="font-black text-foreground">{item.exportCountry}</p>
+                        </div>
+                        <div className="rounded-2xl bg-secondary/50 p-3">
+                          <p className="font-bold text-muted-foreground">Quantity</p>
+                          <p className="font-mono font-black text-foreground">{item.quantity}</p>
+                        </div>
+                        <div className="rounded-2xl bg-secondary/50 p-3">
+                          <p className="font-bold text-muted-foreground">Price</p>
+                          <p className="font-mono font-black text-foreground">{item.price}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <Globe2 className="h-4 w-4 text-primary" />
+                        <span>{item.source}</span>
+                        <span>•</span>
+                        <span>{item.freshness}</span>
+                        <span>•</span>
+                        <span className="font-mono font-black text-blue-700">
+                          Lead Score {item.leadScore}/100
+                        </span>
+                      </div>
+
+                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+                        <button
+                          onClick={() => toggleSave(item.id)}
+                          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-black ${
+                            isSaved
+                              ? "bg-emerald-50 text-emerald-700"
+                              : "bg-secondary text-foreground"
+                          }`}
+                        >
+                          <Save className="h-4 w-4" />
+                          {isSaved ? "Saved" : "Save"}
+                        </button>
+                        <button
+                          onClick={() => revealContact(item.id)}
+                          className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-black text-white hover:bg-blue-600"
+                        >
+                          {isRevealed ? <Eye className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                          {isRevealed
+                            ? item.company || "Contact revealed"
+                            : "Reveal contact • 5 credits"}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {filtered.length === 0 && (
+                <div className="rounded-[2rem] border border-dashed border-border bg-white p-12 text-center">
+                  <Star className="mx-auto h-10 w-10 text-muted-foreground" />
+                  <h2 className="mt-4 text-xl font-black text-foreground">
+                    No matching opportunities
+                  </h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Try lowering the score filter or changing the product/country search.
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>

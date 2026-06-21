@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -186,7 +187,7 @@ function UserProfilePage() {
                   <p className="text-xs text-muted-foreground font-mono tabular-nums">
                     Registered Email:{" "}
                     <strong className="text-foreground">
-                      {user?.email || "partner@tureep.ai"}
+                      {user?.email || "partner@dealcompass.ai"}
                     </strong>{" "}
                     • Primary Operating Node:{" "}
                     <strong className="text-foreground">{user?.country || "Turkey"}</strong>
@@ -214,11 +215,7 @@ function UserProfilePage() {
             </CardContent>
           </Card>
 
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
-              {error}
-            </p>
-          )}
+          {error && <ConnectionErrorCard title="Profile unavailable" message={error} />}
           {success && (
             <p className="text-sm text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
               {success}

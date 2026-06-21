@@ -15,11 +15,11 @@ interface Translations {
 const DICTIONARY: Translations = {
   // Brand & Core
   "app.title": {
-    en: "Tureep AI+",
+    en: "DealCompass AI+",
     ar: "منصة تريب للذكاء الاصطناعي",
     fa: "پلتفرم توریپ هوش مصنوعی",
     ku: "پلاتفۆرمی توریپ بۆ ژیری دەستکرد",
-    tr: "Tureep AI+",
+    tr: "DealCompass AI+",
   },
   "Terminal B2B Trade Summary": {
     en: "Terminal B2B Trade Summary",
@@ -82,11 +82,11 @@ const DICTIONARY: Translations = {
     tr: "Zeka hızında ticaret yapın",
   },
   "hero.subtitle": {
-    en: "Tureep AI+ connects verified sellers and buyers across the Middle East and beyond. Our AI pre-generates institutional deals, clears compliance, and orchestrates logistics — before the first message is sent.",
+    en: "DealCompass AI+ connects verified sellers and buyers across the Middle East and beyond. Our AI pre-generates institutional deals, clears compliance, and orchestrates logistics — before the first message is sent.",
     ar: "تربط منصة تريب للذكاء الاصطناعي بين الشركات الموثوقة في العراق وإيران وتركيا والأسواق العالمية. يقوم الذكاء الاصطناعي بتوليد الصفقات المؤسسية وتخليص الامتثال وتنظيم الشحن قبل إرسال الرسالة الأولى.",
     fa: "توریپ هوش مصنوعی فروشندگان و خریداران تاییدشده در عراق، ایران، ترکیه و بازارهای جهانی را متصل می‌کند. سیستم ما قراردادها، انطباق و لجستیک را پیش از ارسال اولین پیام آماده می‌کند.",
     ku: "پلاتفۆرمی توریپ فرۆشیاران و کڕیارانی باوەڕپێکراو لە عێراق، ئێران، تورکیا و جیهان دەبەستێتەوە. ژیری دەستکرد ڕێککەوتنەکان و لۆجستیك و یاساکان ئامادە دەکات پێش ناردنی یەکەم پەیام.",
-    tr: "Tureep AI+, Irak, İran, Türkiye ve ötesindeki doğrulanmış alıcı ve satıcıları birbirine bağlar. Yapay zekamız ilk mesaj gönderilmeden önce kurumsal anlaşmaları oluşturur ve lojistiği düzenler.",
+    tr: "DealCompass AI+, Irak, İran, Türkiye ve ötesindeki doğrulanmış alıcı ve satıcıları birbirine bağlar. Yapay zekamız ilk mesaj gönderilmeden önce kurumsal anlaşmaları oluşturur ve lojistiği düzenler.",
   },
   "hero.input": {
     en: "Business email address",
@@ -112,11 +112,11 @@ const DICTIONARY: Translations = {
 
   // Terminal Preview Mockup in Hero
   "mock.head": {
-    en: "Tureep AI+ Terminal",
+    en: "DealCompass AI+ Terminal",
     ar: "منصة تريب التجارية",
     fa: "ترمینال تجاری توریپ",
     ku: "پلاتفۆرمی توریپ",
-    tr: "Tureep AI+ Terminali",
+    tr: "DealCompass AI+ Terminali",
   },
   "mock.dash": {
     en: "Dashboard",
@@ -422,12 +422,12 @@ const DICTIONARY: Translations = {
     ku: "هەڵەیەك ڕوویدا. تکایە دووبارە هەوڵ بدەرەوە.",
     tr: "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
   },
-  "© 2026 Tureep Trade Systems. All rights reserved.": {
-    en: "© 2026 Tureep Trade Systems. All rights reserved.",
+  "© 2026 DealCompass Trade Intelligence. All rights reserved.": {
+    en: "© 2026 DealCompass Trade Intelligence. All rights reserved.",
     ar: "© 2026 أنظمة تريب التجارية. جميع الحقوق محفوظة.",
     fa: "© 2026 سیستم‌های تجاری توریپ. کلیه حقوق محفوظ است.",
     ku: "© 2026 سیستەمەکانی بازرگانی توریپ. هەموو مافەکان پارێزراوان.",
-    tr: "© 2026 Tureep Ticaret Sistemleri. Tüm hakları saklıdır.",
+    tr: "© 2026 DealCompass Trade Intelligence. Tüm hakları saklıdır.",
   },
 
   // Dashboard Nav & Buttons
@@ -582,7 +582,7 @@ const DICTIONARY: Translations = {
     tr: "Bölgesel Dil ve Yerelleştirme Vitrini",
   },
   "dash.showcase.desc": {
-    en: "Tureep AI+ strictly enforces instant layout mirroring (dir='rtl') and rich native fonts for institutional trade corridors connecting Iraq, Iran, Turkey, and EU markets.",
+    en: "DealCompass AI+ strictly enforces instant layout mirroring (dir='rtl') and rich native fonts for institutional trade corridors connecting Iraq, Iran, Turkey, and EU markets.",
     ar: "تطبق المنصة بشكل فوري دعم الاتجاه من اليمين إلى اليسار (RTL) مع خطوط أصلية فاخرة لتسهيل التجارة بين العراق وإيران وتركيا والأسواق العالمية.",
     fa: "این پلتفرم به صورت آنی جهت صفحه (RTL) و فونت‌های اصیل را برای تسهیل تجارت نهادی میان عراق، ایران، ترکیه و بازارهای جهانی تنظیم می‌کند.",
     ku: "پلاتفۆرمەکە بە شێوەیەکی خێرا ئاراستەی ڕاست بۆ چەپ (RTL) و فۆنتە ڕەسەنەکان جێبەجێ دەکات بۆ ئاسانکاری بازرگانی نێوان عێراق، ئێران، تورکیا و جیهان.",
@@ -1445,7 +1445,23 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("tureep_lang") as Language | null;
+      const keyMigrations: Array<[string, string]> = [
+        ["tureep_lang", "dealcompass_lang"],
+        ["tureep_token", "dealcompass_token"],
+        ["tureep_signed_out", "dealcompass_signed_out"],
+        ["tureep_gdpr_consent", "dealcompass_gdpr_consent"],
+        ["tureep_contact_requests", "dealcompass_contact_requests"],
+        ["tureep_preview_health_logs", "dealcompass_preview_health_logs"],
+        ["tureep_error_boundary", "dealcompass_error_boundary"],
+        ["tureep_cart", "dealcompass_cart"],
+      ];
+      keyMigrations.forEach(([oldKey, newKey]) => {
+        const oldValue = localStorage.getItem(oldKey);
+        if (oldValue != null && localStorage.getItem(newKey) == null) {
+          localStorage.setItem(newKey, oldValue);
+        }
+      });
+      const saved = localStorage.getItem("dealcompass_lang") as Language | null;
       if (saved) setLanguageState(saved);
     } catch {}
     setHydrated(true);
@@ -1463,7 +1479,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     try {
-      localStorage.setItem("tureep_lang", language);
+      localStorage.setItem("dealcompass_lang", language);
     } catch {}
     document.documentElement.dir = dir;
     document.documentElement.lang = language;

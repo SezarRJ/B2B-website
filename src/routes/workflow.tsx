@@ -159,7 +159,7 @@ function DealWorkflowPage() {
                     End-To-End Journey
                   </Badge>
                   <h2 className="text-lg font-extrabold text-foreground">
-                    How Tureep Counterparties Stepping Through the Hybrid Stack
+                    How DealCompass Users Move Through the Intelligence Stack
                   </h2>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Every cross-border transaction naturally steps through seven distinct

@@ -122,9 +122,10 @@ CREATE POLICY "Sellers manage own products" ON products
                       Multi-Tier Data Sovereign Cloud Architecture
                     </h2>
                     <p className="text-xs text-muted-foreground max-w-3xl leading-relaxed">
-                      Tureep AI+ relies on Supabase for enterprise PostgreSQL management, zero-trust
-                      Row Level Security (RLS) data partitioning, and secure JWT Auth session
-                      emission. Explore our live connectivity ledgers and compliance policies below.
+                      DealCompass AI+ relies on Supabase for enterprise PostgreSQL management,
+                      zero-trust Row Level Security (RLS) data partitioning, and secure JWT Auth
+                      session emission. Explore our live connectivity ledgers and compliance
+                      policies below.
                     </p>
                   </div>
                 </div>

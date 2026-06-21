@@ -44,8 +44,8 @@ export const supabase = new Proxy({} as ReturnType<typeof createSupabaseBrowserC
 
 function clearAuthStorage() {
   if (typeof window === "undefined") return;
-  localStorage.removeItem("tureep_token");
-  localStorage.setItem("tureep_signed_out", "true");
+  localStorage.removeItem("dealcompass_token");
+  localStorage.setItem("dealcompass_signed_out", "true");
   Object.keys(localStorage)
     .filter((key) => key.startsWith("sb-") || key.includes("supabase"))
     .forEach((key) => localStorage.removeItem(key));
@@ -74,8 +74,9 @@ export async function loginWithSupabase(
   });
   if (error) throw error;
   if (typeof window !== "undefined") {
-    localStorage.removeItem("tureep_signed_out");
-    if (data.session?.access_token) localStorage.setItem("tureep_token", data.session.access_token);
+    localStorage.removeItem("dealcompass_signed_out");
+    if (data.session?.access_token)
+      localStorage.setItem("dealcompass_token", data.session.access_token);
   }
   return { session: data.session, user: data.user };
 }

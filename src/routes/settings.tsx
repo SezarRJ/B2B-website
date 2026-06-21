@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import {
   Settings,
   User,
@@ -138,13 +139,14 @@ const tiers = [
 function SettingsPage() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState(false);
   const [activeTab, setActiveTab] = useState<"account" | "billing" | "notifications">("account");
 
   useEffect(() => {
     getMySubscription()
       .then(setSubscription)
-      .catch(console.error)
+      .catch((err) => setError(err instanceof Error ? err.message : "Could not load data."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -174,6 +176,7 @@ function SettingsPage() {
 
   return (
     <div className="space-y-6 animate-slide-in">
+      {error && <ConnectionErrorCard title="Settings unavailable" message={error} />}
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Settings</h1>
@@ -229,7 +232,7 @@ function SettingsPage() {
                 </label>
                 <input
                   type="email"
-                  defaultValue="buyer.turkey@tureep.ai"
+                  defaultValue="buyer.turkey@dealcompass.ai"
                   className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-sm text-surface-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>

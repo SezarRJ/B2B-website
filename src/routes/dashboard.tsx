@@ -21,6 +21,7 @@ import {
   type Product,
 } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -84,15 +85,31 @@ function DashboardPage() {
   const { t, dir } = useI18n();
   const isRtl = dir === "rtl";
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
     return JSON.parse(localStorage.getItem("dealcompass_smart_alerts") || "[]");
   });
 
   useEffect(() => {
-    Promise.all([getProducts(), getDemands(), getPreDeals()]).then(([products, demands, deals]) => {
-      setOpportunities(build(products, demands, deals));
-    });
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const [products, demands, deals] = await Promise.all([
+          getProducts(),
+          getDemands(),
+          getPreDeals(),
+        ]);
+        setOpportunities(build(products, demands, deals));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Could not load trade intelligence data.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
   }, []);
 
   const topOpportunities = useMemo(
@@ -107,6 +124,17 @@ function DashboardPage() {
     const next = alerts.includes(label) ? alerts : [label, ...alerts];
     setAlerts(next);
     localStorage.setItem("dealcompass_smart_alerts", JSON.stringify(next));
+  }
+
+  if (loading || error) {
+    return (
+      <div className={`space-y-6 ${isRtl ? "text-right" : "text-left"}`} dir={dir}>
+        <ConnectionErrorCard
+          title={loading ? "Loading trade radar" : "Trade radar unavailable"}
+          message={loading ? "Connecting to the backend service..." : error}
+        />
+      </div>
+    );
   }
 
   return (

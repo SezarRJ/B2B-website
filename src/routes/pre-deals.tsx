@@ -94,7 +94,7 @@ function PreDealsPage() {
   }
 
   function handleContactRequest(deal: PreDeal) {
-    const existing = JSON.parse(localStorage.getItem("tureep_contact_requests") || "[]");
+    const existing = JSON.parse(localStorage.getItem("dealcompass_contact_requests") || "[]");
     const request = {
       id: `contact-${deal.id}-${Date.now()}`,
       matchId: deal.id,
@@ -104,7 +104,7 @@ function PreDealsPage() {
       status: "sent",
       createdAt: new Date().toISOString(),
     };
-    localStorage.setItem("tureep_contact_requests", JSON.stringify([request, ...existing]));
+    localStorage.setItem("dealcompass_contact_requests", JSON.stringify([request, ...existing]));
     navigate({ to: "/messages" });
   }
 

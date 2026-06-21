@@ -110,7 +110,7 @@ export async function clearAppCacheAndReload() {
   sessionStorage.clear();
 
   // 3. Keep seeded data but wipe TanStack or Lovable temporary error trackers
-  localStorage.removeItem("tureep_error_boundary");
+  localStorage.removeItem("dealcompass_error_boundary");
   localStorage.removeItem("lovable_building_state");
 
   // 4. Force pristine reload

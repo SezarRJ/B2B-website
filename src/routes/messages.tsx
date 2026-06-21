@@ -21,7 +21,7 @@ export interface ContactRequest {
 function getContactRequests(): ContactRequest[] {
   if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(localStorage.getItem("tureep_contact_requests") || "[]");
+    return JSON.parse(localStorage.getItem("dealcompass_contact_requests") || "[]");
   } catch {
     return [];
   }
@@ -29,7 +29,7 @@ function getContactRequests(): ContactRequest[] {
 
 function saveContactRequests(items: ContactRequest[]) {
   if (typeof window !== "undefined") {
-    localStorage.setItem("tureep_contact_requests", JSON.stringify(items));
+    localStorage.setItem("dealcompass_contact_requests", JSON.stringify(items));
   }
 }
 

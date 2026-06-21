@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -277,11 +278,7 @@ function MasterAccountBillingPage() {
             </CardContent>
           </Card>
 
-          {error && (
-            <p className="text-sm font-medium text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
-              {error}
-            </p>
-          )}
+          {error && <ConnectionErrorCard title="Billing unavailable" message={error} />}
           {success && (
             <p className="text-sm font-medium text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
               {success}

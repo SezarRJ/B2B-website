@@ -2,11 +2,45 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useI18n } from "@/lib/i18n";
-import { Bell, Bot, CheckCircle2, Globe2, Radar, Search, Sparkles } from "lucide-react";
+import { Bell, Bot, CheckCircle2, Search, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/ai-agent")({
   component: AiAgentPage,
 });
+
+type AgentResult = {
+  product: string;
+  originCountry: string;
+  exportCountry: string;
+  score: number;
+  signals: string[];
+};
+
+function isAgentResult(value: unknown): value is AgentResult {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.product === "string" &&
+    typeof item.originCountry === "string" &&
+    typeof item.exportCountry === "string" &&
+    typeof item.score === "number" &&
+    Array.isArray(item.signals) &&
+    item.signals.every((signal) => typeof signal === "string")
+  );
+}
+
+function parseAgentResponse(data: unknown): AgentResult[] | null {
+  if (Array.isArray(data) && data.every(isAgentResult)) return data;
+  if (
+    data &&
+    typeof data === "object" &&
+    Array.isArray((data as { results?: unknown }).results) &&
+    (data as { results: unknown[] }).results.every(isAgentResult)
+  ) {
+    return (data as { results: AgentResult[] }).results;
+  }
+  return null;
+}
 
 const examplePrompts = [
   "I need 5000 tons urea 46% origin Oman, export from UAE",
@@ -22,6 +56,7 @@ function AiAgentPage() {
   const [running, setRunning] = useState(false);
   const [hasRun, setHasRun] = useState(false);
   const [agentError, setAgentError] = useState("");
+  const [agentResults, setAgentResults] = useState<AgentResult[]>([]);
   const [alerts, setAlerts] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
     return JSON.parse(localStorage.getItem("dealcompass_smart_alerts") || "[]");
@@ -55,9 +90,14 @@ function AiAgentPage() {
     };
   }, [prompt]);
 
+  // Expected AI endpoint contract:
+  // Request:  POST VITE_AI_AGENT_ENDPOINT with JSON { prompt: string }
+  // Response: { results: Array<{ product: string; originCountry: string; exportCountry: string; score: number; signals: string[] }> }
+  // A bare array with the same result objects is also accepted.
   async function runAgent() {
     const endpoint = import.meta.env.VITE_AI_AGENT_ENDPOINT;
     setAgentError("");
+    setAgentResults([]);
     setHasRun(false);
     if (!endpoint) {
       setAgentError(
@@ -73,6 +113,12 @@ function AiAgentPage() {
         body: JSON.stringify({ prompt }),
       });
       if (!response.ok) throw new Error("AI endpoint request failed");
+      const data = await response.json();
+      const parsed = parseAgentResponse(data);
+      if (!parsed) {
+        throw new Error("AI endpoint returned an invalid response shape.");
+      }
+      setAgentResults(parsed);
       setHasRun(true);
     } catch (error) {
       setAgentError(error instanceof Error ? error.message : "AI endpoint request failed");
@@ -186,31 +232,28 @@ function AiAgentPage() {
               </div>
 
               <div className="grid gap-3 md:grid-cols-3">
-                {[91, 86, 82].map((score, idx) => (
-                  <div key={score} className="rounded-3xl border border-border bg-secondary/30 p-5">
+                {agentResults.map((result) => (
+                  <div
+                    key={`${result.product}-${result.score}`}
+                    className="rounded-3xl border border-border bg-secondary/30 p-5"
+                  >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-black text-foreground">
-                          {extracted.product} opportunity #{idx + 1}
-                        </h3>
+                        <h3 className="font-black text-foreground">{result.product}</h3>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {extracted.origin} → {extracted.exportCountry}
+                          {result.originCountry} → {result.exportCountry}
                         </p>
                       </div>
                       <span className="font-mono text-2xl font-black text-emerald-600">
-                        {score}
+                        {result.score}
                       </span>
                     </div>
                     <div className="mt-4 space-y-2 text-sm">
-                      <p className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Fresh source detected
-                      </p>
-                      <p className="flex items-center gap-2">
-                        <Globe2 className="h-4 w-4 text-blue-700" /> Export country filter matched
-                      </p>
-                      <p className="flex items-center gap-2">
-                        <Radar className="h-4 w-4 text-blue-700" /> Lead score above threshold
-                      </p>
+                      {result.signals.map((signal) => (
+                        <p key={signal} className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600" /> {signal}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 ))}

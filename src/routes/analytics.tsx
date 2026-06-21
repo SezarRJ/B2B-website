@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { ConnectionErrorCard } from "@/components/ConnectionErrorCard";
 import {
   BarChart3,
   TrendingUp,
@@ -333,6 +334,7 @@ function AnalyticsPage() {
   const [imbalances, setImbalances] = useState<DemandAnalytics[]>([]);
   const [features, setFeatures] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([getPricePredictions(), getDemandImbalances(), getFeatureWeights()])
@@ -341,7 +343,7 @@ function AnalyticsPage() {
         setImbalances(i);
         setFeatures(f);
       })
-      .catch(console.error)
+      .catch((err) => setError(err instanceof Error ? err.message : "Could not load data."))
       .finally(() => setLoading(false));
   }, []);
 

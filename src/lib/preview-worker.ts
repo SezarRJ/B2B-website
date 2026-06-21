@@ -12,7 +12,7 @@ export interface PreviewHealthLog {
   details: string;
 }
 
-const LOG_STORAGE_KEY = "tureep_preview_health_logs";
+const LOG_STORAGE_KEY = "dealcompass_preview_health_logs";
 const MAX_LOGS = 100;
 
 export function saveHealthLog(level: PreviewHealthLog["level"], event: string, details: string) {
@@ -169,7 +169,7 @@ function executeSelfHealingRebuild() {
   sessionStorage.removeItem("tanstack_router_state");
 
   // 3. Keep our seeded real B2B data in localStorage but reset error markers
-  localStorage.removeItem("tureep_error_boundary");
+  localStorage.removeItem("dealcompass_error_boundary");
 
   // 4. Perform an absolute clean Hard Request Hard Cache reload
   window.location.reload();
