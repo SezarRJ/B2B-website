@@ -1284,23 +1284,21 @@ function UniversalLanguageBar() {
   ];
 
   return (
-    <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-[9999] bg-slate-950/90 border-2 border-yellow-500/80 p-1.5 rounded-full flex items-center gap-1 shadow-2xl backdrop-blur-md select-none font-mono text-xs">
-      <span className="text-yellow-400 font-extrabold px-2.5 hidden sm:inline select-none">
-        🌐 Locale:
-      </span>
+    <div className="fixed bottom-5 right-20 z-40 hidden items-center gap-1 rounded-lg border border-surface-700 bg-surface-900/95 p-1 shadow-xl backdrop-blur-md select-none font-mono text-[11px] md:flex">
       {chips.map((c) => {
         const isSel = language === c.id;
         return (
           <button
             key={c.id}
             onClick={() => setLanguage(c.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold transition-all ${
+            className={`flex h-8 items-center gap-1.5 rounded-md px-2.5 font-bold transition-colors ${
               isSel
-                ? "bg-yellow-500 text-black shadow-md scale-105"
-                : "text-white hover:bg-white/10 hover:text-yellow-300"
+                ? "bg-primary-600 text-white shadow-md"
+                : "text-surface-300 hover:bg-white/10 hover:text-white"
             }`}
+            aria-label={`Switch language to ${c.label}`}
           >
-            <span className="text-sm select-none">{c.flag}</span>
+            <span className="text-xs select-none">{c.flag}</span>
             <span>{c.label}</span>
           </button>
         );
