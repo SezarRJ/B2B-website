@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { joinWaitlist } from "@/lib/api";
-import { useI18n, Language } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import {
   ArrowRight,
   CheckCircle2,
@@ -66,7 +66,7 @@ const steps = [
 ];
 
 export default function Index() {
-  const { language, setLanguage, t, dir } = useI18n();
+  const { t, dir } = useI18n();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -95,14 +95,6 @@ export default function Index() {
     }
   }
 
-  const languageChips: Array<{ id: Language; label: string }> = [
-    { id: "en", label: "English" },
-    { id: "ar", label: "العربية" },
-    { id: "ku", label: "کوردی" },
-    { id: "fa", label: "فارسی" },
-    { id: "tr", label: "Türkçe" },
-  ];
-
   return (
     <div
       className={`min-h-screen bg-white text-slate-950 ${isRtl ? "text-right" : "text-left"}`}
@@ -111,7 +103,7 @@ export default function Index() {
       <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
           <Link to="/" className={`flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-amber-400 shadow-sm">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-700 text-white shadow-sm">
               <span className="font-serif text-lg font-black">T</span>
             </div>
             <div>
@@ -143,7 +135,7 @@ export default function Index() {
             </Link>
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-slate-800"
+              className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-blue-600"
             >
               {t("landing.cta.primary", "Create free account")}
               <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
@@ -154,10 +146,10 @@ export default function Index() {
 
       <main>
         <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white px-5 py-16 sm:px-8 lg:py-24">
-          <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),transparent_55%)]" />
+          <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.18),transparent_55%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="space-y-7">
-              <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-amber-800">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-blue-800">
                 <Globe className="h-4 w-4" />
                 {t("landing.badge", "Iraq • Turkey • Iran • GCC • Global")}
               </div>
@@ -182,7 +174,7 @@ export default function Index() {
               >
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-500 px-7 py-4 text-base font-black text-slate-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-7 py-4 text-base font-black text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500"
                 >
                   {t("landing.cta.primary", "Create free account")}
                   <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
@@ -211,12 +203,12 @@ export default function Index() {
                     placeholder={t("hero.input", "Business email address")}
                     disabled={status === "loading"}
                     dir="ltr"
-                    className="min-w-0 flex-1 rounded-2xl border border-slate-200 px-5 py-3 text-sm outline-none focus:border-amber-400"
+                    className="min-w-0 flex-1 rounded-2xl border border-slate-200 px-5 py-3 text-sm outline-none focus:border-blue-500"
                   />
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white hover:bg-slate-800 disabled:opacity-50"
+                    className="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-black text-white hover:bg-blue-600 disabled:opacity-50"
                   >
                     {status === "loading"
                       ? t("Applying...", "Applying...")
@@ -231,22 +223,6 @@ export default function Index() {
                   </p>
                 )}
               </form>
-
-              <div className="flex flex-wrap gap-2 pt-2">
-                {languageChips.map((chip) => (
-                  <button
-                    key={chip.id}
-                    onClick={() => setLanguage(chip.id)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${
-                      language === chip.id
-                        ? "border-slate-950 bg-slate-950 text-white"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-400"
-                    }`}
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-200/60">
@@ -274,7 +250,7 @@ export default function Index() {
                         <h3 className="font-black text-slate-950">{item.title}</h3>
                         <p className="mt-1 text-sm text-slate-500">{item.route}</p>
                       </div>
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">
+                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-black text-blue-800">
                         {item.match}
                       </span>
                     </div>
@@ -307,7 +283,7 @@ export default function Index() {
         >
           <div className="mx-auto max-w-7xl">
             <div className="mb-8 max-w-2xl">
-              <p className="text-xs font-black uppercase tracking-wider text-amber-700">
+              <p className="text-xs font-black uppercase tracking-wider text-blue-700">
                 {t("landing.samples.kicker", "Why register?")}
               </p>
               <h2 className="mt-2 text-3xl font-black text-slate-950 sm:text-4xl">
@@ -367,10 +343,10 @@ export default function Index() {
                   key={step.title}
                   className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
                 >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-amber-400">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-700 text-white">
                     <step.icon className="h-6 w-6" />
                   </div>
-                  <p className="mb-2 font-mono text-xs font-black text-amber-700">0{idx + 1}</p>
+                  <p className="mb-2 font-mono text-xs font-black text-blue-700">0{idx + 1}</p>
                   <h3 className="font-black text-slate-950">{step.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{step.text}</p>
                 </div>
@@ -379,16 +355,16 @@ export default function Index() {
           </div>
         </section>
 
-        <section id="safety" className="bg-slate-950 px-5 py-16 text-white sm:px-8">
+        <section id="safety" className="bg-blue-700 px-5 py-16 text-white sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="text-xs font-black uppercase tracking-wider text-amber-400">
+              <p className="text-xs font-black uppercase tracking-wider text-blue-300">
                 {t("landing.safety.kicker", "Trust and safety")}
               </p>
               <h2 className="mt-2 text-3xl font-black sm:text-4xl">
                 {t("landing.safety.title", "Trade with a clearer, safer process")}
               </h2>
-              <p className="mt-4 max-w-xl text-slate-300">
+              <p className="mt-4 max-w-xl text-blue-100">
                 {t(
                   "landing.safety.copy",
                   "Tureep guides companies through verification, matching, order confirmation, protected payment options, and shipment tracking.",
@@ -406,9 +382,9 @@ export default function Index() {
                 return (
                   <div
                     key={label as string}
-                    className="rounded-3xl border border-white/10 bg-white/5 p-5"
+                    className="rounded-3xl border border-white/20 bg-white/10 p-5"
                   >
-                    <SafeIcon className="mb-4 h-6 w-6 text-amber-400" />
+                    <SafeIcon className="mb-4 h-6 w-6 text-blue-300" />
                     <p className="font-black">{label as string}</p>
                   </div>
                 );
@@ -418,7 +394,7 @@ export default function Index() {
         </section>
 
         <section className="px-5 py-16 text-center sm:px-8">
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-amber-50 p-8 sm:p-12">
+          <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-blue-50 p-8 sm:p-12">
             <h2 className="text-3xl font-black text-slate-950 sm:text-4xl">
               {t("landing.final.title", "Start with a free account")}
             </h2>
@@ -430,7 +406,7 @@ export default function Index() {
             </p>
             <Link
               to="/login"
-              className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-8 py-4 text-base font-black text-white hover:bg-slate-800"
+              className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-blue-700 px-8 py-4 text-base font-black text-white hover:bg-blue-600"
             >
               {t("landing.cta.primary", "Create free account")}
               <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
