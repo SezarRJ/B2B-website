@@ -40,7 +40,7 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
 
   async function logout() {
     await logoutWithSupabase();
-    navigate({ to: "/login" });
+    window.location.replace("/login");
   }
 
   const isInternalUser =

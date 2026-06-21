@@ -256,13 +256,19 @@ export interface DemandAnalytics {
   recommended_action: string;
 }
 
+function isSignedOut(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("tureep_signed_out") === "true";
+}
+
 function getToken(): string | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === "undefined" || isSignedOut()) return null;
   return localStorage.getItem("tureep_token");
 }
 
 export function setToken(token: string) {
   if (typeof window !== "undefined") {
+    localStorage.removeItem("tureep_signed_out");
     localStorage.setItem("tureep_token", token);
   }
 }
@@ -270,6 +276,7 @@ export function setToken(token: string) {
 export function removeToken() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("tureep_token");
+    localStorage.setItem("tureep_signed_out", "true");
   }
 }
 
@@ -870,7 +877,10 @@ async function runOfflineMock(path: string, options: RequestInit = {}): Promise<
 
   // 2. Users / Dashboard
   if (path.includes("/users/me")) {
-    const activeToken = getToken() || "jwt_mock_buyer.turkey@tureep.ai";
+    const activeToken = getToken();
+    if (!activeToken) {
+      throw new Error("Signed out");
+    }
     const userEmail = activeToken.replace("jwt_mock_", "");
     const found = users.find((u) => u.email.toLowerCase() === userEmail.toLowerCase());
     return found || users[1]; // default to buyer.turkey
