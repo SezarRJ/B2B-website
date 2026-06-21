@@ -6,71 +6,71 @@ import {
   ArrowRight,
   CheckCircle2,
   Globe,
-  Shield,
-  Sparkles,
-  TrendingUp,
-  ChevronRight,
+  Package,
+  Search,
+  ShieldCheck,
+  Truck,
+  CreditCard,
+  Users,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const sampleOpportunities = [
+  {
+    title: "Premium Iraqi Dates",
+    route: "Basra, Iraq → Turkey",
+    volume: "300 tons",
+    payment: "L/C or protected payment",
+    match: "94% match",
+  },
+  {
+    title: "HMS 1/2 Steel Scrap",
+    route: "Bandar Abbas, Iran → Turkey",
+    volume: "150 tons",
+    payment: "D/P supported",
+    match: "82% match",
+  },
+  {
+    title: "Rock Phosphate 30% P2O5",
+    route: "Iraq → GCC / Turkey",
+    volume: "800 tons",
+    payment: "Escrow option",
+    match: "98% match",
+  },
+];
+
+const steps = [
+  {
+    icon: Package,
+    title: "Post what you sell or need",
+    text: "Add a product as a seller or post a buying request as a buyer.",
+  },
+  {
+    icon: Users,
+    title: "Get matched with companies",
+    text: "See serious buyer/supplier matches based on product, quantity, route, and payment terms.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Verify and agree safely",
+    text: "Use company checks, protected payment, and structured order steps before shipping.",
+  },
+  {
+    icon: Truck,
+    title: "Track the deal to delivery",
+    text: "Follow orders, payment status, and shipment progress in one place.",
+  },
+];
+
 export default function Index() {
   const { language, setLanguage, t, dir } = useI18n();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-
-  const stats = [
-    { value: <span dir="ltr">$4.2B+</span>, label: t("stat.l1", "Trade value screened") },
-    { value: <span dir="ltr">12,800+</span>, label: t("stat.l2", "Pre-deals generated") },
-    { value: <span dir="ltr">1,400+</span>, label: t("stat.l3", "Verified members") },
-    { value: <span dir="ltr">24</span>, label: t("stat.l4", "Active corridors") },
-  ];
-
-  const features = [
-    {
-      icon: Sparkles,
-      title: t("feat.1.t", "Smart Trade Matching"),
-      description: t(
-        "feat.1.d",
-        "Proactive rule-based heuristics across price, reputation, urgency, and operational criteria to surface authentic counterparties.",
-      ),
-    },
-    {
-      icon: Shield,
-      title: t("feat.2.t", "Institutional Trust"),
-      description: t(
-        "feat.2.d",
-        "Verified companies, sanctions screening, and structured payment workflows on every deal.",
-      ),
-    },
-    {
-      icon: TrendingUp,
-      title: t("feat.3.t", "Logistics Clearing"),
-      description: t(
-        "feat.3.d",
-        "Shipping quotes, customs-aware routing, and tracking consolidated inside the deal timeline.",
-      ),
-    },
-    {
-      icon: Globe,
-      title: t("feat.4.t", "Market Intelligence"),
-      description: t(
-        "feat.4.d",
-        "Price signals, demand forecasting, and corridor analytics reserved for Master Account holders.",
-      ),
-    },
-  ];
-
-  const tiers = [
-    { name: "Bronze", price: "$100", note: t("tier.month", "per month"), highlight: false },
-    { name: "Silver", price: "$300", note: t("tier.month", "per month"), highlight: false },
-    { name: "Gold", price: "$1,000", note: t("tier.month", "per month"), highlight: true },
-    { name: "Platinum", price: "$5,000", note: t("tier.month", "per month"), highlight: false },
-    { name: "Black", price: "$20,000", note: t("tier.month", "per month"), highlight: false },
-  ];
+  const isRtl = dir === "rtl";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,8 +82,8 @@ export default function Index() {
       setStatus("success");
       setMessage(
         t(
-          "Your application has been received. Our team will review it shortly.",
-          "Your application has been received. Our team will review it shortly.",
+          "landing.joined",
+          "Thanks — we received your request. You can also create an account now.",
         ),
       );
       setEmail("");
@@ -95,503 +95,354 @@ export default function Index() {
     }
   }
 
-  const isRtl = dir === "rtl";
+  const languageChips: Array<{ id: Language; label: string }> = [
+    { id: "en", label: "English" },
+    { id: "ar", label: "العربية" },
+    { id: "ku", label: "کوردی" },
+    { id: "fa", label: "فارسی" },
+    { id: "tr", label: "Türkçe" },
+  ];
 
   return (
     <div
-      className={`min-h-screen bg-black text-white ${isRtl ? "font-sans text-right" : "font-sans text-left"}`}
+      className={`min-h-screen bg-white text-slate-950 ${isRtl ? "text-right" : "text-left"}`}
       dir={dir}
     >
-      {/* Top Fixed Nav */}
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-md select-none">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-yellow-500/50 bg-yellow-500/10">
-              <span className="font-serif text-lg font-bold text-yellow-400">T</span>
+      <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+          <Link to="/" className={`flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-amber-400 shadow-sm">
+              <span className="font-serif text-lg font-black">T</span>
             </div>
-            <span className="font-serif text-xl font-medium tracking-wide text-white">
-              Tureep <span className="text-yellow-400 font-bold">AI+</span>
-            </span>
+            <div>
+              <div className="text-base font-black tracking-tight">Tureep AI+</div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                B2B Trade
+              </div>
+            </div>
           </Link>
 
-          <div className="hidden items-center gap-8 text-sm font-medium tracking-wide text-white/60 md:flex">
-            <a href="#platform" className="hover:text-white transition-colors">
-              {t("feat.tag", "Platform")}
+          <div className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
+            <a href="#opportunities" className="hover:text-slate-950">
+              {t("landing.nav.samples", "Sample opportunities")}
             </a>
-            <a href="#tiers" className="hover:text-white transition-colors">
-              {t("tier.tag", "Membership")}
+            <a href="#how" className="hover:text-slate-950">
+              {t("landing.nav.how", "How it works")}
             </a>
-            <a href="#corridors" className="hover:text-white transition-colors">
-              {t("corr.tag", "Corridors")}
+            <a href="#safety" className="hover:text-slate-950">
+              {t("landing.nav.safety", "Safety")}
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className={`flex items-center gap-2 ${isRtl ? "flex-row-reverse" : ""}`}>
             <Link
               to="/login"
-              className="hidden text-sm font-medium text-white/60 hover:text-white sm:block transition-colors"
+              className="hidden text-sm font-bold text-slate-600 hover:text-slate-950 sm:block"
             >
               {t("btn.signin", "Sign in")}
             </Link>
             <Link
               to="/login"
-              className="group inline-flex items-center gap-2 rounded-full border border-yellow-500/50 bg-yellow-500/10 px-5 py-2.5 text-xs sm:text-sm font-bold text-yellow-400 transition-all hover:bg-yellow-500 hover:text-black shadow-md"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-slate-800"
             >
-              <span>{t("nav.access", "Access Terminal")}</span>
-              <ChevronRight
-                className={
-                  isRtl
-                    ? "h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-0.5"
-                    : "h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                }
-              />
+              {t("landing.cta.primary", "Create free account")}
+              <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-36 select-text pb-20 lg:pb-32">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-black to-black select-none"></div>
-        <div className="absolute right-0 top-20 h-[400px] w-[400px] rounded-full bg-yellow-500/5 blur-[120px] select-none"></div>
-
-        <div className="relative mx-auto max-w-7xl px-6 sm:px-8 space-y-12">
-          {/* Language switcher */}
-          <div className="rounded-2xl bg-white/[0.04] border border-white/10 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 select-none max-w-5xl mx-auto px-4 py-3 text-center sm:text-left">
-            <div className="flex items-center gap-2.5">
-              <Globe className="h-5 w-5 text-yellow-400 flex-shrink-0" />
-              <div className={isRtl ? "text-right font-mono" : "text-left font-mono"}>
-                <span className="text-yellow-400 font-extrabold block text-xs tracking-wider">
-                  {t("lang.switch", "Choose app language")}
-                </span>
-                <span className="text-white/45 text-[11px]">
-                  RTL-aware interface for MENA trade corridors
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 w-full sm:w-auto">
-              <button
-                onClick={() => setLanguage("ar")}
-                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-black tracking-wider transition-all select-none flex items-center gap-1.5 ${
-                  language === "ar"
-                    ? "bg-yellow-500 text-black shadow-lg scale-105"
-                    : "bg-black/80 text-white border border-white/20 hover:border-yellow-400 hover:text-yellow-300"
-                }`}
-              >
-                <span>🇸🇦</span>
-                <span>العربية (RTL)</span>
-              </button>
-
-              <button
-                onClick={() => setLanguage("tr")}
-                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-black tracking-wider transition-all select-none flex items-center gap-1.5 ${
-                  language === "tr"
-                    ? "bg-yellow-500 text-black shadow-lg scale-105"
-                    : "bg-black/80 text-white border border-white/20 hover:border-yellow-400 hover:text-yellow-300"
-                }`}
-              >
-                <span>🇹🇷</span>
-                <span>Türkçe (LTR)</span>
-              </button>
-
-              <button
-                onClick={() => setLanguage("ku")}
-                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-black tracking-wider transition-all select-none flex items-center gap-1.5 ${
-                  language === "ku"
-                    ? "bg-yellow-500 text-black shadow-lg scale-105"
-                    : "bg-black/80 text-white border border-white/20 hover:border-yellow-400 hover:text-yellow-300"
-                }`}
-              >
-                <span>☀️</span>
-                <span>کوردی (RTL)</span>
-              </button>
-
-              <button
-                onClick={() => setLanguage("fa")}
-                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-black tracking-wider transition-all select-none flex items-center gap-1.5 ${
-                  language === "fa"
-                    ? "bg-yellow-500 text-black shadow-lg scale-105"
-                    : "bg-black/80 text-white border border-white/20 hover:border-yellow-400 hover:text-yellow-300"
-                }`}
-              >
-                <span>🇮🇷</span>
-                <span>فارسی (RTL)</span>
-              </button>
-
-              <button
-                onClick={() => setLanguage("en")}
-                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-black tracking-wider transition-all select-none flex items-center gap-1.5 ${
-                  language === "en"
-                    ? "bg-yellow-500 text-black shadow-lg scale-105"
-                    : "bg-black/80 text-white border border-white/20 hover:border-yellow-400 hover:text-yellow-300"
-                }`}
-              >
-                <span>🇬🇧</span>
-                <span>English</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-xl space-y-6">
-              <div className="inline-flex items-center gap-3 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-xs font-mono font-bold uppercase tracking-widest text-yellow-400 select-none">
-                <span className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse"></span>
-                <span>{t("hero.tag", "Private member network")}</span>
+      <main>
+        <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white px-5 py-16 sm:px-8 lg:py-24">
+          <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),transparent_55%)]" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="space-y-7">
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-amber-800">
+                <Globe className="h-4 w-4" />
+                {t("landing.badge", "Iraq • Turkey • Iran • GCC • Global")}
               </div>
 
-              <h1 className="font-serif text-5xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-6xl lg:text-7xl">
-                {t("hero.title", "Trade at the speed of intelligence")}
-              </h1>
+              <div className="space-y-5">
+                <h1 className="max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
+                  {t(
+                    "landing.hero.title",
+                    "Find verified buyers and suppliers for cross-border trade",
+                  )}
+                </h1>
+                <p className="max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+                  {t(
+                    "landing.hero.subtitle",
+                    "Post what you sell or what you need. Tureep matches you with verified companies and helps manage payment, documents, and shipping.",
+                  )}
+                </p>
+              </div>
 
-              <p className="text-lg leading-relaxed text-white/60 font-medium">
-                {t(
-                  "hero.subtitle",
-                  "Tureep AI+ connects verified sellers and buyers across MENA and global corridors. Our platform pre-generates institutional deal opportunities, clears compliance, and orchestrates haulage --- before the first message is sent.",
-                )}
-              </p>
+              <div
+                className={`flex flex-col gap-3 sm:flex-row ${isRtl ? "sm:flex-row-reverse" : ""}`}
+              >
+                <Link
+                  to="/login"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-500 px-7 py-4 text-base font-black text-slate-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400"
+                >
+                  {t("landing.cta.primary", "Create free account")}
+                  <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
+                </Link>
+                <a
+                  href="#opportunities"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-black text-slate-700 shadow-sm hover:bg-slate-50"
+                >
+                  <Search className="h-5 w-5" />
+                  {t("landing.cta.secondary", "View sample opportunities")}
+                </a>
+              </div>
 
               <form
                 onSubmit={handleSubmit}
-                className="pt-4 flex flex-col gap-3 sm:flex-row max-w-md"
+                className="max-w-xl rounded-3xl border border-slate-200 bg-white p-3 shadow-sm"
               >
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t("hero.input", "Business email address")}
-                  disabled={status === "loading"}
-                  className="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-4 text-sm text-white placeholder:text-white/30 outline-none focus:border-yellow-500/80 focus:bg-white/10 transition-colors disabled:opacity-50 font-mono"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="inline-flex items-center justify-center gap-2.5 rounded-full bg-yellow-500 px-8 py-4 text-sm font-black text-black transition-all hover:bg-yellow-400 disabled:opacity-50 select-none shadow-lg hover:scale-105"
+                <div
+                  className={`flex flex-col gap-3 sm:flex-row ${isRtl ? "sm:flex-row-reverse" : ""}`}
                 >
-                  <span>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t("hero.input", "Business email address")}
+                    disabled={status === "loading"}
+                    dir="ltr"
+                    className="min-w-0 flex-1 rounded-2xl border border-slate-200 px-5 py-3 text-sm outline-none focus:border-amber-400"
+                  />
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white hover:bg-slate-800 disabled:opacity-50"
+                  >
                     {status === "loading"
                       ? t("Applying...", "Applying...")
-                      : t("hero.req", "Request access")}
-                  </span>
-                  <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
-                </button>
+                      : t("landing.join", "Join waitlist")}
+                  </button>
+                </div>
+                {message && (
+                  <p
+                    className={`mt-3 px-2 text-sm font-bold ${status === "error" ? "text-red-600" : "text-emerald-700"}`}
+                  >
+                    {message}
+                  </p>
+                )}
               </form>
 
-              {status === "success" && (
-                <p className="text-sm font-bold text-yellow-400 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                  {message}
-                </p>
-              )}
-              {status === "error" && (
-                <p className="text-sm font-bold text-red-400 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                  {message}
-                </p>
-              )}
-
-              <p className="text-xs text-white/40 leading-relaxed font-mono">
-                {t(
-                  "hero.disclaimer",
-                  "Membership is reviewed. Priority given to commodity traders, manufacturers, and logistics operators.",
-                )}
-              </p>
-            </div>
-
-            {/* Platform Interactive Terminal Mockup */}
-            <div className="relative select-none">
-              <div className="absolute -inset-4 rounded-3xl bg-yellow-500/10 blur-2xl"></div>
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/90 shadow-2xl backdrop-blur-md">
-                <div className="flex items-center gap-2.5 border-b border-white/10 px-5 py-3.5 bg-neutral-950">
-                  <div className="h-3 w-3 rounded-full bg-red-500/80"></div>
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="h-3 w-3 rounded-full bg-green-500/80"></div>
-                  <div className="mx-4 text-xs font-bold text-white/50 font-mono tracking-wider">
-                    {t("mock.head", "Tureep AI+ Terminal")}
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-stretch">
-                  <div className="border-b sm:border-b-0 sm:border-x border-white/10 p-4 bg-neutral-950 flex sm:flex-col items-center justify-center gap-4">
-                    <div className="h-9 w-9 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-black font-serif text-base shadow-inner">
-                      T
-                    </div>
-                    <div className="h-8 w-8 rounded-lg bg-white/5"></div>
-                    <div className="h-8 w-8 rounded-lg bg-white/5"></div>
-                  </div>
-
-                  <div className="flex-1 p-6 space-y-6">
-                    <div className="flex items-center justify-between">
-                      <div className="text-xs font-extrabold text-white/40 uppercase tracking-widest font-mono">
-                        {t("mock.dash", "Dashboard")}
-                      </div>
-                      <div className="rounded-full bg-yellow-500/10 border border-yellow-500/20 px-3.5 py-1 text-xs font-black text-yellow-400 shadow-sm">
-                        {t("mock.role", "Gold Member")}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 text-center shadow-inner">
-                        <div className="text-[10px] font-bold text-white/40 uppercase font-mono">
-                          {t("mock.deals", "Active Pre-Deals")}
-                        </div>
-                        <div className="mt-1 text-2xl font-black text-white font-mono">12</div>
-                      </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 text-center shadow-inner">
-                        <div className="text-[10px] font-bold text-white/40 uppercase font-mono">
-                          {t("mock.val", "Trade Value")}
-                        </div>
-                        <div className="mt-1 text-2xl font-black text-white font-mono">$2.4M</div>
-                      </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 text-center shadow-inner">
-                        <div className="text-[10px] font-bold text-white/40 uppercase font-mono">
-                          {t("mock.score", "Match Score")}
-                        </div>
-                        <div className="mt-1 text-2xl font-black text-yellow-400 font-mono">94</div>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-3 shadow-inner">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
-                        <div className="text-base font-black text-white">
-                          {t("mock.prod", "Premium Iraqi Dates")}
-                        </div>
-                        <span className="text-xs font-black text-neutral-900 bg-yellow-400 px-3 py-0.5 rounded-full uppercase tracking-wider font-mono self-start sm:self-auto shadow-sm">
-                          {t("mock.rec", "Recommended")}
-                        </span>
-                      </div>
-
-                      <div className="p-3 rounded-xl bg-black/60 border border-white/5 text-xs text-white/70 font-mono leading-relaxed space-y-1">
-                        <p>● {t("mock.terms", "300 ton • $2.65 / ton • Escrow")}</p>
-                        <p className="text-emerald-400 font-bold">
-                          ● Protected via Institutional Neutral Custody Subsystem
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                {languageChips.map((chip) => (
+                  <button
+                    key={chip.id}
+                    onClick={() => setLanguage(chip.id)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+                      language === chip.id
+                        ? "border-slate-950 bg-slate-950 text-white"
+                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-400"
+                    }`}
+                  >
+                    {chip.label}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="border-y border-white/10 bg-neutral-950 select-none">
-        <div className="mx-auto grid max-w-7xl divide-y divide-white/10 px-6 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-          {stats.map((s, idx) => (
-            <div key={idx} className="py-12 text-center sm:px-6 hover:bg-white/5 transition-colors">
-              <p className="font-serif text-4xl sm:text-5xl font-extrabold text-white font-mono">
-                {s.value}
-              </p>
-              <p className="mt-2 text-xs font-black uppercase tracking-widest text-yellow-400/80">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="platform" className="py-24 lg:py-32 select-text">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="mx-auto max-w-2xl text-center space-y-3">
-            <p className="text-xs font-black uppercase tracking-widest text-yellow-400 font-mono">
-              {t("feat.tag", "The Platform")}
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl font-extrabold text-white">
-              {t("feat.title", "Built for the full deal cycle")}
-            </h2>
-            <p className="text-lg text-white/50 leading-relaxed font-medium">
-              {t(
-                "feat.subtitle",
-                "From discovery to settlement, every step is engineered for institutional trust and velocity.",
-              )}
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-px bg-white/10 md:grid-cols-2 shadow-2xl rounded-3xl overflow-hidden border border-white/10">
-            {features.map((f, fIdx) => (
-              <div
-                key={fIdx}
-                className="group bg-neutral-950 p-10 transition-colors hover:bg-neutral-900 space-y-4"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 group-hover:scale-110 transition-transform">
-                  <f.icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-white tracking-wide">
-                  {f.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/50 font-medium">{f.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Membership Tiers Section */}
-      <section
-        id="tiers"
-        className="border-y border-white/10 bg-neutral-950 py-24 lg:py-32 select-none"
-      >
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="mx-auto max-w-2xl text-center space-y-3">
-            <p className="text-xs font-black uppercase tracking-widest text-yellow-400 font-mono">
-              {t("tier.tag", "Membership")}
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl font-extrabold text-white">
-              {t("tier.title", "Master Accounts")}
-            </h2>
-            <p className="text-lg text-white/50 leading-relaxed font-medium">
-              {t("tier.subtitle", "Tiered access designed for every scale of international trade.")}
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-5 items-stretch">
-            {tiers.map((tItem, tIdx) => (
-              <div
-                key={tIdx}
-                className={`relative rounded-3xl border p-7 transition-all flex flex-col justify-between ${
-                  tItem.highlight
-                    ? "border-yellow-500 bg-gradient-to-b from-yellow-500/20 to-black shadow-2xl scale-105 z-10"
-                    : "border-white/10 bg-black hover:border-yellow-500/50 hover:bg-neutral-900/60"
-                }`}
-              >
-                {tItem.highlight && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-500 px-5 py-1.5 text-xs font-black uppercase tracking-widest text-black shadow-lg">
-                    {t("tier.popular", "Most popular")}
-                  </div>
-                )}
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-200/60">
+              <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-yellow-400 font-mono">
-                    {tItem.name}
+                  <p className="text-xs font-black uppercase tracking-wider text-slate-400">
+                    {t("landing.preview", "Live preview")}
                   </p>
-                  <p className="mt-4 font-serif text-4xl font-extrabold text-white font-mono">
-                    {tItem.price}
-                  </p>
-                  <p className="text-xs text-white/40 mt-1 font-mono">{tItem.note}</p>
+                  <h2 className="text-xl font-black text-slate-950">
+                    {t("landing.preview.title", "Example trade matches")}
+                  </h2>
                 </div>
-
-                <ul className="mt-10 space-y-4 text-xs sm:text-sm text-white/70 font-medium border-t border-white/10 pt-6">
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-                    <span>{t("tier.f1", "Priority deal access")}</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-                    <span>{t("tier.f2", "Reduced commission")}</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-                    <span>{t("tier.f3", "Dedicated support")}</span>
-                  </li>
-                </ul>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                  {t("topbar.live", "Live")}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Corridors Section */}
-      <section id="corridors" className="py-24 lg:py-32 select-none">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="mx-auto max-w-2xl text-center space-y-3">
-            <p className="text-xs font-black uppercase tracking-widest text-yellow-400 font-mono">
-              {t("corr.tag", "Corridors")}
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl font-extrabold text-white">
-              {t("corr.title", "Active trade lanes")}
-            </h2>
-          </div>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-3 items-stretch">
-            {[
-              {
-                from: t("corr.c1.from", "Iraq"),
-                to: t("corr.c1.to", "Turkey"),
-                goods: t("corr.c1.goods", "Dates, Phosphate, Marble"),
-              },
-              {
-                from: t("corr.c2.from", "Iran"),
-                to: t("corr.c2.to", "Turkey / EU"),
-                goods: t("corr.c2.goods", "Steel Scrap, Petrochemicals"),
-              },
-              {
-                from: t("corr.c3.from", "Turkey"),
-                to: t("corr.c3.to", "Global Markets"),
-                goods: t("corr.c3.goods", "Processed commodities, Textiles"),
-              },
-            ].map((c, cIdx) => (
-              <div
-                key={cIdx}
-                className="rounded-3xl border border-white/10 bg-neutral-950 p-8 space-y-6 hover:border-yellow-500/50 transition-all shadow-xl hover:scale-[1.02]"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-white tracking-wide">{c.from}</span>
-                  <div className="p-3 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
-                    <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
+              <div className="space-y-3">
+                {sampleOpportunities.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="font-black text-slate-950">{item.title}</h3>
+                        <p className="mt-1 text-sm text-slate-500">{item.route}</p>
+                      </div>
+                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">
+                        {item.match}
+                      </span>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="font-bold text-slate-400">Volume</p>
+                        <p className="font-mono font-black text-slate-900">{item.volume}</p>
+                      </div>
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="font-bold text-slate-400">Payment</p>
+                        <p className="font-bold text-slate-900">{item.payment}</p>
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-2xl font-bold text-white tracking-wide">{c.to}</span>
-                </div>
-                <div className="pt-4 border-t border-white/10 space-y-1">
-                  <span className="text-xs text-yellow-400 uppercase tracking-widest font-black font-mono block">
-                    Authenticated Commodity Corridor:
-                  </span>
-                  <p className="text-base text-white/70 font-medium leading-relaxed">{c.goods}</p>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="border-y border-white/10 bg-neutral-950 py-24 select-none">
-        <div className="mx-auto max-w-4xl px-6 text-center space-y-8">
-          <h2 className="font-serif text-4xl font-extrabold text-white sm:text-6xl leading-tight">
-            {t("cta.title", "Join the private B2B network")}
-          </h2>
-          <p className="text-lg sm:text-xl text-white/50 leading-relaxed max-w-2xl mx-auto font-medium">
-            {t(
-              "cta.subtitle",
-              "Priority access is limited. Apply today and our team will review your corporate Node.",
-            )}
-          </p>
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-3.5 rounded-full bg-yellow-500 px-10 py-5 text-base sm:text-lg font-black text-black transition-all hover:bg-yellow-400 shadow-2xl hover:scale-105 select-none"
-          >
-            <span>{t("nav.access", "Access Terminal")}</span>
-            <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer Line */}
-      <footer className="bg-black py-14 select-none border-t border-white/5">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="flex flex-col items-center justify-between gap-8 sm:flex-row text-center sm:text-left">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-yellow-500/50 bg-yellow-500/10">
-                <span className="font-serif text-lg font-bold text-yellow-400">T</span>
-              </div>
-              <span className="font-serif text-xl font-medium tracking-wide text-white">
-                Tureep <span className="text-yellow-400 font-bold">AI+</span>
-              </span>
-            </Link>
-
-            <p className="text-xs sm:text-sm text-white/40 font-mono tracking-wide">
-              {t("foot.copy", "© 2026 Tureep Trade Systems. All rights reserved.")}
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-8 text-xs sm:text-sm font-bold text-white/60">
-              <Link to="/login" className="hover:text-yellow-400 transition-colors">
-                {t("nav.signin", "Sign in")}
-              </Link>
-              <Link to="/dashboard" className="hover:text-yellow-400 transition-colors">
-                {t("nav.dashboard", "Dashboard")}
-              </Link>
+              <p className="mt-4 text-center text-xs font-semibold text-slate-400">
+                {t(
+                  "landing.samples.note",
+                  "Examples only. Create an account to add your own products or requests.",
+                )}
+              </p>
             </div>
           </div>
+        </section>
+
+        <section
+          id="opportunities"
+          className="border-y border-slate-200 bg-slate-50 px-5 py-16 sm:px-8"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 max-w-2xl">
+              <p className="text-xs font-black uppercase tracking-wider text-amber-700">
+                {t("landing.samples.kicker", "Why register?")}
+              </p>
+              <h2 className="mt-2 text-3xl font-black text-slate-950 sm:text-4xl">
+                {t("landing.samples.heading", "See the kind of opportunities customers can create")}
+              </h2>
+              <p className="mt-3 text-slate-600">
+                {t(
+                  "landing.samples.copy",
+                  "Before registering, customers should understand what value they get: serious trade matches, protected payment options, and a clearer route from request to order.",
+                )}
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {sampleOpportunities.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+                >
+                  <h3 className="text-lg font-black text-slate-950">{item.title}</h3>
+                  <p className="mt-2 text-sm text-slate-500">{item.route}</p>
+                  <div className="mt-5 space-y-2 text-sm">
+                    <p className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Quantity</span>
+                      <span className="font-mono font-black">{item.volume}</span>
+                    </p>
+                    <p className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Payment</span>
+                      <span className="font-bold">{item.payment}</span>
+                    </p>
+                    <p className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Match</span>
+                      <span className="font-mono font-black text-emerald-700">{item.match}</span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="how" className="px-5 py-16 sm:px-8 lg:py-24">
+          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <h2 className="text-3xl font-black text-slate-950 sm:text-4xl">
+                {t("landing.how.title", "How Tureep works")}
+              </h2>
+              <p className="mt-3 text-slate-600">
+                {t(
+                  "landing.how.copy",
+                  "A simple guided path from product/request to match, order, payment, and shipment.",
+                )}
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-4">
+              {steps.map((step, idx) => (
+                <div
+                  key={step.title}
+                  className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+                >
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-amber-400">
+                    <step.icon className="h-6 w-6" />
+                  </div>
+                  <p className="mb-2 font-mono text-xs font-black text-amber-700">0{idx + 1}</p>
+                  <h3 className="font-black text-slate-950">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{step.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="safety" className="bg-slate-950 px-5 py-16 text-white sm:px-8">
+          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-amber-400">
+                {t("landing.safety.kicker", "Trust and safety")}
+              </p>
+              <h2 className="mt-2 text-3xl font-black sm:text-4xl">
+                {t("landing.safety.title", "Trade with a clearer, safer process")}
+              </h2>
+              <p className="mt-4 max-w-xl text-slate-300">
+                {t(
+                  "landing.safety.copy",
+                  "Tureep guides companies through verification, matching, order confirmation, protected payment options, and shipment tracking.",
+                )}
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                [ShieldCheck, "Company verification"],
+                [CreditCard, "Protected payment options"],
+                [CheckCircle2, "Structured deal steps"],
+                [Truck, "Shipment visibility"],
+              ].map(([Icon, label]) => {
+                const SafeIcon = Icon as typeof ShieldCheck;
+                return (
+                  <div
+                    key={label as string}
+                    className="rounded-3xl border border-white/10 bg-white/5 p-5"
+                  >
+                    <SafeIcon className="mb-4 h-6 w-6 text-amber-400" />
+                    <p className="font-black">{label as string}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="px-5 py-16 text-center sm:px-8">
+          <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-amber-50 p-8 sm:p-12">
+            <h2 className="text-3xl font-black text-slate-950 sm:text-4xl">
+              {t("landing.final.title", "Start with a free account")}
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-600">
+              {t(
+                "landing.final.copy",
+                "Add your first product or buying request and see what matches the platform can prepare for you.",
+              )}
+            </p>
+            <Link
+              to="/login"
+              className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-8 py-4 text-base font-black text-white hover:bg-slate-800"
+            >
+              {t("landing.cta.primary", "Create free account")}
+              <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-slate-200 px-5 py-8 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center text-sm text-slate-500 sm:flex-row">
+          <p className="font-bold text-slate-950">Tureep AI+</p>
+          <p>{t("foot.copy", "© 2026 Tureep Trade Systems. All rights reserved.")}</p>
         </div>
       </footer>
     </div>

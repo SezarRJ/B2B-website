@@ -82,21 +82,19 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 const navItems = [
-  { path: "/dashboard", labelKey: "nav.dashboard", fallback: "Dashboard", icon: LayoutDashboard },
-  { path: "/products", labelKey: "nav.products", fallback: "Products", icon: Package },
+  { path: "/dashboard", labelKey: "nav.home", fallback: "Home", icon: LayoutDashboard },
+  { path: "/products", labelKey: "nav.marketplace", fallback: "Marketplace", icon: Package },
+  { path: "/demands", labelKey: "nav.requests", fallback: "Buying Requests", icon: ClipboardList },
   {
-    path: "/deals",
-    labelKey: "nav.deals",
-    fallback: "Deals",
+    path: "/pre-deals",
+    labelKey: "nav.matches",
+    fallback: "Matches",
     icon: Handshake,
     badge: "deals" as const,
   },
   { path: "/orders", labelKey: "nav.orders.short", fallback: "Orders", icon: ClipboardList },
-  { path: "/logistics", labelKey: "nav.logistics", fallback: "Logistics", icon: Truck },
-  { path: "/finance", labelKey: "nav.finance.short", fallback: "Finance", icon: CreditCard },
-  { path: "/analytics", labelKey: "nav.insights", fallback: "Insights", icon: BarChart3 },
-  { path: "/compliance", labelKey: "nav.compliance", fallback: "Compliance", icon: Shield },
-  { path: "/settings", labelKey: "nav.settings", fallback: "Settings", icon: Settings },
+  { path: "/shipments", labelKey: "nav.shipments.short", fallback: "Shipments", icon: Truck },
+  { path: "/trade-finance", labelKey: "nav.payments", fallback: "Payments", icon: CreditCard },
 ];
 
 function RootLayout() {
