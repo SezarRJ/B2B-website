@@ -13,7 +13,7 @@ export const CookieConsentBanner: React.FC = () => {
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("tureep_gdpr_consent") : null;
     if (!saved) {
-      setShowBanner(true);
+      saveConsent({ necessary: true, analytics: true, functional: true });
     }
   }, []);
 
