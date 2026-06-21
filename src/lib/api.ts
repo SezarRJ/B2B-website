@@ -1320,7 +1320,9 @@ async function runOfflineMock(path: string, options: RequestInit = {}): Promise<
 // Interceptor wrapper
 async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!API_BASE_URL) {
-    return runOfflineMock(path, options);
+    throw new Error(
+      "Backend API is not configured. Set VITE_API_BASE_URL or disable this feature in the UI.",
+    );
   }
 
   const token = getToken();
@@ -1342,11 +1344,10 @@ async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
     });
 
     if (!res.ok) {
-      // Catch HTTP 4xx/5xx and activate offline mock
-      console.warn(
-        `[API Network Hit Failed: ${res.status}] Activating resilient client-side mock offline ledger for ${path}...`,
+      const message = await res.text().catch(() => "");
+      throw new Error(
+        `API request failed (${res.status}) for ${path}${message ? `: ${message}` : ""}`,
       );
-      return runOfflineMock(path, options);
     }
 
     if (res.status === 204) {
@@ -1355,11 +1356,7 @@ async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
 
     return res.json();
   } catch (err) {
-    // Exactly intercepts "Failed to fetch" or CORS Network errors
-    console.warn(
-      `[Network Unreachable / Failed to Fetch] Activating instant 100% resilient offline LocalStorage mock interceptor for ${path}...`,
-    );
-    return runOfflineMock(path, options);
+    throw err instanceof Error ? err : new Error(`API request failed for ${path}`);
   }
 }
 

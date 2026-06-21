@@ -37,8 +37,18 @@ type Opportunity = {
   contact?: string;
 };
 
-function scoreFromSeed(seed: string, base = 72) {
-  return Math.min(98, base + (seed.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % 24));
+function dataQualityScore(fields: Array<unknown>, source: string, freshness: string) {
+  const completeness = fields.filter(
+    (value) => value !== undefined && value !== null && String(value).trim(),
+  ).length;
+  const completenessScore = Math.round((completeness / fields.length) * 70);
+  const sourceScore =
+    source.toLowerCase().includes("verified") || source.toLowerCase().includes("buyer") ? 15 : 10;
+  const freshnessScore =
+    freshness.toLowerCase().includes("recent") || freshness.toLowerCase().includes("active")
+      ? 15
+      : 8;
+  return Math.min(100, completenessScore + sourceScore + freshnessScore);
 }
 
 function buildOpportunities(
@@ -58,8 +68,16 @@ function buildOpportunities(
     city: p.location,
     source: "Factory / exporter listing",
     freshness: "Updated recently",
-    opportunityScore: scoreFromSeed(p.name, 74),
-    leadScore: scoreFromSeed(p.location, 68),
+    opportunityScore: dataQualityScore(
+      [p.name, p.category, p.quantity, p.price, p.origin, p.location],
+      "Factory / exporter listing",
+      "Updated recently",
+    ),
+    leadScore: dataQualityScore(
+      [p.user_id, p.location, p.origin],
+      "Supplier listing",
+      "Updated recently",
+    ),
     specs: p.description || "Verified commodity supply opportunity.",
     company: "Hidden supplier",
     contact: "Reveal with credits",
@@ -77,8 +95,16 @@ function buildOpportunities(
     city: d.location,
     source: "Buyer request",
     freshness: "Active request",
-    opportunityScore: scoreFromSeed(d.product_name, 70),
-    leadScore: scoreFromSeed(d.location, 66),
+    opportunityScore: dataQualityScore(
+      [d.product_name, d.category, d.quantity, d.budget, d.location, d.urgency],
+      "Buyer request",
+      "Active request",
+    ),
+    leadScore: dataQualityScore(
+      [d.user_id, d.location, d.urgency],
+      "Buyer request",
+      "Active request",
+    ),
     specs: `Urgency level ${d.urgency}. Buyer is looking for qualified suppliers.`,
     company: "Hidden buyer",
     contact: "Reveal with credits",
@@ -96,8 +122,23 @@ function buildOpportunities(
     city: d.product?.location || "Trade corridor",
     source: "AI discovered match",
     freshness: "Matched by platform",
-    opportunityScore: Math.round(Number(d.match_score || 80)),
-    leadScore: scoreFromSeed(d.buyer?.name || "buyer", 70),
+    opportunityScore: dataQualityScore(
+      [
+        d.product?.name,
+        d.quantity,
+        d.suggested_price,
+        d.payment_terms,
+        d.shipping_cost,
+        d.expires_at,
+      ],
+      "AI discovered match",
+      "Matched by platform",
+    ),
+    leadScore: dataQualityScore(
+      [d.buyer?.name, d.buyer?.country, d.buyer?.is_verified],
+      "Verified counterparty",
+      "Matched by platform",
+    ),
     specs: `${d.payment_terms} payment terms • freight estimate $${d.shipping_cost}`,
     company: "Hidden counterparty",
     contact: "Reveal with credits",
@@ -174,7 +215,7 @@ function OpportunitiesPage() {
               <p className="mt-1 text-sm text-muted-foreground">
                 {t(
                   "opportunities.subtitle",
-                  "AI-discovered selling offers, buying requests, tenders, and supply signals.",
+                  "Connected selling offers, buying requests, tenders, and supply signals. External crawler ingestion is not connected yet.",
                 )}
               </p>
             </div>
@@ -256,7 +297,7 @@ function OpportunitiesPage() {
                         {item.opportunityScore}
                       </p>
                       <p className="text-[11px] font-bold text-muted-foreground">
-                        Opportunity Score
+                        Data Quality Score
                       </p>
                     </div>
                   </div>

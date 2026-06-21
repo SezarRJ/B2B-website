@@ -12,9 +12,7 @@ import {
   FileText,
   Globe,
   Layers,
-  Lock,
   LogOut,
-  Network,
   Radar,
   Search,
   UploadCloud,
@@ -94,22 +92,10 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
       icon: Database,
     },
     {
-      id: "microservices-spec",
-      label: t("nav.microservices", "Crawler Architecture"),
-      path: "/microservices-spec",
-      icon: Network,
-    },
-    {
       id: "workflow",
       label: t("nav.workflow", "Scoring Workflow"),
       path: "/workflow",
       icon: Layers,
-    },
-    {
-      id: "hardening-notes",
-      label: t("nav.hardening", "Security Notes"),
-      path: "/hardening-notes",
-      icon: Lock,
     },
   ];
 

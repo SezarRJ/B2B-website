@@ -21,6 +21,7 @@ function AiAgentPage() {
   const [prompt, setPrompt] = useState(examplePrompts[0]);
   const [running, setRunning] = useState(false);
   const [hasRun, setHasRun] = useState(false);
+  const [agentError, setAgentError] = useState("");
   const [alerts, setAlerts] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
     return JSON.parse(localStorage.getItem("dealcompass_smart_alerts") || "[]");
@@ -54,12 +55,30 @@ function AiAgentPage() {
     };
   }, [prompt]);
 
-  function runAgent() {
+  async function runAgent() {
+    const endpoint = import.meta.env.VITE_AI_AGENT_ENDPOINT;
+    setAgentError("");
+    setHasRun(false);
+    if (!endpoint) {
+      setAgentError(
+        "AI Sourcing Agent is not connected yet. Configure VITE_AI_AGENT_ENDPOINT to enable real LLM parsing and source querying.",
+      );
+      return;
+    }
     setRunning(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      if (!response.ok) throw new Error("AI endpoint request failed");
       setHasRun(true);
+    } catch (error) {
+      setAgentError(error instanceof Error ? error.message : "AI endpoint request failed");
+    } finally {
       setRunning(false);
-    }, 600);
+    }
   }
 
   function createAlert() {
@@ -123,8 +142,13 @@ function AiAgentPage() {
               className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-blue-700 px-6 py-3 text-sm font-black text-white hover:bg-blue-600 disabled:opacity-50"
             >
               <Sparkles className="h-4 w-4" />
-              {running ? "Scanning global sources..." : "Run AI search"}
+              {running ? "Calling AI endpoint..." : "Run AI search"}
             </button>
+            {agentError && (
+              <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-900">
+                {agentError}
+              </div>
+            )}
           </section>
 
           <section className="grid gap-4 md:grid-cols-4">

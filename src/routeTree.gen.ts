@@ -22,12 +22,10 @@ import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MlAnalyticsRouteImport } from './routes/ml-analytics'
-import { Route as MicroservicesSpecRouteImport } from './routes/microservices-spec'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LogisticsRouteImport } from './routes/logistics'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KycRouteImport } from './routes/kyc'
-import { Route as HardeningNotesRouteImport } from './routes/hardening-notes'
 import { Route as FinanceRouteImport } from './routes/finance'
 import { Route as DemandsRouteImport } from './routes/demands'
 import { Route as DealsRouteImport } from './routes/deals'
@@ -103,11 +101,6 @@ const MlAnalyticsRoute = MlAnalyticsRouteImport.update({
   path: '/ml-analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MicroservicesSpecRoute = MicroservicesSpecRouteImport.update({
-  id: '/microservices-spec',
-  path: '/microservices-spec',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -126,11 +119,6 @@ const LoginRoute = LoginRouteImport.update({
 const KycRoute = KycRouteImport.update({
   id: '/kyc',
   path: '/kyc',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HardeningNotesRoute = HardeningNotesRouteImport.update({
-  id: '/hardening-notes',
-  path: '/hardening-notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinanceRoute = FinanceRouteImport.update({
@@ -189,12 +177,10 @@ export interface FileRoutesByFullPath {
   '/deals': typeof DealsRoute
   '/demands': typeof DemandsRoute
   '/finance': typeof FinanceRoute
-  '/hardening-notes': typeof HardeningNotesRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
   '/messages': typeof MessagesRoute
-  '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
   '/opportunities': typeof OpportunitiesRoute
@@ -219,12 +205,10 @@ export interface FileRoutesByTo {
   '/deals': typeof DealsRoute
   '/demands': typeof DemandsRoute
   '/finance': typeof FinanceRoute
-  '/hardening-notes': typeof HardeningNotesRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
   '/messages': typeof MessagesRoute
-  '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
   '/opportunities': typeof OpportunitiesRoute
@@ -250,12 +234,10 @@ export interface FileRoutesById {
   '/deals': typeof DealsRoute
   '/demands': typeof DemandsRoute
   '/finance': typeof FinanceRoute
-  '/hardening-notes': typeof HardeningNotesRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
   '/messages': typeof MessagesRoute
-  '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
   '/opportunities': typeof OpportunitiesRoute
@@ -282,12 +264,10 @@ export interface FileRouteTypes {
     | '/deals'
     | '/demands'
     | '/finance'
-    | '/hardening-notes'
     | '/kyc'
     | '/login'
     | '/logistics'
     | '/messages'
-    | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
     | '/opportunities'
@@ -312,12 +292,10 @@ export interface FileRouteTypes {
     | '/deals'
     | '/demands'
     | '/finance'
-    | '/hardening-notes'
     | '/kyc'
     | '/login'
     | '/logistics'
     | '/messages'
-    | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
     | '/opportunities'
@@ -342,12 +320,10 @@ export interface FileRouteTypes {
     | '/deals'
     | '/demands'
     | '/finance'
-    | '/hardening-notes'
     | '/kyc'
     | '/login'
     | '/logistics'
     | '/messages'
-    | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
     | '/opportunities'
@@ -373,12 +349,10 @@ export interface RootRouteChildren {
   DealsRoute: typeof DealsRoute
   DemandsRoute: typeof DemandsRoute
   FinanceRoute: typeof FinanceRoute
-  HardeningNotesRoute: typeof HardeningNotesRoute
   KycRoute: typeof KycRoute
   LoginRoute: typeof LoginRoute
   LogisticsRoute: typeof LogisticsRoute
   MessagesRoute: typeof MessagesRoute
-  MicroservicesSpecRoute: typeof MicroservicesSpecRoute
   MlAnalyticsRoute: typeof MlAnalyticsRoute
   NotificationsRoute: typeof NotificationsRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
@@ -487,13 +461,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MlAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/microservices-spec': {
-      id: '/microservices-spec'
-      path: '/microservices-spec'
-      fullPath: '/microservices-spec'
-      preLoaderRoute: typeof MicroservicesSpecRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/messages': {
       id: '/messages'
       path: '/messages'
@@ -520,13 +487,6 @@ declare module '@tanstack/react-router' {
       path: '/kyc'
       fullPath: '/kyc'
       preLoaderRoute: typeof KycRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hardening-notes': {
-      id: '/hardening-notes'
-      path: '/hardening-notes'
-      fullPath: '/hardening-notes'
-      preLoaderRoute: typeof HardeningNotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/finance': {
@@ -605,12 +565,10 @@ const rootRouteChildren: RootRouteChildren = {
   DealsRoute: DealsRoute,
   DemandsRoute: DemandsRoute,
   FinanceRoute: FinanceRoute,
-  HardeningNotesRoute: HardeningNotesRoute,
   KycRoute: KycRoute,
   LoginRoute: LoginRoute,
   LogisticsRoute: LogisticsRoute,
   MessagesRoute: MessagesRoute,
-  MicroservicesSpecRoute: MicroservicesSpecRoute,
   MlAnalyticsRoute: MlAnalyticsRoute,
   NotificationsRoute: NotificationsRoute,
   OpportunitiesRoute: OpportunitiesRoute,

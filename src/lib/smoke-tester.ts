@@ -29,8 +29,6 @@ export async function executeFrontendSmokeTest(): Promise<SmokeTestResult> {
     "/sanctions",
     "/notifications",
     "/supabase-portal",
-    "/microservices-spec",
-    "/hardening-notes",
   ];
 
   const logs: string[] = [
