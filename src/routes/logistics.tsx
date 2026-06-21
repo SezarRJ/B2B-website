@@ -11,7 +11,7 @@ import {
   Navigation,
   Calendar,
   TrendingUp,
-  ShieldCheck
+  ShieldCheck,
 } from "lucide-react";
 import { getShipments, type Shipment } from "@/lib/api";
 
@@ -45,7 +45,9 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-surface-800 text-sm">{shipment.tracking_number}</h3>
+                <h3 className="font-semibold text-surface-800 text-sm">
+                  {shipment.tracking_number}
+                </h3>
                 <span className="text-xs text-surface-400">{shipment.carrier}</span>
               </div>
               <p className="text-xs text-surface-500 mt-0.5">
@@ -54,11 +56,15 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
             </div>
           </div>
           <div className="text-right">
-            <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
-              shipment.status === "delivered" ? "bg-success-50 text-success-700" :
-              shipment.status === "in_transit" ? "bg-primary-50 text-primary-700" :
-              "bg-warning-50 text-warning-700"
-            }`}>
+            <span
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
+                shipment.status === "delivered"
+                  ? "bg-success-50 text-success-700"
+                  : shipment.status === "in_transit"
+                    ? "bg-primary-50 text-primary-700"
+                    : "bg-warning-50 text-warning-700"
+              }`}
+            >
               {shipment.status.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
             </span>
           </div>
@@ -85,11 +91,17 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
             <p className="text-sm font-semibold text-surface-800">{shipment.origin_corridor}</p>
           </div>
           <div className="bg-surface-50 rounded-xl p-3">
-            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Destination</p>
-            <p className="text-sm font-semibold text-surface-800">{shipment.destination_corridor}</p>
+            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+              Destination
+            </p>
+            <p className="text-sm font-semibold text-surface-800">
+              {shipment.destination_corridor}
+            </p>
           </div>
           <div className="bg-surface-50 rounded-xl p-3">
-            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Est. Delivery</p>
+            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+              Est. Delivery
+            </p>
             <p className="text-sm font-semibold text-surface-800">
               {shipment.estimated_delivery
                 ? new Date(shipment.estimated_delivery).toLocaleDateString()
@@ -109,20 +121,29 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
                 return (
                   <div key={step.id} className="flex gap-4 pb-6 last:pb-0">
                     <div className="flex flex-col items-center">
-                      <div className={`
+                      <div
+                        className={`
                         w-8 h-8 rounded-full flex items-center justify-center z-10
-                        ${isCompleted ? "bg-primary-500 text-white" :
-                          "bg-surface-200 text-surface-400"}
+                        ${
+                          isCompleted
+                            ? "bg-primary-500 text-white"
+                            : "bg-surface-200 text-surface-400"
+                        }
                         ${isCurrent ? "ring-4 ring-primary-100" : ""}
-                      `}>
+                      `}
+                      >
                         <StepIcon className="w-4 h-4" />
                       </div>
                       {idx < statusSteps.length - 1 && (
-                        <div className={`w-0.5 flex-1 mt-1 ${isCompleted && idx < currentStepIndex ? "bg-primary-300" : "bg-surface-200"}`} />
+                        <div
+                          className={`w-0.5 flex-1 mt-1 ${isCompleted && idx < currentStepIndex ? "bg-primary-300" : "bg-surface-200"}`}
+                        />
                       )}
                     </div>
                     <div className="pb-2">
-                      <p className={`text-sm font-semibold ${isCompleted ? "text-surface-800" : "text-surface-400"}`}>
+                      <p
+                        className={`text-sm font-semibold ${isCompleted ? "text-surface-800" : "text-surface-400"}`}
+                      >
                         {step.label}
                       </p>
                       {isCurrent && (
@@ -145,7 +166,8 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
                       <div>
                         <p className="text-xs text-surface-600">{event.description}</p>
                         <p className="text-[10px] text-surface-400 mt-0.5 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" /> {event.location} · {new Date(event.timestamp).toLocaleString()}
+                          <MapPin className="w-3 h-3" /> {event.location} ·{" "}
+                          {new Date(event.timestamp).toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -161,7 +183,9 @@ function ShipmentCard({ shipment }: { shipment: Shipment }) {
           className="flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           {expanded ? "Hide Details" : "View Tracking Timeline"}
-          <ChevronRight className={`w-3.5 h-3.5 transition-transform ${expanded ? "rotate-90" : ""}`} />
+          <ChevronRight
+            className={`w-3.5 h-3.5 transition-transform ${expanded ? "rotate-90" : ""}`}
+          />
         </button>
       </div>
     </div>
@@ -191,7 +215,9 @@ function LogisticsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Logistics & Tracking</h1>
-        <p className="text-sm text-surface-500 mt-0.5">Monitor shipments across trade corridors in real-time</p>
+        <p className="text-sm text-surface-500 mt-0.5">
+          Monitor shipments across trade corridors in real-time
+        </p>
       </div>
 
       {/* Stats */}
@@ -264,7 +290,10 @@ function LogisticsPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse">
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse"
+            >
               <div className="h-4 bg-surface-200 rounded w-1/3 mb-4" />
               <div className="h-2 bg-surface-200 rounded mb-4" />
             </div>

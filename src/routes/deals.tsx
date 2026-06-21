@@ -17,7 +17,7 @@ import {
   Star,
   ArrowRight,
   AlertCircle,
-  Package
+  Package,
 } from "lucide-react";
 import { getPreDeals, actOnPreDeal, generatePreDeals, type PreDeal } from "@/lib/api";
 import { Link } from "@tanstack/react-router";
@@ -39,9 +39,11 @@ function DealCard({ deal, onAction }: { deal: PreDeal; onAction: () => void }) {
   const isAccepted = deal.status === "accepted";
   const isRejected = deal.status === "rejected";
 
-  const scoreColor = score >= 90 ? "bg-success-500" : score >= 75 ? "bg-primary-500" : "bg-warning-500";
+  const scoreColor =
+    score >= 90 ? "bg-success-500" : score >= 75 ? "bg-primary-500" : "bg-warning-500";
   const scoreBg = score >= 90 ? "bg-success-50" : score >= 75 ? "bg-primary-50" : "bg-warning-50";
-  const scoreText = score >= 90 ? "text-success-700" : score >= 75 ? "text-primary-700" : "text-warning-700";
+  const scoreText =
+    score >= 90 ? "text-success-700" : score >= 75 ? "text-primary-700" : "text-warning-700";
 
   async function handleAccept() {
     try {
@@ -61,7 +63,9 @@ function DealCard({ deal, onAction }: { deal: PreDeal; onAction: () => void }) {
     }
   }
 
-  const daysLeft = Math.ceil((new Date(deal.expires_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const daysLeft = Math.ceil(
+    (new Date(deal.expires_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+  );
 
   return (
     <div className="bg-white rounded-2xl border border-surface-200 card-hover overflow-hidden">
@@ -77,12 +81,16 @@ function DealCard({ deal, onAction }: { deal: PreDeal; onAction: () => void }) {
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className={`w-14 h-14 rounded-2xl ${scoreBg} flex items-center justify-center flex-shrink-0`}>
+            <div
+              className={`w-14 h-14 rounded-2xl ${scoreBg} flex items-center justify-center flex-shrink-0`}
+            >
               <span className={`text-lg font-bold ${scoreText}`}>{deal.match_score}</span>
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${scoreBg} ${scoreText}`}>
+                <span
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${scoreBg} ${scoreText}`}
+                >
                   <Star className="w-3 h-3" />
                   {score >= 90 ? "Excellent Match" : score >= 75 ? "Good Match" : "Fair Match"}
                 </span>
@@ -92,14 +100,20 @@ function DealCard({ deal, onAction }: { deal: PreDeal; onAction: () => void }) {
                   </span>
                 )}
               </div>
-              <h3 className="font-semibold text-surface-800 text-sm">{deal.product?.name || "Cross-Border Commodity"}</h3>
+              <h3 className="font-semibold text-surface-800 text-sm">
+                {deal.product?.name || "Cross-Border Commodity"}
+              </h3>
             </div>
           </div>
-          <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
-            isAccepted ? "bg-success-50 text-success-700 border border-success-200" :
-            isRejected ? "bg-danger-50 text-danger-700 border border-danger-200" :
-            "bg-warning-50 text-warning-700 border border-warning-200"
-          }`}>
+          <span
+            className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
+              isAccepted
+                ? "bg-success-50 text-success-700 border border-success-200"
+                : isRejected
+                  ? "bg-danger-50 text-danger-700 border border-danger-200"
+                  : "bg-warning-50 text-warning-700 border border-warning-200"
+            }`}
+          >
             {isAccepted ? "Accepted" : isRejected ? "Declined" : "Pending Review"}
           </span>
         </div>
@@ -249,7 +263,10 @@ function DealsPage() {
     total: deals.length,
     pending: deals.filter((d) => d.status === "pending").length,
     accepted: deals.filter((d) => d.status === "accepted").length,
-    avgScore: deals.length > 0 ? (deals.reduce((sum, d) => sum + parseFloat(d.match_score), 0) / deals.length).toFixed(1) : "0",
+    avgScore:
+      deals.length > 0
+        ? (deals.reduce((sum, d) => sum + parseFloat(d.match_score), 0) / deals.length).toFixed(1)
+        : "0",
   };
 
   return (
@@ -258,7 +275,9 @@ function DealsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-surface-800">Deal Hub</h1>
-          <p className="text-sm text-surface-500 mt-0.5">AI-matched trade opportunities curated for you</p>
+          <p className="text-sm text-surface-500 mt-0.5">
+            AI-matched trade opportunities curated for you
+          </p>
         </div>
         <button
           onClick={handleGenerate}
@@ -319,7 +338,9 @@ function DealsPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-surface-800">Smart Analysis</p>
-              <p className="text-xs text-surface-500 mt-0.5">AI analyzes price, location, reputation, and urgency</p>
+              <p className="text-xs text-surface-500 mt-0.5">
+                AI analyzes price, location, reputation, and urgency
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -328,7 +349,9 @@ function DealsPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-surface-800">Pre-Deal Generation</p>
-              <p className="text-xs text-surface-500 mt-0.5">Auto-generated proposals with pricing and terms</p>
+              <p className="text-xs text-surface-500 mt-0.5">
+                Auto-generated proposals with pricing and terms
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -337,7 +360,9 @@ function DealsPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-surface-800">One-Click Confirm</p>
-              <p className="text-xs text-surface-500 mt-0.5">Accept to instantly create a secured order</p>
+              <p className="text-xs text-surface-500 mt-0.5">
+                Accept to instantly create a secured order
+              </p>
             </div>
           </div>
         </div>
@@ -369,7 +394,10 @@ function DealsPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse">
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse"
+            >
               <div className="h-1.5 bg-surface-200 rounded mb-4" />
               <div className="flex gap-3 mb-4">
                 <div className="w-14 h-14 bg-surface-200 rounded-2xl" />
@@ -385,7 +413,11 @@ function DealsPage() {
         <div className="bg-white rounded-2xl p-12 border border-surface-200 text-center">
           <Sparkles className="w-12 h-12 text-surface-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-surface-700 mb-1">No deals found</h3>
-          <p className="text-sm text-surface-500 mb-2">{activeFilter === "all" ? "Generate AI matches to see opportunities" : `No ${activeFilter} deals`}</p>
+          <p className="text-sm text-surface-500 mb-2">
+            {activeFilter === "all"
+              ? "Generate AI matches to see opportunities"
+              : `No ${activeFilter} deals`}
+          </p>
           {activeFilter === "all" && (
             <button
               onClick={handleGenerate}

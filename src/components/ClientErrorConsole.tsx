@@ -32,7 +32,7 @@ export const ClientErrorConsole: React.FC = () => {
         stack: e.error?.stack || "No stack captured by route browser runtime.",
         type: "error",
       };
-      
+
       console.error("🚨 Client Diagnostic Logger Intercepted JS Error:", newLog);
       setErrorLogs((prev) => [newLog, ...prev.slice(0, 49)]); // Retain 50 logs
       setIsOpen(true);
@@ -40,7 +40,10 @@ export const ClientErrorConsole: React.FC = () => {
 
     // 2. Fully intercept unhandled Promise rejections (e.g. failed fetch or async SSR throws)
     const handleRejection = (e: PromiseRejectionEvent) => {
-      const reasonStr = typeof e.reason === "string" ? e.reason : e.reason?.message || JSON.stringify(e.reason) || "Promise rejection";
+      const reasonStr =
+        typeof e.reason === "string"
+          ? e.reason
+          : e.reason?.message || JSON.stringify(e.reason) || "Promise rejection";
       const newLog: TrappedErrorLog = {
         id: Math.random().toString(36).substring(2, 9),
         timestamp: new Date().toLocaleTimeString(),
@@ -89,7 +92,9 @@ export const ClientErrorConsole: React.FC = () => {
                 <Terminal className="w-4 h-4 animate-pulse" />
               </div>
               <div>
-                <h3 className="text-xs font-black text-white tracking-wide">Client Diagnostic Log Trapper</h3>
+                <h3 className="text-xs font-black text-white tracking-wide">
+                  Client Diagnostic Log Trapper
+                </h3>
                 <span className="text-[9px] text-danger-300">Absolute Console Error Output</span>
               </div>
             </div>
@@ -103,7 +108,10 @@ export const ClientErrorConsole: React.FC = () => {
                 <ChevronUp className="w-4 h-4" />
               </button>
               <button
-                onClick={() => { setErrorLogs([]); setIsOpen(false); }}
+                onClick={() => {
+                  setErrorLogs([]);
+                  setIsOpen(false);
+                }}
                 className="p-1.5 rounded-lg hover:bg-danger-500/20 text-surface-400 hover:text-danger-400 transition-colors cursor-pointer"
                 title="Dismiss error console"
               >
@@ -115,15 +123,24 @@ export const ClientErrorConsole: React.FC = () => {
           {/* Error Stream Output */}
           <div className="p-4 space-y-3 flex-1 overflow-y-auto select-text text-xs">
             {errorLogs.map((log) => (
-              <div key={log.id} className="p-3.5 rounded-2xl bg-danger-950/40 border border-danger-500/30 space-y-1.5 text-danger-200">
+              <div
+                key={log.id}
+                className="p-3.5 rounded-2xl bg-danger-950/40 border border-danger-500/30 space-y-1.5 text-danger-200"
+              >
                 <div className="flex items-center justify-between text-[10px] text-danger-400 border-b border-danger-500/20 pb-1">
-                  <span className="font-extrabold uppercase tracking-wider">{log.type.replace("_", " ")}</span>
+                  <span className="font-extrabold uppercase tracking-wider">
+                    {log.type.replace("_", " ")}
+                  </span>
                   <span className="font-mono text-surface-400">{log.timestamp}</span>
                 </div>
                 <p className="font-bold text-white text-xs select-text font-sans">{log.message}</p>
                 <div className="text-[10px] text-surface-400 flex items-center justify-between pt-1">
                   <span className="truncate max-w-[200px]">Node: {log.source}</span>
-                  {log.lineno && <span>Line: {log.lineno}:{log.colno}</span>}
+                  {log.lineno && (
+                    <span>
+                      Line: {log.lineno}:{log.colno}
+                    </span>
+                  )}
                 </div>
                 <pre className="p-2 rounded-xl bg-black/80 text-[9px] font-mono text-slate-400 overflow-x-auto leading-relaxed border border-white/5 select-text max-h-36">
                   {log.stack}
@@ -134,7 +151,9 @@ export const ClientErrorConsole: React.FC = () => {
 
           {/* Console Footer */}
           <div className="p-3 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-surface-400">
-            <span>Runtime JS Window Logs: <strong className="text-danger-400">Captured Active</strong></span>
+            <span>
+              Runtime JS Window Logs: <strong className="text-danger-400">Captured Active</strong>
+            </span>
             <button
               onClick={() => setErrorLogs([])}
               className="px-2.5 py-1 rounded bg-surface-800 hover:bg-surface-700 text-white font-bold transition-all text-[10px]"

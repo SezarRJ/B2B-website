@@ -13,9 +13,15 @@ import {
   ChevronRight,
   UserCheck,
   Globe,
-  Lock
+  Lock,
 } from "lucide-react";
-import { getKYCStatus, screenSanctions, getMyScreenings, type KYCRecord, type SanctionsScreening } from "@/lib/api";
+import {
+  getKYCStatus,
+  screenSanctions,
+  getMyScreenings,
+  type KYCRecord,
+  type SanctionsScreening,
+} from "@/lib/api";
 
 export const Route = createFileRoute("/compliance")({
   component: CompliancePage,
@@ -34,7 +40,9 @@ function StatusBadge({ status }: { status: string }) {
   const Icon = config.icon;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${config.bg} ${config.text}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${config.bg} ${config.text}`}
+    >
       <Icon className="w-3.5 h-3.5" />
       {status.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
     </span>
@@ -89,7 +97,9 @@ function CompliancePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-surface-800">Compliance Center</h1>
-        <p className="text-sm text-surface-500 mt-0.5">KYC verification, sanctions screening, and regulatory compliance</p>
+        <p className="text-sm text-surface-500 mt-0.5">
+          KYC verification, sanctions screening, and regulatory compliance
+        </p>
       </div>
 
       {/* Compliance Overview Cards */}
@@ -152,20 +162,34 @@ function CompliancePage() {
           <div className="space-y-4">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-surface-50 rounded-xl p-4">
-                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Document Type</p>
-                <p className="text-sm font-semibold text-surface-800">{kyc.document_type.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}</p>
+                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+                  Document Type
+                </p>
+                <p className="text-sm font-semibold text-surface-800">
+                  {kyc.document_type
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                </p>
               </div>
               <div className="bg-surface-50 rounded-xl p-4">
                 <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Status</p>
                 <StatusBadge status={kyc.status} />
               </div>
               <div className="bg-surface-50 rounded-xl p-4">
-                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Submitted</p>
-                <p className="text-sm font-semibold text-surface-800">{new Date(kyc.submitted_at).toLocaleDateString()}</p>
+                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+                  Submitted
+                </p>
+                <p className="text-sm font-semibold text-surface-800">
+                  {new Date(kyc.submitted_at).toLocaleDateString()}
+                </p>
               </div>
               <div className="bg-surface-50 rounded-xl p-4">
-                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Document Hash</p>
-                <p className="text-xs font-mono text-surface-600 truncate">{kyc.document_hash.slice(0, 16)}...</p>
+                <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+                  Document Hash
+                </p>
+                <p className="text-xs font-mono text-surface-600 truncate">
+                  {kyc.document_hash.slice(0, 16)}...
+                </p>
               </div>
             </div>
             {kyc.rejection_reason && (
@@ -179,7 +203,9 @@ function CompliancePage() {
           <div className="text-center py-8">
             <FileText className="w-10 h-10 text-surface-300 mx-auto mb-3" />
             <p className="text-surface-500 font-medium">No KYC records found</p>
-            <p className="text-sm text-surface-400 mt-1">Submit your verification documents to start trading</p>
+            <p className="text-sm text-surface-400 mt-1">
+              Submit your verification documents to start trading
+            </p>
           </div>
         )}
       </div>
@@ -192,7 +218,9 @@ function CompliancePage() {
           </div>
           <div>
             <h3 className="font-bold text-surface-800">Sanctions Screening</h3>
-            <p className="text-sm text-surface-500">Screen entities against OFAC, EU, and UN sanctions lists</p>
+            <p className="text-sm text-surface-500">
+              Screen entities against OFAC, EU, and UN sanctions lists
+            </p>
           </div>
         </div>
 
@@ -225,11 +253,13 @@ function CompliancePage() {
 
         {/* Screen Result */}
         {screenResult && (
-          <div className={`p-5 rounded-xl border mb-6 animate-slide-in ${
-            screenResult.match_found
-              ? "bg-danger-50 border-danger-200"
-              : "bg-success-50 border-success-200"
-          }`}>
+          <div
+            className={`p-5 rounded-xl border mb-6 animate-slide-in ${
+              screenResult.match_found
+                ? "bg-danger-50 border-danger-200"
+                : "bg-success-50 border-success-200"
+            }`}
+          >
             <div className="flex items-start gap-3">
               {screenResult.match_found ? (
                 <AlertTriangle className="w-5 h-5 text-danger-600 flex-shrink-0 mt-0.5" />
@@ -237,14 +267,19 @@ function CompliancePage() {
                 <ShieldCheck className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
               )}
               <div>
-                <p className={`text-sm font-semibold ${screenResult.match_found ? "text-danger-800" : "text-success-800"}`}>
+                <p
+                  className={`text-sm font-semibold ${screenResult.match_found ? "text-danger-800" : "text-success-800"}`}
+                >
                   {screenResult.match_found ? "Match Found — Review Required" : "Entity Cleared"}
                 </p>
-                <p className={`text-xs mt-1 ${screenResult.match_found ? "text-danger-600" : "text-success-600"}`}>
+                <p
+                  className={`text-xs mt-1 ${screenResult.match_found ? "text-danger-600" : "text-success-600"}`}
+                >
                   {screenResult.match_details}
                 </p>
                 <p className="text-[10px] text-surface-400 mt-2">
-                  Screened against: {screenResult.screened_against} · {new Date(screenResult.screened_at).toLocaleString()}
+                  Screened against: {screenResult.screened_against} ·{" "}
+                  {new Date(screenResult.screened_at).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -257,7 +292,10 @@ function CompliancePage() {
             <p className="text-xs font-semibold text-surface-600 mb-3">Screening History</p>
             <div className="space-y-2">
               {screenings.map((s, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-surface-50 rounded-xl">
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-3 bg-surface-50 rounded-xl"
+                >
                   <div className="flex items-center gap-3">
                     {s.match_found ? (
                       <AlertTriangle className="w-4 h-4 text-danger-500" />

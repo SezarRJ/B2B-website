@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { HelpCircle, ExternalLink, Settings, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  HelpCircle,
+  ExternalLink,
+  Settings,
+  CheckCircle2,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 interface HelpTooltipProps {
   title: string;
@@ -12,7 +19,11 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({ title, content, docUrl
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
-    <div className="relative inline-block font-sans select-none" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+    <div
+      className="relative inline-block font-sans select-none"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
       {children || (
         <button
           type="button"
@@ -31,7 +42,9 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({ title, content, docUrl
               <Sparkles className="w-3.5 h-3.5" />
               {title}
             </span>
-            <span className="text-[9px] font-bold text-surface-400 uppercase tracking-widest px-2 py-0.5 rounded bg-surface-800">Help SLA</span>
+            <span className="text-[9px] font-bold text-surface-400 uppercase tracking-widest px-2 py-0.5 rounded bg-surface-800">
+              Help SLA
+            </span>
           </div>
 
           <div className="space-y-2 text-surface-300 leading-relaxed font-sans text-xs">

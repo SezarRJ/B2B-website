@@ -23,6 +23,7 @@ import {
   Clock,
   Truck,
   ShoppingCart,
+  Mail,
   ChevronRight,
 } from "lucide-react";
 
@@ -91,6 +92,21 @@ function PreDealsPage() {
     } finally {
       setConverting(false);
     }
+  }
+
+  function handleContactRequest(deal: PreDeal) {
+    const existing = JSON.parse(localStorage.getItem("tureep_contact_requests") || "[]");
+    const request = {
+      id: `contact-${deal.id}-${Date.now()}`,
+      matchId: deal.id,
+      title: deal.product?.name || "Trade match",
+      counterparty: `${deal.seller?.name || "Supplier"} ↔ ${deal.buyer?.name || "Buyer"}`,
+      message: `Please introduce us for this match: ${deal.quantity} ${deal.product?.unit || "units"} at $${deal.suggested_price}.`,
+      status: "sent",
+      createdAt: new Date().toISOString(),
+    };
+    localStorage.setItem("tureep_contact_requests", JSON.stringify([request, ...existing]));
+    navigate({ to: "/messages" });
   }
 
   const isRtl = dir === "rtl";
@@ -259,6 +275,15 @@ function PreDealsPage() {
                       </div>
 
                       <div className="flex gap-2 lg:flex-col select-none self-end lg:self-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="font-bold"
+                          onClick={() => handleContactRequest(deal)}
+                        >
+                          <Mail className="mr-1.5 h-4 w-4" />
+                          <span>{t("messages.requestContact", "Request Contact")}</span>
+                        </Button>
                         {deal.status === "pending" && (
                           <>
                             <Button

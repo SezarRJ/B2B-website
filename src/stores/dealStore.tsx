@@ -36,17 +36,14 @@ export const DealProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const addToCart = useCallback(
-    (product: Product) => {
-      setSelectedProductsCart((prev) => {
-        if (prev.find((p) => p.id === product.id)) return prev;
-        const next = [...prev, product];
-        saveCartLocal(next);
-        return next;
-      });
-    },
-    []
-  );
+  const addToCart = useCallback((product: Product) => {
+    setSelectedProductsCart((prev) => {
+      if (prev.find((p) => p.id === product.id)) return prev;
+      const next = [...prev, product];
+      saveCartLocal(next);
+      return next;
+    });
+  }, []);
 
   const removeFromCart = useCallback((productId: number) => {
     setSelectedProductsCart((prev) => {
@@ -76,7 +73,11 @@ export const DealProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await actApi(dealId, action);
       setActivePreDeals((prev) =>
-        prev.map((deal) => (deal.id === dealId ? { ...deal, status: action === "accept" ? "accepted" : "rejected" } : deal))
+        prev.map((deal) =>
+          deal.id === dealId
+            ? { ...deal, status: action === "accept" ? "accepted" : "rejected" }
+            : deal,
+        ),
       );
       return res;
     } catch (err: any) {

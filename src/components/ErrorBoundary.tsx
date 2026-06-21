@@ -53,20 +53,28 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-screen flex items-center justify-center bg-surface-900 text-surface-50 p-6 font-sans">
           <div className="max-w-xl w-full bg-surface-800 border border-surface-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-danger-500/10 rounded-full blur-3xl pointer-events-none" />
-            
+
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-danger-500/20 border border-danger-500/30 flex items-center justify-center text-danger-400 flex-shrink-0">
                 <AlertTriangle className="w-6 h-6 animate-bounce" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white tracking-tight">Enterprise Runtime Exception Trapped</h1>
-                <p className="text-xs text-surface-400 font-mono">React JS Error Boundary Isolation Layer</p>
+                <h1 className="text-xl font-bold text-white tracking-tight">
+                  Enterprise Runtime Exception Trapped
+                </h1>
+                <p className="text-xs text-surface-400 font-mono">
+                  React JS Error Boundary Isolation Layer
+                </p>
               </div>
             </div>
 
             <div className="p-4 bg-surface-900/90 rounded-2xl border border-surface-700/80 mb-8 space-y-2 font-mono text-xs overflow-auto max-h-56">
-              <span className="text-danger-400 font-bold block font-sans uppercase tracking-widest text-[10px]">Trapped Exception Signature:</span>
-              <p className="text-white font-bold">{this.state.error?.message || "Operational lockup identified."}</p>
+              <span className="text-danger-400 font-bold block font-sans uppercase tracking-widest text-[10px]">
+                Trapped Exception Signature:
+              </span>
+              <p className="text-white font-bold">
+                {this.state.error?.message || "Operational lockup identified."}
+              </p>
               {this.state.errorInfo && (
                 <pre className="text-surface-400 text-[10px] leading-relaxed pt-2 border-t border-surface-800">
                   {this.state.errorInfo.componentStack}

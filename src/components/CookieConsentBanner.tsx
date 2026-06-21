@@ -11,7 +11,8 @@ export const CookieConsentBanner: React.FC = () => {
   });
 
   useEffect(() => {
-    const saved = typeof window !== "undefined" ? localStorage.getItem("tureep_gdpr_consent") : null;
+    const saved =
+      typeof window !== "undefined" ? localStorage.getItem("tureep_gdpr_consent") : null;
     if (!saved) {
       saveConsent({ necessary: true, analytics: true, functional: true });
     }
@@ -46,7 +47,8 @@ export const CookieConsentBanner: React.FC = () => {
             <div className="min-w-0">
               <h3 className="text-sm font-bold tracking-tight text-white">Privacy preferences</h3>
               <p className="mt-1 max-w-md text-xs leading-relaxed text-surface-400">
-                We use essential storage for sessions and optional analytics to improve trade workflow signals.
+                We use essential storage for sessions and optional analytics to improve trade
+                workflow signals.
               </p>
             </div>
           </div>
@@ -81,15 +83,21 @@ export const CookieConsentBanner: React.FC = () => {
             <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
                 <span className="block font-bold text-success-400">Essential storage</span>
-                <span className="block text-[10px] text-surface-400">Required for secure sessions and preferences.</span>
+                <span className="block text-[10px] text-surface-400">
+                  Required for secure sessions and preferences.
+                </span>
               </div>
-              <span className="rounded bg-surface-800 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-surface-400">Always on</span>
+              <span className="rounded bg-surface-800 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-surface-400">
+                Always on
+              </span>
             </div>
 
             <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
                 <span className="block font-bold text-white">Trade analytics</span>
-                <span className="block text-[10px] text-surface-400">Anonymized workflow and corridor performance metrics.</span>
+                <span className="block text-[10px] text-surface-400">
+                  Anonymized workflow and corridor performance metrics.
+                </span>
               </div>
               <input
                 type="checkbox"
@@ -102,7 +110,9 @@ export const CookieConsentBanner: React.FC = () => {
             <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
                 <span className="block font-bold text-white">Functional preferences</span>
-                <span className="block text-[10px] text-surface-400">Remembers language, layout, and terminal settings.</span>
+                <span className="block text-[10px] text-surface-400">
+                  Remembers language, layout, and terminal settings.
+                </span>
               </div>
               <input
                 type="checkbox"

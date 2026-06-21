@@ -22,6 +22,7 @@ import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MlAnalyticsRouteImport } from './routes/ml-analytics'
 import { Route as MicroservicesSpecRouteImport } from './routes/microservices-spec'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LogisticsRouteImport } from './routes/logistics'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KycRouteImport } from './routes/kyc'
@@ -100,6 +101,11 @@ const MicroservicesSpecRoute = MicroservicesSpecRouteImport.update({
   path: '/microservices-spec',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LogisticsRoute = LogisticsRouteImport.update({
   id: '/logistics',
   path: '/logistics',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
+  '/messages': typeof MessagesRoute
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
+  '/messages': typeof MessagesRoute
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/logistics': typeof LogisticsRoute
+  '/messages': typeof MessagesRoute
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/kyc'
     | '/login'
     | '/logistics'
+    | '/messages'
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/kyc'
     | '/login'
     | '/logistics'
+    | '/messages'
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/kyc'
     | '/login'
     | '/logistics'
+    | '/messages'
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
@@ -340,6 +352,7 @@ export interface RootRouteChildren {
   KycRoute: typeof KycRoute
   LoginRoute: typeof LoginRoute
   LogisticsRoute: typeof LogisticsRoute
+  MessagesRoute: typeof MessagesRoute
   MicroservicesSpecRoute: typeof MicroservicesSpecRoute
   MlAnalyticsRoute: typeof MlAnalyticsRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -448,6 +461,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MicroservicesSpecRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/logistics': {
       id: '/logistics'
       path: '/logistics'
@@ -548,6 +568,7 @@ const rootRouteChildren: RootRouteChildren = {
   KycRoute: KycRoute,
   LoginRoute: LoginRoute,
   LogisticsRoute: LogisticsRoute,
+  MessagesRoute: MessagesRoute,
   MicroservicesSpecRoute: MicroservicesSpecRoute,
   MlAnalyticsRoute: MlAnalyticsRoute,
   NotificationsRoute: NotificationsRoute,
@@ -565,3 +586,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -92,6 +92,7 @@ const navItems = [
     icon: Handshake,
     badge: "deals" as const,
   },
+  { path: "/messages", labelKey: "nav.messages", fallback: "Messages", icon: Bell },
   { path: "/orders", labelKey: "nav.orders.short", fallback: "Orders", icon: ClipboardList },
   { path: "/shipments", labelKey: "nav.shipments.short", fallback: "Shipments", icon: Truck },
   { path: "/trade-finance", labelKey: "nav.payments", fallback: "Payments", icon: CreditCard },

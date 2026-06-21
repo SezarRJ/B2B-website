@@ -16,23 +16,80 @@ import {
   MapPin,
   CreditCard,
   FileText,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
-import { getOrders, createOrderFromPreDeal, createPayment, actOnPayment, type Order } from "@/lib/api";
+import {
+  getOrders,
+  createOrderFromPreDeal,
+  createPayment,
+  actOnPayment,
+  type Order,
+} from "@/lib/api";
 
 export const Route = createFileRoute("/orders")({
   component: OrdersPage,
 });
 
-const statusConfig: Record<string, { label: string; bg: string; text: string; icon: any; desc: string }> = {
-  pending: { label: "Pending", bg: "bg-surface-100", text: "text-surface-600", icon: Clock, desc: "Awaiting confirmation" },
-  confirmed: { label: "Confirmed", bg: "bg-primary-50", text: "text-primary-700", icon: CheckCircle2, desc: "Order confirmed, payment pending" },
-  paid: { label: "Paid", bg: "bg-success-50", text: "text-success-700", icon: DollarSign, desc: "Payment received" },
-  in_transit: { label: "In Transit", bg: "bg-warning-50", text: "text-warning-700", icon: Truck, desc: "Shipment in progress" },
-  delivered: { label: "Delivered", bg: "bg-success-50", text: "text-success-700", icon: Package, desc: "Goods delivered" },
-  completed: { label: "Completed", bg: "bg-success-50", text: "text-success-700", icon: CheckCircle2, desc: "Trade complete" },
-  cancelled: { label: "Cancelled", bg: "bg-danger-50", text: "text-danger-700", icon: AlertCircle, desc: "Order cancelled" },
-  disputed: { label: "Disputed", bg: "bg-danger-50", text: "text-danger-700", icon: AlertCircle, desc: "Under dispute resolution" },
+const statusConfig: Record<
+  string,
+  { label: string; bg: string; text: string; icon: any; desc: string }
+> = {
+  pending: {
+    label: "Pending",
+    bg: "bg-surface-100",
+    text: "text-surface-600",
+    icon: Clock,
+    desc: "Awaiting confirmation",
+  },
+  confirmed: {
+    label: "Confirmed",
+    bg: "bg-primary-50",
+    text: "text-primary-700",
+    icon: CheckCircle2,
+    desc: "Order confirmed, payment pending",
+  },
+  paid: {
+    label: "Paid",
+    bg: "bg-success-50",
+    text: "text-success-700",
+    icon: DollarSign,
+    desc: "Payment received",
+  },
+  in_transit: {
+    label: "In Transit",
+    bg: "bg-warning-50",
+    text: "text-warning-700",
+    icon: Truck,
+    desc: "Shipment in progress",
+  },
+  delivered: {
+    label: "Delivered",
+    bg: "bg-success-50",
+    text: "text-success-700",
+    icon: Package,
+    desc: "Goods delivered",
+  },
+  completed: {
+    label: "Completed",
+    bg: "bg-success-50",
+    text: "text-success-700",
+    icon: CheckCircle2,
+    desc: "Trade complete",
+  },
+  cancelled: {
+    label: "Cancelled",
+    bg: "bg-danger-50",
+    text: "text-danger-700",
+    icon: AlertCircle,
+    desc: "Order cancelled",
+  },
+  disputed: {
+    label: "Disputed",
+    bg: "bg-danger-50",
+    text: "text-danger-700",
+    icon: AlertCircle,
+    desc: "Under dispute resolution",
+  },
 };
 
 const paymentConfig: Record<string, { label: string; bg: string; text: string }> = {
@@ -102,7 +159,9 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-surface-800">{order.order_number}</h3>
-                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}>
+                <span
+                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}
+                >
                   {status.label}
                 </span>
               </div>
@@ -110,7 +169,9 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
             </div>
           </div>
           <div className="text-right">
-            <p className="text-lg font-bold text-surface-800">${Number(order.total_value).toFixed(2)}</p>
+            <p className="text-lg font-bold text-surface-800">
+              ${Number(order.total_value).toFixed(2)}
+            </p>
             <p className="text-xs text-surface-400">{order.currency}</p>
           </div>
         </div>
@@ -121,13 +182,21 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
             <Package className="w-6 h-6 text-primary-600" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-surface-800">{order.items[0]?.product?.name || "B2B Commodity"}</p>
+            <p className="text-sm font-semibold text-surface-800">
+              {order.items[0]?.product?.name || "B2B Commodity"}
+            </p>
             <div className="flex items-center gap-3 mt-1 text-xs text-surface-500">
-              <span>{order.items[0]?.quantity} {order.items[0]?.unit}</span>
+              <span>
+                {order.items[0]?.quantity} {order.items[0]?.unit}
+              </span>
               <span className="text-surface-300">|</span>
-              <span>${Number(order.items[0]?.unit_price).toFixed(2)}/{order.items[0]?.unit}</span>
+              <span>
+                ${Number(order.items[0]?.unit_price).toFixed(2)}/{order.items[0]?.unit}
+              </span>
               <span className="text-surface-300">|</span>
-              <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {order.origin_country} → {order.destination_country}</span>
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3 h-3" /> {order.origin_country} → {order.destination_country}
+              </span>
             </div>
           </div>
         </div>
@@ -143,12 +212,20 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
             <p className="text-sm font-bold text-surface-800">{order.payment_method}</p>
           </div>
           <div className="bg-surface-50 rounded-xl p-3">
-            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Platform Fee</p>
-            <p className="text-sm font-bold text-surface-800">${Number(order.platform_fee).toFixed(2)}</p>
+            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+              Platform Fee
+            </p>
+            <p className="text-sm font-bold text-surface-800">
+              ${Number(order.platform_fee).toFixed(2)}
+            </p>
           </div>
           <div className="bg-surface-50 rounded-xl p-3">
-            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">Payment Status</p>
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${payment.bg} ${payment.text}`}>
+            <p className="text-[10px] text-surface-400 uppercase tracking-wider mb-1">
+              Payment Status
+            </p>
+            <span
+              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${payment.bg} ${payment.text}`}
+            >
               {payment.label}
             </span>
           </div>
@@ -161,7 +238,8 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
             <div>
               <p className="text-sm font-semibold text-primary-800">Funds Secured in Escrow</p>
               <p className="text-xs text-primary-600 mt-0.5">
-                ${Number(order.total_value).toFixed(2)} is held in neutral custody. Release requires verified shipping documents and quality inspection.
+                ${Number(order.total_value).toFixed(2)} is held in neutral custody. Release requires
+                verified shipping documents and quality inspection.
               </p>
             </div>
           </div>
@@ -190,7 +268,10 @@ function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) 
                   onChange={(e) => setConditionsMet(e.target.checked)}
                   className="w-4 h-4 rounded border-surface-300 text-primary-600 focus:ring-primary-500"
                 />
-                <label htmlFor={`conditions-${order.id}`} className="text-xs text-surface-600 cursor-pointer">
+                <label
+                  htmlFor={`conditions-${order.id}`}
+                  className="text-xs text-surface-600 cursor-pointer"
+                >
                   I confirm shipping docs & SGS inspection passed
                 </label>
               </div>
@@ -311,9 +392,9 @@ function OrdersPage() {
           <div>
             <h3 className="font-bold text-surface-800 mb-1">Secure Escrow Protection</h3>
             <p className="text-sm text-surface-600 leading-relaxed">
-              All transactions are protected by our institutional neutral escrow system. Funds are held securely until 
-              shipping documents and SGS quality inspections are verified. This protects both buyers and sellers 
-              across Iraq, Iran, Turkey, and global corridors.
+              All transactions are protected by our institutional neutral escrow system. Funds are
+              held securely until shipping documents and SGS quality inspections are verified. This
+              protects both buyers and sellers across Iraq, Iran, Turkey, and global corridors.
             </p>
             <div className="flex flex-wrap gap-4 mt-4">
               <div className="flex items-center gap-2 text-xs text-surface-600">
@@ -345,7 +426,9 @@ function OrdersPage() {
                 : "bg-white border border-surface-200 text-surface-600 hover:bg-surface-50"
             }`}
           >
-            {f === "all" ? "All Orders" : f.replace("_", " ").replace(/\w/g, (l) => l.toUpperCase())}
+            {f === "all"
+              ? "All Orders"
+              : f.replace("_", " ").replace(/\w/g, (l) => l.toUpperCase())}
           </button>
         ))}
       </div>
@@ -354,7 +437,10 @@ function OrdersPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse">
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-5 border border-surface-200 animate-pulse"
+            >
               <div className="flex gap-3 mb-4">
                 <div className="w-12 h-12 bg-surface-200 rounded-xl" />
                 <div className="flex-1 space-y-2">
@@ -369,7 +455,9 @@ function OrdersPage() {
         <div className="bg-white rounded-2xl p-12 border border-surface-200 text-center">
           <ClipboardCheck className="w-12 h-12 text-surface-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-surface-700 mb-1">No orders yet</h3>
-          <p className="text-sm text-surface-500 mb-6">Accept a pre-deal to create your first order</p>
+          <p className="text-sm text-surface-500 mb-6">
+            Accept a pre-deal to create your first order
+          </p>
         </div>
       ) : (
         <div className="space-y-4 stagger-children">

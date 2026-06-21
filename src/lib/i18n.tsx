@@ -747,6 +747,20 @@ const DICTIONARY: Translations = {
     ku: "گونجاوەکان",
     tr: "Eşleşmeler",
   },
+  "nav.messages": {
+    en: "Messages",
+    ar: "الرسائل",
+    fa: "پیام‌ها",
+    ku: "پەیامەکان",
+    tr: "Mesajlar",
+  },
+  "messages.requestContact": {
+    en: "Request Contact",
+    ar: "طلب التواصل",
+    fa: "درخواست تماس",
+    ku: "داواکاری پەیوەندی",
+    tr: "İletişim İste",
+  },
   "nav.shipments.short": {
     en: "Shipments",
     ar: "الشحنات",

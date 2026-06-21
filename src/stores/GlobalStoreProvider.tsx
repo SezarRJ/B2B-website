@@ -11,9 +11,7 @@ export const GlobalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
       <I18nProvider>
         <AuthProvider>
           <NotificationProvider>
-            <DealProvider>
-              {children}
-            </DealProvider>
+            <DealProvider>{children}</DealProvider>
           </NotificationProvider>
         </AuthProvider>
       </I18nProvider>

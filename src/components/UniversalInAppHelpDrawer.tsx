@@ -38,9 +38,14 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
     },
   ];
 
-  const filteredTopics = searchQuery.trim() === ""
-    ? helpTopics
-    : helpTopics.filter((t) => t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredTopics =
+    searchQuery.trim() === ""
+      ? helpTopics
+      : helpTopics.filter(
+          (t) =>
+            t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.desc.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
 
   return (
     <div className="fixed bottom-5 left-5 z-40 font-sans select-none pointer-events-auto">
@@ -100,19 +105,28 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
               <div className="py-12 text-center text-surface-400 font-mono text-xs">
                 <FileText className="w-8 h-8 mx-auto mb-2 text-surface-600" />
                 <p>Zero matching documentation topics found.</p>
-                <span className="text-[10px]">Try searching for 'Stripe', 'KYC', or 'PgBouncer'.</span>
+                <span className="text-[10px]">
+                  Try searching for 'Stripe', 'KYC', or 'PgBouncer'.
+                </span>
               </div>
             ) : (
               filteredTopics.map((topic, idx) => (
-                <div key={idx} className="group space-y-2 rounded-lg border border-surface-700/80 bg-surface-800/80 p-4 transition-colors hover:border-primary-500/60 select-text">
+                <div
+                  key={idx}
+                  className="group space-y-2 rounded-lg border border-surface-700/80 bg-surface-800/80 p-4 transition-colors hover:border-primary-500/60 select-text"
+                >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-primary-400 font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-primary-950/80 border border-primary-800">
                       {topic.category}
                     </span>
                   </div>
-                  <h3 className="font-bold text-white text-xs leading-tight font-sans select-text">{topic.title}</h3>
-                  <p className="text-surface-300 text-xs leading-relaxed font-sans select-text">{topic.desc}</p>
-                  
+                  <h3 className="font-bold text-white text-xs leading-tight font-sans select-text">
+                    {topic.title}
+                  </h3>
+                  <p className="text-surface-300 text-xs leading-relaxed font-sans select-text">
+                    {topic.desc}
+                  </p>
+
                   <div className="pt-2 flex items-center justify-end border-t border-surface-700/50">
                     <a
                       href={topic.docUrl}
@@ -131,8 +145,15 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
 
           {/* Quick Support Footer */}
           <div className="flex items-center justify-between border-t border-surface-800 bg-surface-950 p-4 font-mono text-[11px] text-surface-400">
-            <span>SRE On-Call Pool: <strong className="text-success-400">100% Operational</strong></span>
-            <a href="/API_DOCUMENTATION_AND_OPENAPI_SPEC.md" target="_blank" rel="noreferrer" className="text-white underline font-semibold">
+            <span>
+              SRE On-Call Pool: <strong className="text-success-400">100% Operational</strong>
+            </span>
+            <a
+              href="/API_DOCUMENTATION_AND_OPENAPI_SPEC.md"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white underline font-semibold"
+            >
               OpenAPI Path Spec
             </a>
           </div>

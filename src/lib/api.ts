@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, no-empty */
 import { supabase } from "@/integrations/supabase/client";
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim();

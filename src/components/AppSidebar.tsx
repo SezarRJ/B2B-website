@@ -10,6 +10,7 @@ import {
   Handshake,
   ShoppingCart,
   FileCheck2,
+  Mail,
   LogOut,
   Lock,
   CreditCard,
@@ -56,6 +57,7 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
       icon: ClipboardList,
     },
     { id: "pre-deals", label: t("nav.matches", "Matches"), path: "/pre-deals", icon: Handshake },
+    { id: "messages", label: t("nav.messages", "Messages"), path: "/messages", icon: Mail },
     { id: "orders", label: t("nav.orders.short", "Orders"), path: "/orders", icon: ShoppingCart },
     {
       id: "shipments",

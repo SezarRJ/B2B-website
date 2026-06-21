@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { Notification as ApiNotification, getNotifications, markNotificationRead as markReadApi, markAllNotificationsRead as markAllReadApi } from "@/lib/api";
+import {
+  Notification as ApiNotification,
+  getNotifications,
+  markNotificationRead as markReadApi,
+  markAllNotificationsRead as markAllReadApi,
+} from "@/lib/api";
 
 interface ToastAlert {
   id: string;
@@ -43,7 +48,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const markRead = async (id: number) => {
     try {
       await markReadApi(id);
-      setNotifications((prev) => prev.map((item) => (item.id === id ? { ...item, read: true } : item)));
+      setNotifications((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, read: true } : item)),
+      );
     } catch (err) {
       console.error(err);
     }
@@ -72,7 +79,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }, toast.duration || 5000);
       }
     },
-    [removeToast]
+    [removeToast],
   );
 
   const unreadCount = notifications.filter((n) => !n.read).length;
