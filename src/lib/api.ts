@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-empty */
 import { supabase } from "@/integrations/supabase/client";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim();
 
 export type AccountType = "free" | "bronze" | "silver" | "gold" | "platinum" | "black";
 
@@ -1310,6 +1310,10 @@ async function runOfflineMock(path: string, options: RequestInit = {}): Promise<
 
 // Interceptor wrapper
 async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
+  if (!API_BASE_URL) {
+    return runOfflineMock(path, options);
+  }
+
   const token = getToken();
   const isForm =
     options.body instanceof URLSearchParams ||

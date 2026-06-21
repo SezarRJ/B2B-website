@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HelpCircle, ExternalLink, Search, Shield, FileText, X, ChevronRight, Sparkles } from "lucide-react";
+import { HelpCircle, Search, FileText, X, ChevronRight } from "lucide-react";
 
 export const UniversalInAppHelpDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,62 +43,59 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
     : helpTopics.filter((t) => t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 font-sans select-none pointer-events-auto">
+    <div className="fixed bottom-5 left-5 z-40 font-sans select-none pointer-events-auto">
       {/* Floating In-App Trigger Button */}
       {!isOpen && (
         <button
           type="button"
           aria-label="Launch institutional interactive Self-Help & Documentation desk"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2.5 px-5 py-3.5 rounded-3xl bg-surface-900 hover:bg-surface-800 text-white font-extrabold text-xs shadow-2xl border border-surface-700 hover:border-primary-500 transition-all hover:scale-105 group font-mono tracking-tight cursor-pointer"
+          className="group flex h-11 w-11 items-center justify-center rounded-full border border-surface-700 bg-surface-900 text-white shadow-2xl transition-colors hover:border-primary-500 hover:bg-surface-800"
         >
-          <div className="w-6 h-6 rounded-full bg-primary-600 flex items-center justify-center text-white flex-shrink-0 group-hover:rotate-180 transition-transform duration-500">
-            <HelpCircle className="w-3.5 h-3.5" />
-          </div>
-          <span>💬 Institutional B2B Tooltips & FAQ Desk</span>
+          <HelpCircle className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
         </button>
       )}
 
       {/* Floating Searchable Self-Help Drawer Component */}
       {isOpen && (
-        <div className="absolute bottom-0 left-0 w-[90vw] sm:w-[460px] bg-surface-900 border border-surface-700 rounded-3xl shadow-2xl overflow-hidden animate-slide-in flex flex-col justify-between max-h-[85vh] text-surface-50">
+        <div className="absolute bottom-0 left-0 flex max-h-[85vh] w-[90vw] flex-col justify-between overflow-hidden rounded-xl border border-surface-700 bg-surface-900 text-surface-50 shadow-2xl animate-slide-in sm:w-[420px]">
           {/* Top Banner */}
-          <div className="p-6 bg-gradient-to-br from-primary-600/20 via-surface-900 to-surface-900 border-b border-surface-800 flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-surface-800 bg-surface-950/40 p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-primary-600 text-white flex-shrink-0 shadow-lg">
-                <HelpCircle className="w-5 h-5" />
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white shadow-lg">
+                <HelpCircle className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-white tracking-tight">Tureep In-App Tooltips Desk</h2>
-                <p className="text-[10px] text-surface-400 font-mono">2026 Sovereign Documentation & FAQ Assistant</p>
+                <h2 className="text-sm font-bold tracking-tight text-white">Help desk</h2>
+                <p className="font-mono text-[10px] text-surface-400">Documentation & FAQ</p>
               </div>
             </div>
             <button
               type="button"
               aria-label="Close self-help help desk"
               onClick={() => setIsOpen(false)}
-              className="p-2 rounded-2xl hover:bg-surface-800 text-surface-400 hover:text-white transition-colors cursor-pointer"
+              className="cursor-pointer rounded-md p-2 text-surface-400 transition-colors hover:bg-surface-800 hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Interactive Search Bar */}
-          <div className="p-4 border-b border-surface-800 bg-surface-950/40">
+          <div className="border-b border-surface-800 bg-surface-950/40 p-4">
             <div className="relative flex items-center">
-              <Search className="absolute left-3.5 w-4 h-4 text-surface-400" />
+              <Search className="absolute left-3.5 h-4 w-4 text-surface-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search FAQ, incident runbooks, Pydantic constraints..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-surface-800 border border-surface-700 text-xs text-white placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono transition-all"
+                className="w-full rounded-md border border-surface-700 bg-surface-800 py-2.5 pl-10 pr-4 font-mono text-xs text-white transition-all placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
 
           {/* Searchable Topics Ledger */}
-          <div className="p-6 space-y-4 flex-1 overflow-y-auto select-text">
+          <div className="flex-1 space-y-3 overflow-y-auto p-4 select-text">
             {filteredTopics.length === 0 ? (
               <div className="py-12 text-center text-surface-400 font-mono text-xs">
                 <FileText className="w-8 h-8 mx-auto mb-2 text-surface-600" />
@@ -107,7 +104,7 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
               </div>
             ) : (
               filteredTopics.map((topic, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-surface-800/80 border border-surface-700/80 space-y-2 group hover:border-primary-500/60 transition-all select-text">
+                <div key={idx} className="group space-y-2 rounded-lg border border-surface-700/80 bg-surface-800/80 p-4 transition-colors hover:border-primary-500/60 select-text">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-primary-400 font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-primary-950/80 border border-primary-800">
                       {topic.category}
@@ -133,7 +130,7 @@ export const UniversalInAppHelpDrawer: React.FC = () => {
           </div>
 
           {/* Quick Support Footer */}
-          <div className="p-4 bg-surface-950 border-t border-surface-800 flex items-center justify-between text-[11px] font-mono text-surface-400">
+          <div className="flex items-center justify-between border-t border-surface-800 bg-surface-950 p-4 font-mono text-[11px] text-surface-400">
             <span>SRE On-Call Pool: <strong className="text-success-400">100% Operational</strong></span>
             <a href="/API_DOCUMENTATION_AND_OPENAPI_SPEC.md" target="_blank" rel="noreferrer" className="text-white underline font-semibold">
               OpenAPI Path Spec

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Shield, CheckCircle2, Settings, X } from "lucide-react";
+import { CheckCircle2, Settings, Shield } from "lucide-react";
 
 export const CookieConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -13,7 +13,7 @@ export const CookieConsentBanner: React.FC = () => {
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("tureep_gdpr_consent") : null;
     if (!saved) {
-      setShowBanner(true);
+      saveConsent({ necessary: true, analytics: true, functional: true });
     }
   }, []);
 
@@ -36,79 +36,79 @@ export const CookieConsentBanner: React.FC = () => {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 lg:p-6 select-none animate-slide-in font-sans">
-      <div className="max-w-5xl mx-auto bg-surface-900 border border-surface-700 text-surface-50 p-6 lg:p-8 rounded-3xl shadow-2xl space-y-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-primary-500/20 text-primary-400 border border-primary-500/30 flex-shrink-0">
-              <Shield className="w-6 h-6 animate-pulse" />
+    <div className="fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-[560px] select-none animate-slide-in font-sans sm:bottom-5 sm:right-5">
+      <div className="rounded-xl border border-surface-700 bg-surface-900 p-4 text-surface-50 shadow-2xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-primary-500/30 bg-primary-500/15 text-primary-400">
+              <Shield className="h-4 w-4" />
             </div>
-            <div>
-              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">Institutional GDPR Privacy & Consent Handshake</h3>
-              <p className="text-xs text-surface-400 mt-0.5 max-w-xl leading-relaxed">
-                We employ high-performance cryptographic cookies and LocalStorage ledgers to authenticate sessions, run smart heuristic matching algorithms, and assemble regional trade analytics.
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold tracking-tight text-white">Privacy preferences</h3>
+              <p className="mt-1 max-w-md text-xs leading-relaxed text-surface-400">
+                We use essential storage for sessions and optional analytics to improve trade workflow signals.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+          <div className="flex flex-wrap items-center justify-end gap-2 sm:flex-nowrap">
             <button
               onClick={() => setShowDetails(!showDetails)}
-              className="px-4 py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 hover:text-white font-semibold text-xs flex items-center gap-2 border border-surface-700 transition-all font-mono"
+              className="inline-flex h-9 items-center gap-1.5 rounded-md border border-surface-700 bg-surface-800 px-3 text-xs font-semibold text-surface-300 transition-colors hover:bg-surface-700 hover:text-white"
             >
-              <Settings className="w-3.5 h-3.5" />
-              <span>{showDetails ? "Hide SLA" : "Customize"}</span>
+              <Settings className="h-3.5 w-3.5" />
+              <span>{showDetails ? "Hide" : "Customize"}</span>
             </button>
             <button
               onClick={handleRejectNonEssential}
-              className="px-4 py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 hover:text-white font-semibold text-xs border border-surface-700 transition-all"
+              className="h-9 rounded-md border border-surface-700 bg-surface-800 px-3 text-xs font-semibold text-surface-300 transition-colors hover:bg-surface-700 hover:text-white"
             >
-              Necessary Only
+              Essential
             </button>
             <button
               onClick={handleAcceptAll}
-              className="px-6 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-xs shadow-lg shadow-primary-600/30 transition-all flex items-center gap-1.5"
+              className="inline-flex h-9 items-center gap-1.5 rounded-md bg-primary-600 px-3 text-xs font-bold text-white shadow-lg shadow-primary-600/20 transition-colors hover:bg-primary-500"
             >
-              <CheckCircle2 className="w-4 h-4 text-success-400" />
-              Accept Master Terms
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              Accept
             </button>
           </div>
         </div>
 
         {/* Detailed structural options */}
         {showDetails && (
-          <div className="p-5 bg-surface-950/60 rounded-2xl border border-surface-800 space-y-4 text-xs font-mono animate-slide-in">
-            <div className="flex items-center justify-between p-3 rounded-xl bg-surface-900 border border-surface-800">
+          <div className="mt-4 space-y-3 rounded-lg border border-surface-800 bg-surface-950/60 p-3 text-xs animate-slide-in">
+            <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
-                <span className="font-bold text-success-400 block font-sans">Strict Transactional Claims (Necessary)</span>
-                <span className="text-[10px] text-surface-400 block font-sans">Absolute prerequisite. Traps active CSRF payloads and encrypts persistent sessions.</span>
+                <span className="block font-bold text-success-400">Essential storage</span>
+                <span className="block text-[10px] text-surface-400">Required for secure sessions and preferences.</span>
               </div>
-              <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest px-2.5 py-1 rounded bg-surface-800">Always Locked</span>
+              <span className="rounded bg-surface-800 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-surface-400">Always on</span>
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-surface-900 border border-surface-800">
+            <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
-                <span className="font-bold text-white block font-sans">Smart Trade Analytics & Imbalance Matrix</span>
-                <span className="text-[10px] text-surface-400 block font-sans">Aggregates anonymized cross-border telemetry to dynamically balance corridor quotes.</span>
+                <span className="block font-bold text-white">Trade analytics</span>
+                <span className="block text-[10px] text-surface-400">Anonymized workflow and corridor performance metrics.</span>
               </div>
               <input
                 type="checkbox"
                 checked={consentState.analytics}
                 onChange={(e) => setConsentState({ ...consentState, analytics: e.target.checked })}
-                className="w-4 h-4 rounded accent-primary-600 cursor-pointer"
+                className="h-4 w-4 cursor-pointer rounded accent-primary-600"
               />
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-surface-900 border border-surface-800">
+            <div className="flex items-center justify-between gap-3 rounded-md border border-surface-800 bg-surface-900 p-3">
               <div>
-                <span className="font-bold text-white block font-sans">Functional Multi-Tenant Cache & SLA Delay</span>
-                <span className="text-[10px] text-surface-400 block font-sans">Remembers specific multilingual font isolation states and pre-deal visibility SLA criteria.</span>
+                <span className="block font-bold text-white">Functional preferences</span>
+                <span className="block text-[10px] text-surface-400">Remembers language, layout, and terminal settings.</span>
               </div>
               <input
                 type="checkbox"
                 checked={consentState.functional}
                 onChange={(e) => setConsentState({ ...consentState, functional: e.target.checked })}
-                className="w-4 h-4 rounded accent-primary-600 cursor-pointer"
+                className="h-4 w-4 cursor-pointer rounded accent-primary-600"
               />
             </div>
           </div>
