@@ -1455,10 +1455,10 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   const fontFamily =
     language === "ar" || language === "ku"
-      ? "'Noto Sans Arabic', sans-serif"
+      ? "var(--font-arabic)"
       : language === "fa"
-        ? "'Vazirmatn', sans-serif"
-        : "'Inter', sans-serif";
+        ? "var(--font-persian)"
+        : "var(--font-sans)";
 
   useEffect(() => {
     if (!hydrated) return;
@@ -1496,7 +1496,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       <div
         dir={dir}
         style={{ fontFamily }}
-        className={`min-h-screen transition-all ${dir === "rtl" ? "text-right" : "text-left"}`}
+        className={`min-h-screen font-sans transition-all ${dir === "rtl" ? "text-right" : "text-left"}`}
       >
         {children}
       </div>
