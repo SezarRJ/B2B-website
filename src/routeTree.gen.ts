@@ -19,6 +19,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PreDealsRouteImport } from './routes/pre-deals'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MlAnalyticsRouteImport } from './routes/ml-analytics'
 import { Route as MicroservicesSpecRouteImport } from './routes/microservices-spec'
@@ -34,6 +35,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as BillingRouteImport } from './routes/billing'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AiAgentRouteImport } from './routes/ai-agent'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WorkflowRoute = WorkflowRouteImport.update({
@@ -84,6 +86,11 @@ const PreDealsRoute = PreDealsRouteImport.update({
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpportunitiesRoute = OpportunitiesRouteImport.update({
+  id: '/opportunities',
+  path: '/opportunities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -161,6 +168,11 @@ const AnalyticsRoute = AnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiAgentRoute = AiAgentRouteImport.update({
+  id: '/ai-agent',
+  path: '/ai-agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -169,6 +181,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-agent': typeof AiAgentRoute
   '/analytics': typeof AnalyticsRoute
   '/billing': typeof BillingRoute
   '/compliance': typeof ComplianceRoute
@@ -184,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/orders': typeof OrdersRoute
   '/pre-deals': typeof PreDealsRoute
   '/products': typeof ProductsRoute
@@ -197,6 +211,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-agent': typeof AiAgentRoute
   '/analytics': typeof AnalyticsRoute
   '/billing': typeof BillingRoute
   '/compliance': typeof ComplianceRoute
@@ -212,6 +227,7 @@ export interface FileRoutesByTo {
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/orders': typeof OrdersRoute
   '/pre-deals': typeof PreDealsRoute
   '/products': typeof ProductsRoute
@@ -226,6 +242,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-agent': typeof AiAgentRoute
   '/analytics': typeof AnalyticsRoute
   '/billing': typeof BillingRoute
   '/compliance': typeof ComplianceRoute
@@ -241,6 +258,7 @@ export interface FileRoutesById {
   '/microservices-spec': typeof MicroservicesSpecRoute
   '/ml-analytics': typeof MlAnalyticsRoute
   '/notifications': typeof NotificationsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/orders': typeof OrdersRoute
   '/pre-deals': typeof PreDealsRoute
   '/products': typeof ProductsRoute
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-agent'
     | '/analytics'
     | '/billing'
     | '/compliance'
@@ -271,6 +290,7 @@ export interface FileRouteTypes {
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
+    | '/opportunities'
     | '/orders'
     | '/pre-deals'
     | '/products'
@@ -284,6 +304,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-agent'
     | '/analytics'
     | '/billing'
     | '/compliance'
@@ -299,6 +320,7 @@ export interface FileRouteTypes {
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
+    | '/opportunities'
     | '/orders'
     | '/pre-deals'
     | '/products'
@@ -312,6 +334,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-agent'
     | '/analytics'
     | '/billing'
     | '/compliance'
@@ -327,6 +350,7 @@ export interface FileRouteTypes {
     | '/microservices-spec'
     | '/ml-analytics'
     | '/notifications'
+    | '/opportunities'
     | '/orders'
     | '/pre-deals'
     | '/products'
@@ -341,6 +365,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiAgentRoute: typeof AiAgentRoute
   AnalyticsRoute: typeof AnalyticsRoute
   BillingRoute: typeof BillingRoute
   ComplianceRoute: typeof ComplianceRoute
@@ -356,6 +381,7 @@ export interface RootRouteChildren {
   MicroservicesSpecRoute: typeof MicroservicesSpecRoute
   MlAnalyticsRoute: typeof MlAnalyticsRoute
   NotificationsRoute: typeof NotificationsRoute
+  OpportunitiesRoute: typeof OpportunitiesRoute
   OrdersRoute: typeof OrdersRoute
   PreDealsRoute: typeof PreDealsRoute
   ProductsRoute: typeof ProductsRoute
@@ -438,6 +464,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/opportunities': {
+      id: '/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof OpportunitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -545,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-agent': {
+      id: '/ai-agent'
+      path: '/ai-agent'
+      fullPath: '/ai-agent'
+      preLoaderRoute: typeof AiAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -557,6 +597,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiAgentRoute: AiAgentRoute,
   AnalyticsRoute: AnalyticsRoute,
   BillingRoute: BillingRoute,
   ComplianceRoute: ComplianceRoute,
@@ -572,6 +613,7 @@ const rootRouteChildren: RootRouteChildren = {
   MicroservicesSpecRoute: MicroservicesSpecRoute,
   MlAnalyticsRoute: MlAnalyticsRoute,
   NotificationsRoute: NotificationsRoute,
+  OpportunitiesRoute: OpportunitiesRoute,
   OrdersRoute: OrdersRoute,
   PreDealsRoute: PreDealsRoute,
   ProductsRoute: ProductsRoute,

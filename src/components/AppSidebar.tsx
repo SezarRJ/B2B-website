@@ -4,23 +4,20 @@ import { logoutWithSupabase } from "@/lib/supabase";
 import { getMe, type User } from "@/lib/api";
 import { useI18n, Language } from "@/lib/i18n";
 import {
-  LayoutDashboard,
-  Package,
-  ClipboardList,
-  Handshake,
-  ShoppingCart,
-  FileCheck2,
-  Mail,
-  LogOut,
-  Lock,
-  CreditCard,
-  Truck,
+  BarChart3,
   Bell,
-  Network,
-  Globe,
+  Bot,
+  CreditCard,
   Database,
+  FileText,
+  Globe,
   Layers,
-  Store,
+  Lock,
+  LogOut,
+  Network,
+  Radar,
+  Search,
+  UploadCloud,
 } from "lucide-react";
 
 interface AppSidebarProps {
@@ -48,55 +45,63 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
     user?.account_type === "black" || user?.email?.toLowerCase().includes("admin");
 
   const customerItems = [
-    { id: "dashboard", label: t("nav.home", "Home"), path: "/dashboard", icon: LayoutDashboard },
-    { id: "products", label: t("nav.marketplace", "Marketplace"), path: "/products", icon: Store },
+    { id: "dashboard", label: t("nav.dashboard", "Dashboard"), path: "/dashboard", icon: Radar },
     {
-      id: "demands",
-      label: t("nav.requests", "Buying Requests"),
-      path: "/demands",
-      icon: ClipboardList,
+      id: "opportunities",
+      label: t("nav.opportunityWall", "Opportunity Wall"),
+      path: "/opportunities",
+      icon: Globe,
     },
-    { id: "pre-deals", label: t("nav.matches", "Matches"), path: "/pre-deals", icon: Handshake },
-    { id: "messages", label: t("nav.messages", "Messages"), path: "/messages", icon: Mail },
-    { id: "orders", label: t("nav.orders.short", "Orders"), path: "/orders", icon: ShoppingCart },
+    { id: "ai-agent", label: t("nav.aiAgent", "AI Sourcing Agent"), path: "/ai-agent", icon: Bot },
     {
-      id: "shipments",
-      label: t("nav.shipments.short", "Shipments"),
-      path: "/shipments",
-      icon: Truck,
+      id: "analytics",
+      label: t("nav.marketIntel", "Market Intelligence"),
+      path: "/analytics",
+      icon: BarChart3,
     },
-    {
-      id: "trade-finance",
-      label: t("nav.payments", "Payments"),
-      path: "/trade-finance",
-      icon: CreditCard,
-    },
-    { id: "kyc", label: t("nav.verification", "Verification"), path: "/kyc", icon: FileCheck2 },
-    { id: "billing", label: t("nav.membership", "Membership"), path: "/billing", icon: Package },
     {
       id: "notifications",
-      label: t("nav.notifications", "Notifications"),
+      label: t("nav.smartAlerts", "Smart Alerts"),
       path: "/notifications",
       icon: Bell,
+    },
+    {
+      id: "products",
+      label: t("nav.myPostedOffers", "My Posted Offers"),
+      path: "/products",
+      icon: UploadCloud,
+    },
+    { id: "demands", label: t("nav.myRequests", "My Requests"), path: "/demands", icon: Search },
+    {
+      id: "messages",
+      label: t("nav.revealedContacts", "Revealed Contacts"),
+      path: "/messages",
+      icon: FileText,
+    },
+    {
+      id: "billing",
+      label: t("nav.creditsBilling", "Credits & Billing"),
+      path: "/billing",
+      icon: CreditCard,
     },
   ];
 
   const internalItems = [
     {
       id: "supabase-portal",
-      label: t("nav.supabase", "Supabase & RLS"),
+      label: t("nav.supabase", "Data & RLS"),
       path: "/supabase-portal",
       icon: Database,
     },
     {
       id: "microservices-spec",
-      label: t("nav.microservices", "Microservices"),
+      label: t("nav.microservices", "Crawler Architecture"),
       path: "/microservices-spec",
       icon: Network,
     },
     {
       id: "workflow",
-      label: t("nav.workflow", "Workflow Explorer"),
+      label: t("nav.workflow", "Scoring Workflow"),
       path: "/workflow",
       icon: Layers,
     },
@@ -119,18 +124,18 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
       dir={dir}
     >
       <div
-        className={`flex h-16 items-center gap-3 border-b border-border px-6 bg-slate-950 text-white cursor-pointer ${isRtl ? "flex-row-reverse" : ""}`}
+        className={`flex h-16 items-center gap-3 border-b border-border px-6 bg-blue-700 text-white cursor-pointer ${isRtl ? "flex-row-reverse" : ""}`}
         onClick={() => navigate({ to: "/" })}
       >
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-500 text-slate-950 shadow-md">
-          <span className="font-serif text-base font-black">T</span>
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-blue-700 shadow-md">
+          <Radar className="h-5 w-5" />
         </div>
         <div className={isRtl ? "text-right" : ""}>
-          <span className="text-base font-extrabold tracking-tight font-serif text-white block leading-tight">
-            Tureep AI+
+          <span className="text-base font-extrabold tracking-tight text-white block leading-tight">
+            DealCompass AI+
           </span>
-          <span className="text-[10px] text-yellow-400 font-mono tabular-nums block">
-            {t("nav.customerPortal", "Customer Portal")}
+          <span className="text-[10px] text-blue-100 font-mono tabular-nums block">
+            {t("nav.intelPortal", "Trade Intelligence")}
           </span>
         </div>
       </div>
@@ -163,7 +168,7 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
               onClick={() => navigate({ to: item.path })}
               className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all cursor-pointer ${isRtl ? "flex-row-reverse" : ""} ${
                 isActive
-                  ? `bg-primary text-white font-extrabold shadow-md ${isRtl ? "-translate-x-1" : "translate-x-1"}`
+                  ? `bg-blue-700 text-white font-extrabold shadow-md ${isRtl ? "-translate-x-1" : "translate-x-1"}`
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
@@ -171,7 +176,7 @@ export function AppSidebar({ activeRoute }: AppSidebarProps) {
               <span className="truncate">{item.label}</span>
               {isActive && (
                 <span
-                  className={`${isRtl ? "mr-auto" : "ml-auto"} w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse flex-shrink-0`}
+                  className={`${isRtl ? "mr-auto" : "ml-auto"} w-1.5 h-1.5 rounded-full bg-white animate-pulse flex-shrink-0`}
                 />
               )}
             </button>

@@ -4,64 +4,45 @@ import { joinWaitlist } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
 import {
   ArrowRight,
-  CheckCircle2,
+  BarChart3,
+  Bell,
+  Bot,
+  Database,
+  Eye,
   Globe,
-  Package,
+  Radar,
   Search,
   ShieldCheck,
-  Truck,
-  CreditCard,
-  Users,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const sampleOpportunities = [
+const sampleSignals = [
   {
-    title: "Premium Iraqi Dates",
-    route: "Basra, Iraq → Turkey",
-    volume: "300 tons",
-    payment: "L/C or protected payment",
-    match: "94% match",
+    product: "Urea 46%",
+    origin: "Oman",
+    exportCountry: "UAE",
+    quantity: "5,000 MT",
+    score: 91,
+    type: "Buying signal",
   },
   {
-    title: "HMS 1/2 Steel Scrap",
-    route: "Bandar Abbas, Iran → Turkey",
-    volume: "150 tons",
-    payment: "D/P supported",
-    match: "82% match",
+    product: "Premium Iraqi Dates",
+    origin: "Iraq",
+    exportCountry: "Turkey",
+    quantity: "300 tons",
+    score: 88,
+    type: "Buyer demand",
   },
   {
-    title: "Rock Phosphate 30% P2O5",
-    route: "Iraq → GCC / Turkey",
-    volume: "800 tons",
-    payment: "Escrow option",
-    match: "98% match",
-  },
-];
-
-const steps = [
-  {
-    icon: Package,
-    title: "Post what you sell or need",
-    text: "Add a product as a seller or post a buying request as a buyer.",
-  },
-  {
-    icon: Users,
-    title: "Get matched with companies",
-    text: "See serious buyer/supplier matches based on product, quantity, route, and payment terms.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Verify and agree safely",
-    text: "Use company checks, protected payment, and structured order steps before shipping.",
-  },
-  {
-    icon: Truck,
-    title: "Track the deal to delivery",
-    text: "Follow orders, payment status, and shipment progress in one place.",
+    product: "HMS 1/2 Steel Scrap",
+    origin: "Global",
+    exportCountry: "Turkey",
+    quantity: "150 tons",
+    score: 84,
+    type: "Supplier signal",
   },
 ];
 
@@ -80,18 +61,11 @@ export default function Index() {
     try {
       await joinWaitlist(email);
       setStatus("success");
-      setMessage(
-        t(
-          "landing.joined",
-          "Thanks — we received your request. You can also create an account now.",
-        ),
-      );
+      setMessage("Thanks — your request has been received.");
       setEmail("");
     } catch {
       setStatus("error");
-      setMessage(
-        t("Something went wrong. Please try again.", "Something went wrong. Please try again."),
-      );
+      setMessage("Something went wrong. Please try again.");
     }
   }
 
@@ -100,72 +74,59 @@ export default function Index() {
       className={`min-h-screen bg-white text-slate-950 ${isRtl ? "text-right" : "text-left"}`}
       dir={dir}
     >
-      <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-md">
+      <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
           <Link to="/" className={`flex items-center gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-700 text-white shadow-sm">
-              <span className="font-serif text-lg font-black">T</span>
+              <Radar className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-base font-black tracking-tight">Tureep AI+</div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                B2B Trade
+              <div className="text-base font-black tracking-tight">DealCompass AI+</div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-500">
+                Trade Intelligence
               </div>
             </div>
           </Link>
 
           <div className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
-            <a href="#opportunities" className="hover:text-slate-950">
-              {t("landing.nav.samples", "Sample opportunities")}
+            <a href="#radar" className="hover:text-blue-700">
+              Trade Radar
             </a>
-            <a href="#how" className="hover:text-slate-950">
-              {t("landing.nav.how", "How it works")}
+            <a href="#agent" className="hover:text-blue-700">
+              AI Agent
             </a>
-            <a href="#safety" className="hover:text-slate-950">
-              {t("landing.nav.safety", "Safety")}
+            <a href="#revenue" className="hover:text-blue-700">
+              Credits
             </a>
           </div>
 
-          <div className={`flex items-center gap-2 ${isRtl ? "flex-row-reverse" : ""}`}>
-            <Link
-              to="/login"
-              className="hidden text-sm font-bold text-slate-600 hover:text-slate-950 sm:block"
-            >
-              {t("btn.signin", "Sign in")}
-            </Link>
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-blue-600"
-            >
-              {t("landing.cta.primary", "Create free account")}
-              <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-blue-600"
+          >
+            Start searching
+            <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
+          </Link>
         </div>
       </nav>
 
       <main>
-        <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white px-5 py-16 sm:px-8 lg:py-24">
+        <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white px-5 py-16 sm:px-8 lg:py-24">
           <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.18),transparent_55%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="space-y-7">
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-blue-800">
                 <Globe className="h-4 w-4" />
-                {t("landing.badge", "Iraq • Turkey • Iran • GCC • Global")}
+                Global Trade Intelligence Platform
               </div>
 
               <div className="space-y-5">
                 <h1 className="max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
-                  {t(
-                    "landing.hero.title",
-                    "Find verified buyers and suppliers for cross-border trade",
-                  )}
+                  Global trade opportunities, discovered by AI.
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
-                  {t(
-                    "landing.hero.subtitle",
-                    "Post what you sell or what you need. Tureep matches you with verified companies and helps manage payment, documents, and shipping.",
-                  )}
+                  DealCompass AI+ scans global trade sources, analyzes opportunities, scores leads,
+                  and helps you reach the right buyer or supplier faster.
                 </p>
               </div>
 
@@ -174,23 +135,22 @@ export default function Index() {
               >
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-7 py-4 text-base font-black text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-700 px-7 py-4 text-base font-black text-white shadow-lg shadow-blue-600/20 hover:bg-blue-600"
                 >
-                  {t("landing.cta.primary", "Create free account")}
+                  Start searching opportunities
                   <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
                 </Link>
                 <a
-                  href="#opportunities"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 text-base font-black text-slate-700 shadow-sm hover:bg-slate-50"
+                  href="#radar"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-100 bg-white px-7 py-4 text-base font-black text-blue-700 shadow-sm hover:bg-blue-50"
                 >
-                  <Search className="h-5 w-5" />
-                  {t("landing.cta.secondary", "View sample opportunities")}
+                  <Eye className="h-5 w-5" /> View live opportunity wall
                 </a>
               </div>
 
               <form
                 onSubmit={handleSubmit}
-                className="max-w-xl rounded-3xl border border-slate-200 bg-white p-3 shadow-sm"
+                className="max-w-xl rounded-3xl border border-blue-100 bg-white p-3 shadow-sm"
               >
                 <div
                   className={`flex flex-col gap-3 sm:flex-row ${isRtl ? "sm:flex-row-reverse" : ""}`}
@@ -203,16 +163,14 @@ export default function Index() {
                     placeholder={t("hero.input", "Business email address")}
                     disabled={status === "loading"}
                     dir="ltr"
-                    className="min-w-0 flex-1 rounded-2xl border border-slate-200 px-5 py-3 text-sm outline-none focus:border-blue-500"
+                    className="min-w-0 flex-1 rounded-2xl border border-blue-100 px-5 py-3 text-sm outline-none focus:border-blue-500"
                   />
                   <button
                     type="submit"
                     disabled={status === "loading"}
                     className="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-black text-white hover:bg-blue-600 disabled:opacity-50"
                   >
-                    {status === "loading"
-                      ? t("Applying...", "Applying...")
-                      : t("landing.join", "Join waitlist")}
+                    {status === "loading" ? "Sending..." : "Request early access"}
                   </button>
                 </div>
                 {message && (
@@ -225,167 +183,94 @@ export default function Index() {
               </form>
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-200/60">
-              <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
+            <div className="rounded-[2rem] border border-blue-100 bg-white p-5 shadow-2xl shadow-blue-100/70">
+              <div className="mb-4 flex items-center justify-between border-b border-blue-50 pb-4">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-wider text-slate-400">
-                    {t("landing.preview", "Live preview")}
+                  <p className="text-xs font-black uppercase tracking-wider text-blue-500">
+                    Live preview
                   </p>
-                  <h2 className="text-xl font-black text-slate-950">
-                    {t("landing.preview.title", "Example trade matches")}
-                  </h2>
+                  <h2 className="text-xl font-black text-slate-950">Opportunity Radar</h2>
                 </div>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                  {t("topbar.live", "Live")}
+                  Live
                 </span>
               </div>
               <div className="space-y-3">
-                {sampleOpportunities.map((item) => (
+                {sampleSignals.map((item) => (
                   <div
-                    key={item.title}
-                    className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
+                    key={item.product}
+                    className="rounded-3xl border border-blue-100 bg-blue-50/50 p-4"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-black text-slate-950">{item.title}</h3>
-                        <p className="mt-1 text-sm text-slate-500">{item.route}</p>
+                        <h3 className="font-black text-slate-950">{item.product}</h3>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Origin: {item.origin} • Export: {item.exportCountry}
+                        </p>
                       </div>
-                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-black text-blue-800">
-                        {item.match}
+                      <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-blue-700">
+                        {item.score}/100
                       </span>
                     </div>
                     <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
                       <div className="rounded-2xl bg-white p-3">
-                        <p className="font-bold text-slate-400">Volume</p>
-                        <p className="font-mono font-black text-slate-900">{item.volume}</p>
+                        <p className="font-bold text-slate-400">Quantity</p>
+                        <p className="font-mono font-black text-slate-900">{item.quantity}</p>
                       </div>
                       <div className="rounded-2xl bg-white p-3">
-                        <p className="font-bold text-slate-400">Payment</p>
-                        <p className="font-bold text-slate-900">{item.payment}</p>
+                        <p className="font-bold text-slate-400">Type</p>
+                        <p className="font-bold text-slate-900">{item.type}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-center text-xs font-semibold text-slate-400">
-                {t(
-                  "landing.samples.note",
-                  "Examples only. Create an account to add your own products or requests.",
-                )}
-              </p>
             </div>
           </div>
         </section>
 
-        <section
-          id="opportunities"
-          className="border-y border-slate-200 bg-slate-50 px-5 py-16 sm:px-8"
-        >
+        <section id="radar" className="border-y border-blue-100 bg-white px-5 py-16 sm:px-8">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-8 max-w-2xl">
+            <div className="mb-10 max-w-2xl">
               <p className="text-xs font-black uppercase tracking-wider text-blue-700">
-                {t("landing.samples.kicker", "Why register?")}
+                Trade Radar Engine
               </p>
               <h2 className="mt-2 text-3xl font-black text-slate-950 sm:text-4xl">
-                {t("landing.samples.heading", "See the kind of opportunities customers can create")}
+                We do not wait for opportunities. We go and discover them.
               </h2>
               <p className="mt-3 text-slate-600">
-                {t(
-                  "landing.samples.copy",
-                  "Before registering, customers should understand what value they get: serious trade matches, protected payment options, and a clearer route from request to order.",
-                )}
-              </p>
-            </div>
-            <div className="grid gap-4 md:grid-cols-3">
-              {sampleOpportunities.map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
-                >
-                  <h3 className="text-lg font-black text-slate-950">{item.title}</h3>
-                  <p className="mt-2 text-sm text-slate-500">{item.route}</p>
-                  <div className="mt-5 space-y-2 text-sm">
-                    <p className="flex items-center justify-between gap-4">
-                      <span className="text-slate-500">Quantity</span>
-                      <span className="font-mono font-black">{item.volume}</span>
-                    </p>
-                    <p className="flex items-center justify-between gap-4">
-                      <span className="text-slate-500">Payment</span>
-                      <span className="font-bold">{item.payment}</span>
-                    </p>
-                    <p className="flex items-center justify-between gap-4">
-                      <span className="text-slate-500">Match</span>
-                      <span className="font-mono font-black text-emerald-700">{item.match}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="how" className="px-5 py-16 sm:px-8 lg:py-24">
-          <div className="mx-auto max-w-7xl">
-            <div className="mx-auto mb-12 max-w-2xl text-center">
-              <h2 className="text-3xl font-black text-slate-950 sm:text-4xl">
-                {t("landing.how.title", "How Tureep works")}
-              </h2>
-              <p className="mt-3 text-slate-600">
-                {t(
-                  "landing.how.copy",
-                  "A simple guided path from product/request to match, order, payment, and shipment.",
-                )}
+                The radar collects selling offers, buying requests, tenders, manufacturing requests,
+                and surplus production signals from global trade sources.
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-4">
-              {steps.map((step, idx) => (
-                <div
-                  key={step.title}
-                  className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
-                >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-700 text-white">
-                    <step.icon className="h-6 w-6" />
-                  </div>
-                  <p className="mb-2 font-mono text-xs font-black text-blue-700">0{idx + 1}</p>
-                  <h3 className="font-black text-slate-950">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{step.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="safety" className="bg-blue-700 px-5 py-16 text-white sm:px-8">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-xs font-black uppercase tracking-wider text-blue-300">
-                {t("landing.safety.kicker", "Trust and safety")}
-              </p>
-              <h2 className="mt-2 text-3xl font-black sm:text-4xl">
-                {t("landing.safety.title", "Trade with a clearer, safer process")}
-              </h2>
-              <p className="mt-4 max-w-xl text-blue-100">
-                {t(
-                  "landing.safety.copy",
-                  "Tureep guides companies through verification, matching, order confirmation, protected payment options, and shipment tracking.",
-                )}
-              </p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
               {[
-                [ShieldCheck, "Company verification"],
-                [CreditCard, "Protected payment options"],
-                [CheckCircle2, "Structured deal steps"],
-                [Truck, "Shipment visibility"],
-              ].map(([Icon, label]) => {
-                const SafeIcon = Icon as typeof ShieldCheck;
+                [
+                  Database,
+                  "Collect",
+                  "Scan chambers, tenders, directories, marketplaces, and open data.",
+                ],
+                [
+                  Search,
+                  "Normalize",
+                  "Clean duplicates, extract quantity, price, origin, export country, and specs.",
+                ],
+                [
+                  BarChart3,
+                  "Score",
+                  "Rank opportunities by freshness, source trust, completeness, and lead quality.",
+                ],
+                [Bell, "Alert", "Notify users when matching signals appear."],
+              ].map(([Icon, title, text]) => {
+                const SafeIcon = Icon as typeof Database;
                 return (
                   <div
-                    key={label as string}
-                    className="rounded-3xl border border-white/20 bg-white/10 p-5"
+                    key={title as string}
+                    className="rounded-3xl border border-blue-100 bg-blue-50/40 p-6"
                   >
-                    <SafeIcon className="mb-4 h-6 w-6 text-blue-300" />
-                    <p className="font-black">{label as string}</p>
+                    <SafeIcon className="mb-5 h-7 w-7 text-blue-700" />
+                    <h3 className="font-black text-slate-950">{title as string}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">{text as string}</p>
                   </div>
                 );
               })}
@@ -393,32 +278,61 @@ export default function Index() {
           </div>
         </section>
 
-        <section className="px-5 py-16 text-center sm:px-8">
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-blue-50 p-8 sm:p-12">
+        <section id="agent" className="bg-blue-700 px-5 py-16 text-white sm:px-8">
+          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-blue-100">
+                AI Sourcing Agent
+              </p>
+              <h2 className="mt-2 text-3xl font-black sm:text-4xl">
+                A virtual sourcing employee working 24/7.
+              </h2>
+              <p className="mt-4 max-w-xl text-blue-100">
+                Type what you need in natural language. The agent extracts filters, searches the
+                radar, removes weak results, and builds a shortlist.
+              </p>
+            </div>
+            <div className="rounded-[2rem] border border-white/20 bg-white/10 p-6">
+              <Bot className="mb-4 h-8 w-8 text-white" />
+              <p className="text-sm text-blue-100">Example prompt</p>
+              <p className="mt-2 text-xl font-black">
+                “I need 5000 tons urea 46% origin Oman, export from UAE.”
+              </p>
+              <Link
+                to="/login"
+                className="mt-6 inline-flex rounded-2xl bg-white px-5 py-3 text-sm font-black text-blue-700"
+              >
+                Try the AI Agent
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section id="revenue" className="px-5 py-16 sm:px-8">
+          <div className="mx-auto max-w-7xl text-center">
+            <ShieldCheck className="mx-auto mb-4 h-10 w-10 text-blue-700" />
             <h2 className="text-3xl font-black text-slate-950 sm:text-4xl">
-              {t("landing.final.title", "Start with a free account")}
+              Reveal real contacts with Credits.
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-slate-600">
-              {t(
-                "landing.final.copy",
-                "Add your first product or buying request and see what matches the platform can prepare for you.",
-              )}
+            <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+              Users can browse opportunity details for free. Company name, decision maker, phone,
+              email, website, and source are unlocked with credits.
             </p>
             <Link
               to="/login"
               className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-blue-700 px-8 py-4 text-base font-black text-white hover:bg-blue-600"
             >
-              {t("landing.cta.primary", "Create free account")}
+              Open DealCompass AI+
               <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
             </Link>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-slate-200 px-5 py-8 sm:px-8">
+      <footer className="border-t border-blue-100 px-5 py-8 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center text-sm text-slate-500 sm:flex-row">
-          <p className="font-bold text-slate-950">Tureep AI+</p>
-          <p>{t("foot.copy", "© 2026 Tureep Trade Systems. All rights reserved.")}</p>
+          <p className="font-bold text-slate-950">DealCompass AI+</p>
+          <p>© 2026 DealCompass AI+. Global Trade Intelligence Platform.</p>
         </div>
       </footer>
     </div>

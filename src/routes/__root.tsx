@@ -82,20 +82,22 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 const navItems = [
-  { path: "/dashboard", labelKey: "nav.home", fallback: "Home", icon: LayoutDashboard },
-  { path: "/products", labelKey: "nav.marketplace", fallback: "Marketplace", icon: Package },
-  { path: "/demands", labelKey: "nav.requests", fallback: "Buying Requests", icon: ClipboardList },
+  { path: "/dashboard", labelKey: "nav.dashboard", fallback: "Dashboard", icon: LayoutDashboard },
   {
-    path: "/pre-deals",
-    labelKey: "nav.matches",
-    fallback: "Matches",
-    icon: Handshake,
-    badge: "deals" as const,
+    path: "/opportunities",
+    labelKey: "nav.opportunityWall",
+    fallback: "Opportunity Wall",
+    icon: Package,
   },
-  { path: "/messages", labelKey: "nav.messages", fallback: "Messages", icon: Bell },
-  { path: "/orders", labelKey: "nav.orders.short", fallback: "Orders", icon: ClipboardList },
-  { path: "/shipments", labelKey: "nav.shipments.short", fallback: "Shipments", icon: Truck },
-  { path: "/trade-finance", labelKey: "nav.payments", fallback: "Payments", icon: CreditCard },
+  { path: "/ai-agent", labelKey: "nav.aiAgent", fallback: "AI Agent", icon: Handshake },
+  {
+    path: "/analytics",
+    labelKey: "nav.marketIntel",
+    fallback: "Market Intelligence",
+    icon: ClipboardList,
+  },
+  { path: "/notifications", labelKey: "nav.smartAlerts", fallback: "Smart Alerts", icon: Bell },
+  { path: "/billing", labelKey: "nav.creditsBilling", fallback: "Credits", icon: CreditCard },
 ];
 
 function RootLayout() {
@@ -211,11 +213,8 @@ function AppChrome() {
                     >
                       <Icon className="w-3.5 h-3.5" />
                       <span>{t(item.labelKey, item.fallback)}</span>
-                      {item.badge === "deals" && notifications > 0 && (
-                        <span
-                          className="ml-1 text-[9px] font-bold px-1.5 py-0.5 rounded-sm font-mono"
-                          style={{ backgroundColor: "#f59e0b", color: "#0B1220" }}
-                        >
+                      {item.path === "/notifications" && notifications > 0 && (
+                        <span className="ml-1 rounded-sm bg-blue-100 px-1.5 py-0.5 font-mono text-[9px] font-bold text-blue-700">
                           {notifications}
                         </span>
                       )}
