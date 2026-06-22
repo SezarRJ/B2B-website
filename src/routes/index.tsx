@@ -47,7 +47,7 @@ const sampleSignals = [
 ];
 
 export default function Index() {
-  const { t, dir } = useI18n();
+  const { t, dir, language, setLanguage } = useI18n();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -83,30 +83,39 @@ export default function Index() {
             <div>
               <div className="text-base font-black tracking-tight">DealCompass AI+</div>
               <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-500">
-                Trade Intelligence
+                {t("landing.brand.subtitle", "Trade Intelligence")}
               </div>
             </div>
           </Link>
 
           <div className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
             <a href="#radar" className="hover:text-blue-700">
-              Trade Radar
+              {t("landing.nav.radar", "Trade Radar")}
             </a>
             <a href="#agent" className="hover:text-blue-700">
-              AI Agent
+              {t("landing.nav.agent", "AI Agent")}
             </a>
             <a href="#revenue" className="hover:text-blue-700">
-              Credits
+              {t("landing.nav.credits", "Credits")}
             </a>
           </div>
 
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-blue-600"
-          >
-            Start searching
-            <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
-          </Link>
+          <div className={`flex items-center gap-2 ${isRtl ? "flex-row-reverse" : ""}`}>
+            <button
+              type="button"
+              onClick={() => setLanguage(language === "ar" ? "en" : "ar")}
+              className="rounded-full border border-blue-100 bg-white px-3 py-2 text-xs font-black text-blue-700 hover:bg-blue-50"
+            >
+              {language === "ar" ? "English" : "العربية"}
+            </button>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2.5 text-sm font-black text-white shadow-sm hover:bg-blue-600"
+            >
+              {t("landing.cta.start", "Start searching")}
+              <ArrowRight className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -117,16 +126,18 @@ export default function Index() {
             <div className="space-y-7">
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-blue-800">
                 <Globe className="h-4 w-4" />
-                Global Trade Intelligence Platform
+                {t("landing.badge", "Global Trade Intelligence Platform")}
               </div>
 
               <div className="space-y-5">
                 <h1 className="max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
-                  Global trade opportunities, discovered by AI.
+                  {t("landing.hero.dcTitle", "Global trade opportunities, discovered by AI.")}
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
-                  DealCompass AI+ scans global trade sources, analyzes opportunities, scores leads,
-                  and helps you reach the right buyer or supplier faster.
+                  {t(
+                    "landing.hero.dcSubtitle",
+                    "DealCompass AI+ scans global trade sources, analyzes opportunities, scores leads, and helps you reach the right buyer or supplier faster.",
+                  )}
                 </p>
               </div>
 
@@ -137,14 +148,15 @@ export default function Index() {
                   to="/login"
                   className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-700 px-7 py-4 text-base font-black text-white shadow-lg shadow-blue-600/20 hover:bg-blue-600"
                 >
-                  Start searching opportunities
+                  {t("landing.cta.searchOpps", "Start searching opportunities")}
                   <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
                 </Link>
                 <a
                   href="#radar"
                   className="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-100 bg-white px-7 py-4 text-base font-black text-blue-700 shadow-sm hover:bg-blue-50"
                 >
-                  <Eye className="h-5 w-5" /> View live opportunity wall
+                  <Eye className="h-5 w-5" />{" "}
+                  {t("landing.cta.viewWall", "View live opportunity wall")}
                 </a>
               </div>
 
@@ -170,7 +182,9 @@ export default function Index() {
                     disabled={status === "loading"}
                     className="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-black text-white hover:bg-blue-600 disabled:opacity-50"
                   >
-                    {status === "loading" ? "Sending..." : "Request early access"}
+                    {status === "loading"
+                      ? t("landing.sending", "Sending...")
+                      : t("landing.requestAccess", "Request early access")}
                   </button>
                 </div>
                 {message && (
@@ -187,12 +201,14 @@ export default function Index() {
               <div className="mb-4 flex items-center justify-between border-b border-blue-50 pb-4">
                 <div>
                   <p className="text-xs font-black uppercase tracking-wider text-blue-500">
-                    Live preview
+                    {t("topbar.live", "Live")} preview
                   </p>
-                  <h2 className="text-xl font-black text-slate-950">Opportunity Radar</h2>
+                  <h2 className="text-xl font-black text-slate-950">
+                    {t("landing.radar", "Opportunity Radar")}
+                  </h2>
                 </div>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                  Live
+                  {t("topbar.live", "Live")}
                 </span>
               </div>
               <div className="space-y-3">
@@ -233,14 +249,19 @@ export default function Index() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 max-w-2xl">
               <p className="text-xs font-black uppercase tracking-wider text-blue-700">
-                Trade Radar Engine
+                {t("landing.radarEngine", "Trade Radar Engine")}
               </p>
               <h2 className="mt-2 text-3xl font-black text-slate-950 sm:text-4xl">
-                We do not wait for opportunities. We go and discover them.
+                {t(
+                  "landing.radarTitle",
+                  "We do not wait for opportunities. We go and discover them.",
+                )}
               </h2>
               <p className="mt-3 text-slate-600">
-                The radar collects selling offers, buying requests, tenders, manufacturing requests,
-                and surplus production signals from global trade sources.
+                {t(
+                  "landing.radarCopy",
+                  "The radar collects selling offers, buying requests, tenders, manufacturing requests, and surplus production signals from global trade sources.",
+                )}
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-4">
@@ -285,11 +306,13 @@ export default function Index() {
                 AI Sourcing Agent
               </p>
               <h2 className="mt-2 text-3xl font-black sm:text-4xl">
-                A virtual sourcing employee working 24/7.
+                {t("landing.agentTitle", "A virtual sourcing employee working 24/7.")}
               </h2>
               <p className="mt-4 max-w-xl text-blue-100">
-                Type what you need in natural language. The agent extracts filters, searches the
-                radar, removes weak results, and builds a shortlist.
+                {t(
+                  "landing.agentCopy",
+                  "Type what you need in natural language. The agent extracts filters, searches the radar, removes weak results, and builds a shortlist.",
+                )}
               </p>
             </div>
             <div className="rounded-[2rem] border border-white/20 bg-white/10 p-6">
@@ -322,7 +345,7 @@ export default function Index() {
               to="/login"
               className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-blue-700 px-8 py-4 text-base font-black text-white hover:bg-blue-600"
             >
-              Open DealCompass AI+
+              {t("landing.openApp", "Open DealCompass AI+")}
               <ArrowRight className={isRtl ? "h-5 w-5 rotate-180" : "h-5 w-5"} />
             </Link>
           </div>
@@ -332,7 +355,9 @@ export default function Index() {
       <footer className="border-t border-blue-100 px-5 py-8 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center text-sm text-slate-500 sm:flex-row">
           <p className="font-bold text-slate-950">DealCompass AI+</p>
-          <p>© 2026 DealCompass AI+. Global Trade Intelligence Platform.</p>
+          <p>
+            {t("landing.footer", "© 2026 DealCompass AI+. Global Trade Intelligence Platform.")}
+          </p>
         </div>
       </footer>
     </div>

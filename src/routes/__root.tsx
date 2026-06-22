@@ -15,6 +15,7 @@ import {
   BarChart3,
   Settings,
   Bell,
+  ArrowLeft,
   LogOut,
   Shield,
   Truck,
@@ -120,6 +121,14 @@ function AppChrome() {
 
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(path + "/");
+
+  function goBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/dashboard";
+    }
+  }
 
   const chromeLessRoutes = ["/", "/login"];
   const legacySidebarRoutes = [
@@ -323,6 +332,20 @@ function AppChrome() {
             )}
           </header>
         </>
+      )}
+
+      {!isChromeLess && (
+        <button
+          type="button"
+          onClick={goBack}
+          className={`fixed top-20 z-50 inline-flex items-center gap-2 rounded-full border border-surface-200 bg-white/95 px-4 py-2 text-xs font-black text-surface-700 shadow-lg backdrop-blur hover:bg-surface-50 ${
+            isRtl ? "right-4 flex-row-reverse" : "left-4"
+          }`}
+          aria-label={t("btn.back", "Back")}
+        >
+          <ArrowLeft className={isRtl ? "h-4 w-4 rotate-180" : "h-4 w-4"} />
+          {t("btn.back", "Back")}
+        </button>
       )}
 
       {/* Page content */}
