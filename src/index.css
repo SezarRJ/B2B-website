@@ -1,6 +1,5 @@
 @import "tailwindcss" source(none);
 @source "../src";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -266,6 +265,33 @@ html {
   .focus-ring:focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  .animate-in {
+    animation: slideInUp 0.18s ease-out both;
+  }
+
+  .animate-out {
+    animation: slideInUp 0.14s ease-in reverse both;
+  }
+
+  .fade-in,
+  .fade-in-0 {
+    opacity: 1;
+  }
+
+  .fade-out,
+  .fade-out-0 {
+    opacity: 0;
+  }
+
+  .zoom-in-90,
+  .zoom-in-95 {
+    transform: scale(1);
+  }
+
+  .zoom-out-95 {
+    transform: scale(0.95);
   }
 }
 
