@@ -180,11 +180,11 @@ function AppChrome() {
                 </div>
               </Link>
 
-              <div className="hidden lg:block h-6 w-px bg-white/10 mx-1" />
+              <div className="hidden xl:block h-6 w-px bg-white/10 mx-1" />
 
               {/* Horizontal nav */}
               <nav
-                className={`hidden lg:flex items-center gap-0.5 flex-1 min-w-0 overflow-x-auto ${isRtl ? "flex-row-reverse" : ""}`}
+                className={`hidden xl:flex items-center gap-0.5 flex-1 min-w-0 overflow-x-auto ${isRtl ? "flex-row-reverse" : ""}`}
               >
                 {navItems.map((item) => {
                   const active = isActive(item.path);
@@ -224,14 +224,14 @@ function AppChrome() {
               {/* Mobile menu trigger */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`lg:hidden ${isRtl ? "mr-auto" : "ml-auto"} p-2 rounded-md hover:bg-white/10`}
+                className={`xl:hidden ${isRtl ? "mr-auto" : "ml-auto"} p-2 rounded-md hover:bg-white/10`}
                 aria-label="Toggle menu"
               >
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
 
               {/* Right cluster — status + profile */}
-              <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+              <div className="hidden xl:flex items-center gap-2 flex-shrink-0">
                 <div className="flex items-center gap-1.5 px-2.5 h-7 rounded-md bg-white/5 border border-white/10">
                   <span
                     className="w-1.5 h-1.5 rounded-full status-pulse"
@@ -296,7 +296,7 @@ function AppChrome() {
 
             {/* Mobile nav drawer */}
             {mobileOpen && (
-              <div className="lg:hidden border-t border-white/10 px-2 py-2 space-y-0.5">
+              <div className="xl:hidden border-t border-white/10 px-2 py-2 space-y-0.5">
                 {navItems.map((item) => {
                   const active = isActive(item.path);
                   const Icon = item.icon;
