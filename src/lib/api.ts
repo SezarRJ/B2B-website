@@ -365,7 +365,27 @@ async function deleteWorkflowActionFromSupabase(actionId: string): Promise<boole
   }
 }
 
-// Interceptor wrapper
+function mapSupabaseError(error: unknown, fallback: string) {
+  if (!error) return new Error(fallback);
+  if (typeof error === "object" && "message" in error) {
+    return new Error(String((error as { message: unknown }).message));
+  }
+  return new Error(fallback);
+}
+
+async function getAuthUser() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) {
+    throw mapSupabaseError(error, "User is not signed in.");
+  }
+  return data.user;
+}
+
+function db() {
+  return supabase as any;
+}
+
+// Optional custom backend interceptor for features not yet mapped directly to Supabase.
 async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!API_BASE_URL) {
     throw new Error(
@@ -430,11 +450,31 @@ export async function register(data: any): Promise<User> {
 }
 
 export async function getMe(): Promise<User> {
-  return api<User>("/api/users/me");
+  const authUser = await getAuthUser();
+  const { data, error } = await db()
+    .from("users")
+    .select("*")
+    .or(`id.eq.${authUser.id},email.eq.${authUser.email}`)
+    .maybeSingle();
+  if (error) throw mapSupabaseError(error, "Could not load user profile.");
+  if (!data) throw new Error("User profile is not configured in Supabase users table.");
+  return data as User;
 }
 
 export async function getDashboard(): Promise<DashboardStats> {
-  return api<DashboardStats>("/api/users/dashboard");
+  const [products, demands, preDeals, orders] = await Promise.all([
+    getProducts(),
+    getDemands(),
+    getPreDeals().catch(() => []),
+    getOrders().catch(() => []),
+  ]);
+  return {
+    total_products: products.length,
+    total_demands: demands.length,
+    active_pre_deals: preDeals.length,
+    accepted_deals: preDeals.filter((deal) => deal.status === "accepted").length,
+    active_orders: orders.length,
+  };
 }
 
 export async function getWorkflowActionLogs(): Promise<WorkflowActionLog[]> {
@@ -468,42 +508,75 @@ export async function deleteWorkflowAction(
 }
 
 export async function getProducts(): Promise<Product[]> {
-  return api<Product[]>("/api/products/");
+  const { data, error } = await db()
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load products from Supabase.");
+  return (data || []) as Product[];
 }
 
 export async function createProduct(
   data: Omit<Product, "id" | "user_id" | "created_at" | "updated_at" | "is_available">,
 ): Promise<Product> {
-  return api<Product>("/api/products/", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const authUser = await getAuthUser();
+  const { data: inserted, error } = await db()
+    .from("products")
+    .insert({ ...data, user_id: authUser.id })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create product in Supabase.");
+  return inserted as Product;
 }
 
 export async function getDemands(): Promise<Demand[]> {
-  return api<Demand[]>("/api/demands/");
+  const { data, error } = await db()
+    .from("demands")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load buying requests from Supabase.");
+  return (data || []) as Demand[];
 }
 
 export async function createDemand(
   data: Omit<Demand, "id" | "user_id" | "created_at" | "is_active">,
 ): Promise<Demand> {
-  return api<Demand>("/api/demands/", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const authUser = await getAuthUser();
+  const { data: inserted, error } = await db()
+    .from("demands")
+    .insert({ ...data, user_id: authUser.id })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create buying request in Supabase.");
+  return inserted as Demand;
 }
 
 export async function getPreDeals(): Promise<PreDeal[]> {
-  return api<PreDeal[]>("/api/deals/pre-deals");
+  const { data, error } = await db()
+    .from("pre_deals")
+    .select(
+      "*, product:products(*), seller:users!pre_deals_seller_id_fkey(*), buyer:users!pre_deals_buyer_id_fkey(*)",
+    )
+    .order("created_at", { ascending: false });
+  if (error) {
+    const simple = await db()
+      .from("pre_deals")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (simple.error) throw mapSupabaseError(simple.error, "Could not load matches from Supabase.");
+    return (simple.data || []) as PreDeal[];
+  }
+  return (data || []) as PreDeal[];
 }
 
 export async function actOnPreDeal(
   dealId: number,
   action: "accept" | "reject",
 ): Promise<{ status: string; pre_deal_id: number }> {
-  return api<{ status: string; pre_deal_id: number }>(`/api/deals/pre-deals/${dealId}/${action}`, {
-    method: "POST",
-  });
+  const nextStatus = action === "accept" ? "accepted" : "rejected";
+  const { error } = await db().from("pre_deals").update({ status: nextStatus }).eq("id", dealId);
+  if (error) throw mapSupabaseError(error, "Could not update match status in Supabase.");
+  return { status: nextStatus, pre_deal_id: dealId };
 }
 
 export async function generatePreDeals(): Promise<{
@@ -519,25 +592,82 @@ export async function generatePreDeals(): Promise<{
 export async function joinWaitlist(
   email: string,
 ): Promise<{ id: number; email: string; source: string; created_at: string }> {
-  return api<{ id: number; email: string; source: string; created_at: string }>("/api/waitlist/", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-  });
+  const { data, error } = await db()
+    .from("waitlist")
+    .upsert({ email, source: "landing_page" }, { onConflict: "email" })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not join waitlist in Supabase.");
+  return data as { id: number; email: string; source: string; created_at: string };
 }
 
 export async function getOrders(): Promise<Order[]> {
-  return api<Order[]>("/api/orders/");
+  const { data, error } = await db()
+    .from("orders")
+    .select("*, items:order_items(*, product:products(*)), payments(*)")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load orders from Supabase.");
+  return (data || []) as Order[];
 }
 
 export async function getOrder(orderId: number): Promise<Order> {
-  return api<Order>(`/api/orders/${orderId}`);
+  const { data, error } = await db()
+    .from("orders")
+    .select("*, items:order_items(*, product:products(*)), payments(*)")
+    .eq("id", orderId)
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not load order from Supabase.");
+  return data as Order;
 }
 
 export async function createOrderFromPreDeal(preDealId: number): Promise<Order> {
-  return api<Order>("/api/orders/", {
-    method: "POST",
-    body: JSON.stringify({ pre_deal_id: preDealId }),
-  });
+  const { data: deal, error: dealError } = await db()
+    .from("pre_deals")
+    .select("*, product:products(*)")
+    .eq("id", preDealId)
+    .single();
+  if (dealError || !deal)
+    throw mapSupabaseError(dealError, "Could not load match for order creation.");
+
+  const totalValue = Number(deal.suggested_price || 0) * Number(deal.quantity || 0);
+  const orderPayload = {
+    order_number: `DC-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`,
+    pre_deal_id: deal.id,
+    buyer_id: deal.buyer_id,
+    seller_id: deal.seller_id,
+    status: "confirmed",
+    payment_status: "pending",
+    payment_method: deal.payment_terms || "Protected Payment",
+    total_value: totalValue,
+    platform_fee: totalValue * 0.003,
+    currency: "USD",
+    incoterm: "FOB",
+    origin_country: deal.product?.origin || "Unknown",
+    destination_country: "Unknown",
+  };
+  const { data: order, error } = await db()
+    .from("orders")
+    .insert(orderPayload)
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create order in Supabase.");
+
+  if (deal.product_id) {
+    await db()
+      .from("order_items")
+      .insert({
+        order_id: order.id,
+        product_id: deal.product_id,
+        quantity: deal.quantity,
+        unit: deal.product?.unit || "unit",
+        unit_price: deal.suggested_price,
+        total_price: totalValue,
+        currency: "USD",
+        fulfillment_status: "pending",
+      });
+  }
+
+  return getOrder(order.id);
 }
 
 export async function createPayment(
@@ -546,10 +676,22 @@ export async function createPayment(
   amount: string,
   currency: string,
 ): Promise<Payment> {
-  return api<Payment>(`/api/orders/${orderId}/payments`, {
-    method: "POST",
-    body: JSON.stringify({ order_id: orderId, method, amount, currency }),
-  });
+  const order = await getOrder(orderId);
+  const { data, error } = await db()
+    .from("payments")
+    .insert({
+      order_id: orderId,
+      payer_id: order.buyer_id,
+      payee_id: order.seller_id,
+      method,
+      amount,
+      currency,
+      status: "pending",
+    })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create payment in Supabase.");
+  return data as Payment;
 }
 
 export async function actOnPayment(
@@ -557,13 +699,14 @@ export async function actOnPayment(
   paymentId: number,
   action: "pay" | "release" | "refund",
 ): Promise<{ status: string; payment_id: number }> {
-  return api<{ status: string; payment_id: number }>(
-    `/api/orders/${orderId}/payments/${paymentId}/action`,
-    {
-      method: "POST",
-      body: JSON.stringify({ action }),
-    },
-  );
+  const status = action === "pay" ? "held" : action === "release" ? "released" : "refunded";
+  const { error } = await db()
+    .from("payments")
+    .update({ status })
+    .eq("id", paymentId)
+    .eq("order_id", orderId);
+  if (error) throw mapSupabaseError(error, "Could not update payment status in Supabase.");
+  return { status, payment_id: paymentId };
 }
 
 export async function submitKYC(
@@ -616,15 +759,33 @@ export async function getMyScreenings(): Promise<SanctionsScreening[]> {
 
 // Notifications API
 export async function getNotifications(): Promise<Notification[]> {
-  return api<Notification[]>("/api/notifications/");
+  const { data, error } = await db()
+    .from("notifications")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load notifications from Supabase.");
+  return (data || []) as Notification[];
 }
 
 export async function markNotificationRead(id: number): Promise<Notification> {
-  return api<Notification>(`/api/notifications/mark-read/${id}`, { method: "POST" });
+  const { data, error } = await db()
+    .from("notifications")
+    .update({ read: true })
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not mark notification as read.");
+  return data as Notification;
 }
 
 export async function markAllNotificationsRead(): Promise<{ status: string }> {
-  return api<{ status: string }>("/api/notifications/mark-all-read", { method: "POST" });
+  const authUser = await getAuthUser();
+  const { error } = await db()
+    .from("notifications")
+    .update({ read: true })
+    .eq("user_id", authUser.id);
+  if (error) throw mapSupabaseError(error, "Could not mark notifications as read.");
+  return { status: "ok" };
 }
 
 export async function triggerMockNotification(
@@ -641,18 +802,26 @@ export async function triggerMockNotification(
 
 // Subscriptions API
 export async function getMySubscription(): Promise<Subscription | null> {
-  return api<Subscription | null>("/api/billing/my-subscription");
+  const authUser = await getAuthUser();
+  const { data, error } = await db()
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", authUser.id)
+    .maybeSingle();
+  if (error) throw mapSupabaseError(error, "Could not load subscription from Supabase.");
+  return data as Subscription | null;
 }
 
 export async function createCheckoutSession(tier: string): Promise<Subscription> {
-  return api<Subscription>("/api/billing/create-checkout-session", {
-    method: "POST",
-    body: JSON.stringify({ tier }),
-  });
+  throw new Error(
+    `Billing checkout is not connected. Configure Stripe/Supabase billing before upgrading to ${tier}.`,
+  );
 }
 
 export async function cancelSubscription(): Promise<{ status: string }> {
-  return api<{ status: string }>("/api/billing/cancel-subscription", { method: "POST" });
+  throw new Error(
+    "Billing cancellation is not connected. Configure Stripe/Supabase billing first.",
+  );
 }
 
 // Trade Finance API
@@ -664,14 +833,34 @@ export async function createLC(data: {
   currency: string;
   expiry_days: number;
 }): Promise<LetterOfCredit> {
-  return api<LetterOfCredit>("/api/trade-finance/lc", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const order = await getOrder(data.order_id);
+  const { data: inserted, error } = await db()
+    .from("letters_of_credit")
+    .insert({
+      lc_number: `LC-${Date.now()}`,
+      order_id: data.order_id,
+      applicant_id: order.buyer_id,
+      beneficiary_id: order.seller_id,
+      issuing_bank: data.issuing_bank,
+      advising_bank: data.advising_bank,
+      amount: data.amount,
+      currency: data.currency,
+      expiry_date: new Date(Date.now() + data.expiry_days * 86400000).toISOString(),
+      status: "draft",
+    })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create L/C in Supabase.");
+  return inserted as LetterOfCredit;
 }
 
 export async function getLCs(): Promise<LetterOfCredit[]> {
-  return api<LetterOfCredit[]>("/api/trade-finance/lc");
+  const { data, error } = await db()
+    .from("letters_of_credit")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load letters of credit from Supabase.");
+  return (data || []) as LetterOfCredit[];
 }
 
 export async function actOnLC(
@@ -679,10 +868,14 @@ export async function actOnLC(
   action: string,
   notes?: string,
 ): Promise<LetterOfCredit> {
-  return api<LetterOfCredit>(`/api/trade-finance/lc/${lcId}/action`, {
-    method: "POST",
-    body: JSON.stringify({ action, notes }),
-  });
+  const { data, error } = await db()
+    .from("letters_of_credit")
+    .update({ status: action, discrepancy_notes: notes })
+    .eq("id", lcId)
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not update L/C in Supabase.");
+  return data as LetterOfCredit;
 }
 
 export async function createDP(data: {
@@ -692,21 +885,44 @@ export async function createDP(data: {
   amount: string;
   currency: string;
 }): Promise<DocumentaryCollection> {
-  return api<DocumentaryCollection>("/api/trade-finance/dp", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const order = await getOrder(data.order_id);
+  const { data: inserted, error } = await db()
+    .from("documentary_collections")
+    .insert({
+      dp_number: `DP-${Date.now()}`,
+      order_id: data.order_id,
+      exporter_id: order.seller_id,
+      importer_id: order.buyer_id,
+      remitting_bank: data.remitting_bank,
+      collecting_bank: data.collecting_bank,
+      amount: data.amount,
+      currency: data.currency,
+      status: "draft",
+    })
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create D/P in Supabase.");
+  return inserted as DocumentaryCollection;
 }
 
 export async function getDPs(): Promise<DocumentaryCollection[]> {
-  return api<DocumentaryCollection[]>("/api/trade-finance/dp");
+  const { data, error } = await db()
+    .from("documentary_collections")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load documentary collections from Supabase.");
+  return (data || []) as DocumentaryCollection[];
 }
 
 export async function actOnDP(dpId: number, action: string): Promise<DocumentaryCollection> {
-  return api<DocumentaryCollection>(`/api/trade-finance/dp/${dpId}/action`, {
-    method: "POST",
-    body: JSON.stringify({ action }),
-  });
+  const { data, error } = await db()
+    .from("documentary_collections")
+    .update({ status: action })
+    .eq("id", dpId)
+    .select("*")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not update D/P in Supabase.");
+  return data as DocumentaryCollection;
 }
 
 // Logistics API
@@ -716,14 +932,26 @@ export async function createShipment(data: {
   origin_corridor: string;
   destination_corridor: string;
 }): Promise<Shipment> {
-  return api<Shipment>("/api/logistics/shipments/", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const { data: inserted, error } = await db()
+    .from("shipments")
+    .insert({
+      ...data,
+      tracking_number: `DC-TRK-${Date.now().toString().slice(-8)}`,
+      status: "label_created",
+    })
+    .select("*, events:shipment_events(*)")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not create shipment in Supabase.");
+  return inserted as Shipment;
 }
 
 export async function getShipments(): Promise<Shipment[]> {
-  return api<Shipment[]>("/api/logistics/shipments/");
+  const { data, error } = await db()
+    .from("shipments")
+    .select("*, events:shipment_events(*)")
+    .order("created_at", { ascending: false });
+  if (error) throw mapSupabaseError(error, "Could not load shipments from Supabase.");
+  return (data || []) as Shipment[];
 }
 
 export async function addTrackingEvent(
@@ -732,10 +960,20 @@ export async function addTrackingEvent(
   description: string,
   nextStatus: string,
 ): Promise<Shipment> {
-  return api<Shipment>(`/api/logistics/shipments/${shipmentId}/events?next_status=${nextStatus}`, {
-    method: "POST",
-    body: JSON.stringify({ location, description }),
+  const { error: eventError } = await db().from("shipment_events").insert({
+    shipment_id: shipmentId,
+    location,
+    description,
   });
+  if (eventError) throw mapSupabaseError(eventError, "Could not add tracking event in Supabase.");
+  const { data, error } = await db()
+    .from("shipments")
+    .update({ status: nextStatus })
+    .eq("id", shipmentId)
+    .select("*, events:shipment_events(*)")
+    .single();
+  if (error) throw mapSupabaseError(error, "Could not update shipment status in Supabase.");
+  return data as Shipment;
 }
 
 // ML Analytics API
