@@ -7,6 +7,20 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  vite: {
+    // Lovable's default config opts into Lightning CSS. That is normally fine,
+    // but this app uses Tailwind v4's CSS-first directives (`@theme`, source
+    // hints, etc.), and Lightning can see those directives before Tailwind has
+    // expanded them during dev/preview. Keep Vite on the PostCSS pipeline for
+    // CSS transforms and use esbuild for CSS minification so Tailwind owns its
+    // at-rules and the preview/dev logs stay clean.
+    css: {
+      transformer: "postcss",
+    },
+    build: {
+      cssMinify: "esbuild",
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
