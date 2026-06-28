@@ -385,12 +385,112 @@ function db() {
   return supabase as any;
 }
 
+function offlineResponse<T>(path: string, options: RequestInit = {}): T {
+  const now = new Date().toISOString();
+
+  if (path === "/api/kyc/status") {
+    return null as T;
+  }
+
+  if (path === "/api/compliance/sanctions/my-screenings" || path === "/api/kyc/pending") {
+    return [] as T;
+  }
+
+  if (path === "/api/compliance/sanctions/screen") {
+    let entityName = "Entity";
+    try {
+      const body = typeof options.body === "string" ? JSON.parse(options.body) : null;
+      entityName = body?.entity_name || entityName;
+    } catch {
+      // Keep the fallback entity label if the request body is not JSON.
+    }
+
+    return {
+      id: 0,
+      user_id: 0,
+      entity_name: entityName,
+      entity_type: "company",
+      screened_against: "Provider unavailable",
+      match_found: false,
+      match_details: "Screening provider is not connected.",
+      screened_at: now,
+      review_status: "pending",
+    } as T;
+  }
+
+  if (path === "/api/kyc/submit") {
+    let body: any = {};
+    try {
+      body = typeof options.body === "string" ? JSON.parse(options.body) : {};
+    } catch {
+      body = {};
+    }
+
+    return {
+      id: 0,
+      user_id: 0,
+      status: "submitted",
+      document_type: body.document_type || "document",
+      document_url: body.document_url || "",
+      document_hash: body.document_hash || "offline-preview",
+      submitted_at: now,
+    } as T;
+  }
+
+  if (path.startsWith("/api/workflow/actions")) {
+    if (options.method === "POST") {
+      try {
+        const body = typeof options.body === "string" ? JSON.parse(options.body) : {};
+        return { ...body, source: "local" } as T;
+      } catch {
+        return { source: "local" } as T;
+      }
+    }
+    if (options.method === "DELETE") {
+      return { status: "deleted", id: path.split("/").pop() || "" } as T;
+    }
+    return [] as T;
+  }
+
+  if (path.startsWith("/api/notifications/trigger-mock")) {
+    return {
+      id: Date.now(),
+      user_id: 0,
+      title: "Preview notification",
+      message: "Notification gateway is not connected in preview.",
+      type: "in_app",
+      priority: "medium",
+      read: false,
+      created_at: now,
+    } as T;
+  }
+
+  if (path.startsWith("/api/ml-analytics/feature-weights")) {
+    return { model_version: "preview-offline", accuracy_r2: "0.00", weights: [] } as T;
+  }
+
+  if (
+    path.startsWith("/api/ml-analytics/price-predictions") ||
+    path.startsWith("/api/ml-analytics/demand-imbalance")
+  ) {
+    return [] as T;
+  }
+
+  if (path.startsWith("/api/ml-analytics/simulate")) {
+    return { status: "offline", match_score: 0, recommendation: "Provider unavailable" } as T;
+  }
+
+  if (path === "/api/deals/generate-pre-deals") {
+    return { created_pre_deal_ids: [], count: 0 } as T;
+  }
+
+  throw new Error("This feature needs a configured backend API.");
+}
+
 // Optional custom backend interceptor for features not yet mapped directly to Supabase.
 async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!API_BASE_URL) {
-    throw new Error(
-      "Backend API is not configured. Set VITE_API_BASE_URL or disable this feature in the UI.",
-    );
+    return offlineResponse<T>(path, options);
   }
 
   const token = getToken();

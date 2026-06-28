@@ -61,13 +61,14 @@ function CompliancePage() {
     setLoading(true);
     try {
       const [kycData, screeningData] = await Promise.all([
-        getKYCStatus(),
+        getKYCStatus().catch(() => null),
         getMyScreenings().catch(() => []),
       ]);
       setKyc(kycData);
       setScreenings(screeningData);
     } catch (err) {
-      console.error(err);
+      setKyc(null);
+      setScreenings([]);
     } finally {
       setLoading(false);
     }
@@ -86,7 +87,12 @@ function CompliancePage() {
       setScreenResult(result);
       await loadData();
     } catch (err) {
-      console.error(err);
+      setScreenResult({
+        match_found: false,
+        match_details: "Screening provider is not connected.",
+        screened_against: "Provider unavailable",
+        screened_at: new Date().toISOString(),
+      });
     } finally {
       setScreening(false);
     }
